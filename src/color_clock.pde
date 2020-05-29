@@ -5,20 +5,27 @@ Description:   This program maps the time to a color.
 ***************************************************************/
 
 
-int r, g, b, i, raw_time, sec_in_min, min_in_hr, sec_in_hr, minor_color, second_color;
+int r, g, b;
+int i;
+int raw_time, sec_in_min, min_in_hr, sec_in_hr;
+int minor_color, second_color;
+
 int [] interval;
 boolean time_interval;
-float time, decimal, bin_size, c;
+
+float time, decimal, bin_size, offset;
 
 
 void setup(){
 
+    // housekeeping
     size(300, 300);
     background(0);
     colorMode(RGB, 255, 255, 255);
     ellipseMode(RADIUS);
     frameRate(50);
     
+    // initialize rgb
     i = r = b = g = 0;
 
     sec_in_min = min_in_hr = 60;
@@ -26,13 +33,19 @@ void setup(){
     
     minor_color = 0;
     
-    // time between colors - red, yellow, green, cyan, blue, magenta
+    // bin_size: hours between colors:  red     0xFF0000
+    //                                  yellow  0xFF0000
+    //                                  green   0x00FF00 
+    //                                  cyan    0x00FFFF
+    //                                  blue    0x0000FF
+    //                                  magenta 0xFF00FF
     bin_size = 4;
     
-    //bin_size = 1;
     time = 0;
     
+    
     interval = new int[7];
+
     for (i = 0; i < 7; i++) {
       interval[i] = i * int(bin_size);
       print("interval: ", i, "---->", interval[i], "\n");
@@ -41,52 +54,58 @@ void setup(){
     print("------------------------\n");
 
     
-    /*
-    interval:  0 ----> 0 
-    interval:  1 ----> 4 
-    interval:  2 ----> 8 
-    interval:  3 ----> 12 
-    interval:  4 ----> 16 
-    interval:  5 ----> 20 
-    interval:  6 ----> 24 
+    /* 
+    interval corresponds with hour number
+    
+    interval:  0 ----> hour  0:00
+    interval:  1 ----> hour  4:00
+    interval:  2 ----> hour  8:00
+    interval:  3 ----> hour 12:00
+    interval:  4 ----> hour 16:00
+    interval:  5 ----> hour 20:00
+    interval:  6 ----> hour 24:00
     */
     
 }
 
 void draw(){
   ellipse(150, 150, 100, 50);
-  
-  // second number in day
+
+  // raw_time: number of seconds since midnight
   raw_time = (sec_in_min * (hour() * min_in_hr + minute()) + second());
   
-  // normalized time
+  // normalized time: number of hours since midnight
   time = (raw_time/(1.0 * sec_in_hr));
   
-  // determine where red starts
+  // this equation is used to determine where red starts <---- ???????
   time = (time + 2) % 24;
 
+  // offset from bin - normalized as a fraction of bin size 
   decimal = (time % bin_size)/bin_size;
   
-  // is color moving away from red, green, or blue?
-  // 0 => moving towards red, green, blue
-  // 1 => moving towards yellow, cyan, magenta
+  // time interval: boolean noting that time is moving in direction of
+  //                primary color (red green blue)
+  //
+  // false => moving towards primary color (red, green, blue)
+  // true  => moving towards secondary color (yellow, cyan, magenta)
   time_interval = (int(time) % (bin_size * 2))  < (bin_size);
-
-  // 0   RED 22   0
-  // 1   YEL 02   4
-  // 2   GRN 06   8
-  // 3   CYA 10   12
-  // 4   BLU 14   16
-  // 5   VIO 18   20
+  
+  // interval color 
+  // 0        RED   22:00
+  // 1        YEL    2:00
+  // 2        GRN    6:00
+  // 3        CYA   10:00
+  // 4        BLU   14:00
+  // 5        VIO   18:00
   
   print("int time: ", int(time), "\n");
   
-  // fraction between major colors
-  c = decimal * 255;
+  // offset from bin normalized to 255
+  offset = decimal * 255;
 
   // !time_interval => moving towards R, G, B
   if (!time_interval) {
-    second_color = 255 - int(c);
+    second_color = 255 - int(offset);
     if (second_color < minor_color) {
       second_color = minor_color;
     }
@@ -94,8 +113,8 @@ void draw(){
   
   // time_interval => moving towards yellow, cyan, magenta
   else {
-    second_color = int(c);
-    if (c < minor_color) second_color = minor_color;
+    second_color = int(offset);
+    if (offset < minor_color) second_color = minor_color;
   }
   
     /*
@@ -179,7 +198,7 @@ int[] set_colors() {
 // prints values valuable for debugging
 void debug_msg() {
   print("hour = ", hour(), "\n");  
-  print("time = ", time, ", ", "decimal = ", decimal, ", c = ", c, ", ");
+  print("time = ", time, ", ", "decimal = ", decimal, ", offset = ", offset, ", ");
   print ("time_interval = ", time_interval, "\n");
   
   print("second_color = ", second_color, "; \n");
