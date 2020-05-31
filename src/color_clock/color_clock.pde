@@ -4,9 +4,9 @@
  Description:   This program maps the current time to a color.
  
                 Time is displayed as a colored ellipse.
-                color will cycle through red, yellow, green,
-                cyan, blue, and magenta with the following RGB
-                values:
+                color will cycle through "main colors" i.e.
+                red, yellow, green, cyan, blue, and magenta
+                with the following RGB values:
                 
                 red     0xFF0000
                 yellow  0xFF0000
@@ -18,8 +18,15 @@
 ***************************************************************/
 
 
-   
+/********************************
+future development
 
+remove globals!!
+user selection of main colors
+number of main colors
+color of main colors
+
+********************************/
 
 int r, g, b;
 int sec_since_midnight;
@@ -33,7 +40,7 @@ int MIN_IN_HR  = 60;
 int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 
-int [] interval;
+int [] main_color_times;
 boolean time_interval;
 
 float hours_since_midnight, fractional_offset_from_color, hours_bet_colors;
@@ -49,35 +56,15 @@ void setup(){
     ellipseMode(RADIUS);
     frameRate(50);
     
-    // initialize rgb
-    r = b = g = 0;
-    
     minor_color = 0;
     
     // hours_bet_colors: hours between each of 6 colors
-    hours_bet_colors = 1;
+    hours_bet_colors = 4;
     
-    interval = new int[7];
-
-    for (int i = 0; i < 7; i++) {
-      interval[i] = i * int(hours_bet_colors);
-      print("interval: ", i, "---->", interval[i], "\n");
-    }
+    // array of times 
+    main_color_times = initialize_color_times(hours_bet_colors);
 
     print("------------------------\n");
-
-    
-    /* 
-    interval corresponds with hour number
-    
-    interval:  0 ----> hour  0:00
-    interval:  1 ----> hour  4:00
-    interval:  2 ----> hour  8:00
-    interval:  3 ----> hour 12:00
-    interval:  4 ----> hour 16:00
-    interval:  5 ----> hour 20:00
-    interval:  6 ----> hour 24:00
-    */
     
 }
 
@@ -102,7 +89,7 @@ void draw(){
   // 4        BLU   14:00
   // 5        VIO   18:00
   
-  print("int hours_since_midnight: ", int(hours_since_midnight), "\n");
+  print("\nint hours_since_midnight: ", int(hours_since_midnight), "\n");
  
 
   // !time_interval => moving towards R, G, B
@@ -119,54 +106,44 @@ void draw(){
     if (normalized_offset < minor_color) second_color = minor_color;
   }
   
-    /*
-    interval:  0 ----> 0    red 
-    interval:  1 ----> 4    yel
-    interval:  2 ----> 8    grn
-    interval:  3 ----> 12   cya
-    interval:  4 ----> 16   blu
-    interval:  5 ----> 20   vio
-    interval:  6 ----> 24   red
-    */
+  if (hours_since_midnight >= main_color_times[6]) hours_since_midnight = 0;
   
-  if (hours_since_midnight >= interval[6]) hours_since_midnight = 0;
-  
-  if (hours_since_midnight >= interval[0] && hours_since_midnight <= interval[1]) {
+  if (hours_since_midnight >= main_color_times[0] && hours_since_midnight <= main_color_times[1]) {
     r = MAX_VAL;
     b = minor_color;
     g = second_color;
     print("red to yellow\n");
   }
   
-  if (hours_since_midnight >= interval[1] && hours_since_midnight <= interval[2]) {
+  if (hours_since_midnight >= main_color_times[1] && hours_since_midnight <= main_color_times[2]) {
     r = second_color;
     b = minor_color;
     g = MAX_VAL;
     print("yellow to green\n");
   }
   
-  if (hours_since_midnight >= interval[2] && hours_since_midnight <= interval[3]) {
+  if (hours_since_midnight >= main_color_times[2] && hours_since_midnight <= main_color_times[3]) {
     g = MAX_VAL;
     r = minor_color;
     b = second_color;
     print("green to cyan\n");
   }  
  
-  if (hours_since_midnight >= interval[3] && hours_since_midnight <= interval[4]) {
+  if (hours_since_midnight >= main_color_times[3] && hours_since_midnight <= main_color_times[4]) {
     g = second_color;
     b = MAX_VAL;
     r = minor_color;
     print("cyan to blue\n");
   }
  
-  if (hours_since_midnight >= interval[4] && hours_since_midnight <= interval[5]) {
+  if (hours_since_midnight >= main_color_times[4] && hours_since_midnight <= main_color_times[5]) {
     b = MAX_VAL;
     g = minor_color;
     r = second_color;
     print("blue to magenta\n");
   }
   
-  if (hours_since_midnight >= interval[5] && hours_since_midnight <= interval[6]) {
+  if (hours_since_midnight >= main_color_times[5] && hours_since_midnight <= main_color_times[6]) {
     b = second_color;
     g = minor_color;
     r = MAX_VAL;
@@ -175,15 +152,16 @@ void draw(){
   
   debug_msg();
   
-  set_colors();
+  //set_colors();
   
   fill(r, g, b);
   noStroke();
     
-  hours_since_midnight = hours_since_midnight + 1;
+  //hours_since_midnight = hours_since_midnight + 1;
 }
 
 // depending on time, sets RGB values
+// not written yet
 int[] set_colors() {
   int [] rgb;
   rgb = new int[3];
@@ -203,9 +181,6 @@ int get_time_as_normalized_offset(float hours_bet_colors) {
 
   sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
   hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
-  
-  // this equation is used to determine where red starts <---- ???????
-  hours_since_midnight = (hours_since_midnight + 2) % 24;
 
   // offset from bin - normalized as a fraction of bin size (hours between colors)
   fractional_offset_from_color = (hours_since_midnight % hours_bet_colors)/hours_bet_colors;
@@ -215,6 +190,19 @@ int get_time_as_normalized_offset(float hours_bet_colors) {
   
   return normalized_offset;
 
+}
+
+// initialize array that stores times of main colors
+int [] initialize_color_times(float hours_between_colors) {
+
+  int [] color_times = new int[7];
+  for (int i = 0; i < 7; i++) {
+    color_times[i] = i * int(hours_between_colors);
+    print("color_times: ", i, "---->", color_times[i], "\n");
+  }
+  
+  return color_times;
+  
 }
 
 // prints values valuable for debugging
