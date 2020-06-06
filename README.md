@@ -1,6 +1,7 @@
 # color_clock
 
-code in processing (download at processing.org)
+This program was written in Processing.
+(download at processing.org)
 
 colored orb that maps current time to color
 
