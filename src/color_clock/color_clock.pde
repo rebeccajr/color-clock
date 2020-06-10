@@ -31,7 +31,7 @@ color of main colors
 int r, g, b;
 int sec_since_midnight;
 
-int minor_color, second_color;
+int MIN_VAL, second_color;
 
 // set constants
 int MAX_VAL    = 255;
@@ -56,7 +56,7 @@ void setup(){
     ellipseMode(RADIUS);
     frameRate(50);
     
-    minor_color = 0;
+    MIN_VAL = 200;
     
     // hours_bet_colors: hours between each of 6 colors
     hours_bet_colors = 4;
@@ -75,7 +75,7 @@ void draw(){
   get_time_as_normalized_offset(hours_bet_colors);
   
   // time interval: boolean noting that time is moving in direction of
-  //                primary color (red green blue)
+  //                even or odd color
   //
   // false => moving towards primary color (red, green, blue)
   // true  => moving towards secondary color (yellow, cyan, magenta)
@@ -95,36 +95,36 @@ void draw(){
   // !time_interval => moving towards R, G, B
   if (!time_interval) {
     second_color = MAX_VAL - normalized_offset;
-    if (second_color < minor_color) {
-      second_color = minor_color;
+    if (second_color < MIN_VAL) {
+      second_color = MIN_VAL;
     }
   }
   
   // time_interval => moving towards yellow, cyan, magenta
   else {
     second_color = normalized_offset;
-    if (normalized_offset < minor_color) second_color = minor_color;
+    if (normalized_offset < MIN_VAL) second_color = MIN_VAL;
   }
   
   if (hours_since_midnight >= main_color_times[6]) hours_since_midnight = 0;
   
   if (hours_since_midnight >= main_color_times[0] && hours_since_midnight <= main_color_times[1]) {
     r = MAX_VAL;
-    b = minor_color;
+    b = MIN_VAL;
     g = second_color;
     print("red to yellow\n");
   }
   
   if (hours_since_midnight >= main_color_times[1] && hours_since_midnight <= main_color_times[2]) {
     r = second_color;
-    b = minor_color;
+    b = MIN_VAL;
     g = MAX_VAL;
     print("yellow to green\n");
   }
   
   if (hours_since_midnight >= main_color_times[2] && hours_since_midnight <= main_color_times[3]) {
     g = MAX_VAL;
-    r = minor_color;
+    r = MIN_VAL;
     b = second_color;
     print("green to cyan\n");
   }  
@@ -132,20 +132,20 @@ void draw(){
   if (hours_since_midnight >= main_color_times[3] && hours_since_midnight <= main_color_times[4]) {
     g = second_color;
     b = MAX_VAL;
-    r = minor_color;
+    r = MIN_VAL;
     print("cyan to blue\n");
   }
  
   if (hours_since_midnight >= main_color_times[4] && hours_since_midnight <= main_color_times[5]) {
     b = MAX_VAL;
-    g = minor_color;
+    g = MIN_VAL;
     r = second_color;
     print("blue to magenta\n");
   }
   
   if (hours_since_midnight >= main_color_times[5] && hours_since_midnight <= main_color_times[6]) {
     b = second_color;
-    g = minor_color;
+    g = MIN_VAL;
     r = MAX_VAL;
     print("magenta to red\n");
   }
@@ -157,7 +157,6 @@ void draw(){
   fill(r, g, b);
   noStroke();
     
-  //hours_since_midnight = hours_since_midnight + 1;
 }
 
 // depending on time, sets RGB values
