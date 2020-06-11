@@ -180,9 +180,7 @@ int[] set_colors() {
   
 }
 
-int convert_hr_to_sec_since_midnight(float hrs_since_midnight){
-  return (int) (1.0 * SEC_IN_HR * hrs_since_midnight); 
-}
+
 
 // returns offset from last main color, normalized to 255
 int get_time_as_normalized_offset(float hours_bet_colors) {
@@ -200,7 +198,9 @@ int get_time_as_normalized_offset(float hours_bet_colors) {
 
 }
 
-
+int convert_hr_to_sec_since_midnight(float hrs_since_midnight){
+  return (int) (1.0 * SEC_IN_HR * hrs_since_midnight); 
+}
 
 
 
