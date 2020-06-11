@@ -47,6 +47,8 @@ boolean time_interval;
 float hours_since_midnight, fractional_offset_from_color, hours_bet_colors;
 int normalized_offset;
 
+RgbColor set_color;
+
 
 void setup(){
 
@@ -56,6 +58,8 @@ void setup(){
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     ellipseMode(RADIUS);
     frameRate(50);
+    
+    set_color = new RgbColor(MAX_VAL, MAX_VAL, MAX_VAL);
     
     // hours_bet_colors: hours between each of 6 colors
     hours_bet_colors = 4;
@@ -69,6 +73,7 @@ void setup(){
 
 void draw(){
   ellipse(150, 150, 100, 50);
+  
 
   // returns current time as an offset from the last major color
   get_time_as_normalized_offset(hours_bet_colors);
@@ -82,18 +87,10 @@ void draw(){
   
   print("\nint hours_since_midnight: ", int(hours_since_midnight), "\n");
  
- 
-  // make general purpose interpolation function
   
   // array of main colors
   // array of time for each color?
   // given current time, and above arrays
-  
-  
-  
-  
-  // nested interpolate function to get rgb between two colors
-  // <r1,g1,b1>,<r2,g2,b2>, % return rgb - color object
 
 
   // !time_interval => moving towards R, G, B
@@ -115,16 +112,16 @@ void draw(){
   if (hours_since_midnight >= main_color_times[6]) hours_since_midnight = 0;
   
   if (hours_since_midnight >= main_color_times[0] && hours_since_midnight <= main_color_times[1]) {
-    r = MAX_VAL;
-    b = MIN_VAL;
-    g = second_color;
+    set_color.r = MAX_VAL;
+    set_color.b = MIN_VAL;
+    set_color.g = second_color;
     print("red to yellow\n");
   }
   
   if (hours_since_midnight >= main_color_times[1] && hours_since_midnight <= main_color_times[2]) {
-    r = second_color;
-    b = MIN_VAL;
-    g = MAX_VAL;
+    set_color.r = second_color;
+    set_color.b = MIN_VAL;
+    set_color.g = MAX_VAL;
     print("yellow to green\n");
   }
   
@@ -136,31 +133,32 @@ void draw(){
   }  
  
   if (hours_since_midnight >= main_color_times[3] && hours_since_midnight <= main_color_times[4]) {
-    g = second_color;
-    b = MAX_VAL;
-    r = MIN_VAL;
+    set_color.g = second_color;
+    set_color.b = MAX_VAL;
+    set_color.r = MIN_VAL;
     print("cyan to blue\n");
   }
  
   if (hours_since_midnight >= main_color_times[4] && hours_since_midnight <= main_color_times[5]) {
-    b = MAX_VAL;
-    g = MIN_VAL;
-    r = second_color;
+    set_color.b = MAX_VAL;
+    set_color.g = MIN_VAL;
+    set_color.r = second_color;
     print("blue to magenta\n");
   }
   
   if (hours_since_midnight >= main_color_times[5] && hours_since_midnight <= main_color_times[6]) {
-    b = second_color;
-    g = MIN_VAL;
-    r = MAX_VAL;
+    set_color.b = second_color;
+    set_color.g = MIN_VAL;
+    set_color.r = MAX_VAL;
     print("magenta to red\n");
   }
   
-  debug_msg();
+  //debug_msg();
   
   //set_colors();
   
-  fill(r, g, b);
+  //fill(r, g, b);
+  fill(set_color.r, set_color.g, set_color.b);
   noStroke();
     
 }
@@ -181,6 +179,41 @@ int[] set_colors() {
 }
 
 
+// assumption color is in correct range and fraction is between 0 and 1
+RgbColor interpolate_bet_colors(RgbColor color1, RgbColor color2, float fraction){
+
+  // difference between color2 and color 1
+  int delta;
+  
+  
+  delta = color2.r - color1.r;
+  int newRed   = (int) (fraction * delta) + color1.r;
+  
+  delta = color2.g - color1.g;
+  int newGreen = (int) (fraction * delta) + color1.g;
+  
+  delta = color2.b - color1.b;
+  int newBlue  = (int) (fraction * delta) + color1.b;
+  
+  return new RgbColor(newRed, newGreen, newBlue);
+  
+}
+
+class RgbColor {
+  int r;
+  int g; 
+  int b;
+  RgbColor(){}
+
+  RgbColor(int red, int green, int blue){
+  
+    r = red;
+    g = green;
+    b = blue;
+    
+  }
+
+}
 
 // returns offset from last main color, normalized to 255
 int get_time_as_normalized_offset(float hours_bet_colors) {
