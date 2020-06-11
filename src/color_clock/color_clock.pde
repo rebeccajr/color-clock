@@ -31,10 +31,11 @@ color of main colors
 int r, g, b;
 int sec_since_midnight;
 
-int MIN_VAL, second_color;
+int second_color;
 
 // set constants
 int MAX_VAL    = 255;
+int MIN_VAL    = 0;
 int SEC_IN_MIN = 60;
 int MIN_IN_HR  = 60;
 int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
@@ -55,8 +56,6 @@ void setup(){
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     ellipseMode(RADIUS);
     frameRate(50);
-    
-    MIN_VAL = 200;
     
     // hours_bet_colors: hours between each of 6 colors
     hours_bet_colors = 4;
@@ -81,16 +80,21 @@ void draw(){
   // true  => moving towards secondary color (yellow, cyan, magenta)
   time_interval = (int(hours_since_midnight) % (hours_bet_colors * 2))  < (hours_bet_colors);
   
-  // interval color 
-  // 0        RED   22:00
-  // 1        YEL    2:00
-  // 2        GRN    6:00
-  // 3        CYA   10:00
-  // 4        BLU   14:00
-  // 5        VIO   18:00
-  
   print("\nint hours_since_midnight: ", int(hours_since_midnight), "\n");
  
+ 
+  // make general purpose interpolation function
+  
+  // array of main colors
+  // array of time for each color?
+  // given current time, and above arrays
+  
+  
+  
+  
+  // nested interpolate function to get rgb between two colors
+  // <r1,g1,b1>,<r2,g2,b2>, % return rgb - color object
+
 
   // !time_interval => moving towards R, G, B
   if (!time_interval) {
@@ -105,6 +109,8 @@ void draw(){
     second_color = normalized_offset;
     if (normalized_offset < MIN_VAL) second_color = MIN_VAL;
   }
+  
+
   
   if (hours_since_midnight >= main_color_times[6]) hours_since_midnight = 0;
   
@@ -174,6 +180,9 @@ int[] set_colors() {
   
 }
 
+int convert_hr_to_sec_since_midnight(float hrs_since_midnight){
+  return (int) (1.0 * SEC_IN_HR * hrs_since_midnight); 
+}
 
 // returns offset from last main color, normalized to 255
 int get_time_as_normalized_offset(float hours_bet_colors) {
@@ -191,6 +200,10 @@ int get_time_as_normalized_offset(float hours_bet_colors) {
 
 }
 
+
+
+
+
 // initialize array that stores times of main colors
 int [] initialize_color_times(float hours_between_colors) {
 
@@ -201,7 +214,22 @@ int [] initialize_color_times(float hours_between_colors) {
   }
   
   return color_times;
+}
+
+// initialize array that contains main colors 
+// currently hard-coded
+int [] initialize_main_colors(){
   
+  int [] colors = new int[6];
+  
+  colors[0] = 0xFF0000; // red
+  colors[1] = 0xFFFF00; // yellow
+  colors[2] = 0x00FF00; // green
+  colors[3] = 0x00FFFF; // cyan
+  colors[4] = 0x0000FF; // blue
+  colors[5] = 0xFF00FF; // magenta
+  
+  return colors;
 }
 
 // prints values valuable for debugging
