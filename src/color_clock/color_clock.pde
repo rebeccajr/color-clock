@@ -21,7 +21,6 @@
 /********************************
 future development
 
-remove globals!!
 user selection of main colors
 number of main colors
 color of main colors
@@ -47,7 +46,7 @@ boolean time_interval;
 float hours_since_midnight, fractional_offset_from_color, hours_bet_colors;
 int normalized_offset;
 
-RgbColor set_color;
+RgbColor clock_color;
 
 
 void setup(){
@@ -59,7 +58,7 @@ void setup(){
     ellipseMode(RADIUS);
     frameRate(50);
     
-    set_color = new RgbColor(MAX_VAL, MAX_VAL, MAX_VAL);
+    clock_color = new RgbColor(MAX_VAL, MAX_VAL, MAX_VAL);
     
     // hours_bet_colors: hours between each of 6 colors
     hours_bet_colors = 4;
@@ -112,16 +111,16 @@ void draw(){
   if (hours_since_midnight >= main_color_times[6]) hours_since_midnight = 0;
   
   if (hours_since_midnight >= main_color_times[0] && hours_since_midnight <= main_color_times[1]) {
-    set_color.r = MAX_VAL;
-    set_color.b = MIN_VAL;
-    set_color.g = second_color;
+    clock_color.r = MAX_VAL;
+    clock_color.b = MIN_VAL;
+    clock_color.g = second_color;
     print("red to yellow\n");
   }
   
   if (hours_since_midnight >= main_color_times[1] && hours_since_midnight <= main_color_times[2]) {
-    set_color.r = second_color;
-    set_color.b = MIN_VAL;
-    set_color.g = MAX_VAL;
+    clock_color.r = second_color;
+    clock_color.b = MIN_VAL;
+    clock_color.g = MAX_VAL;
     print("yellow to green\n");
   }
   
@@ -133,23 +132,23 @@ void draw(){
   }  
  
   if (hours_since_midnight >= main_color_times[3] && hours_since_midnight <= main_color_times[4]) {
-    set_color.g = second_color;
-    set_color.b = MAX_VAL;
-    set_color.r = MIN_VAL;
+    clock_color.g = second_color;
+    clock_color.b = MAX_VAL;
+    clock_color.r = MIN_VAL;
     print("cyan to blue\n");
   }
  
   if (hours_since_midnight >= main_color_times[4] && hours_since_midnight <= main_color_times[5]) {
-    set_color.b = MAX_VAL;
-    set_color.g = MIN_VAL;
-    set_color.r = second_color;
+    clock_color.b = MAX_VAL;
+    clock_color.g = MIN_VAL;
+    clock_color.r = second_color;
     print("blue to magenta\n");
   }
   
   if (hours_since_midnight >= main_color_times[5] && hours_since_midnight <= main_color_times[6]) {
-    set_color.b = second_color;
-    set_color.g = MIN_VAL;
-    set_color.r = MAX_VAL;
+    clock_color.b = second_color;
+    clock_color.g = MIN_VAL;
+    clock_color.r = MAX_VAL;
     print("magenta to red\n");
   }
   
@@ -158,7 +157,7 @@ void draw(){
   //set_colors();
   
   //fill(r, g, b);
-  fill(set_color.r, set_color.g, set_color.b);
+  fill(clock_color.r, clock_color.g, clock_color.b);
   noStroke();
     
 }
@@ -179,41 +178,7 @@ int[] set_colors() {
 }
 
 
-// assumption color is in correct range and fraction is between 0 and 1
-RgbColor interpolate_bet_colors(RgbColor color1, RgbColor color2, float fraction){
 
-  // difference between color2 and color 1
-  int delta;
-  
-  
-  delta = color2.r - color1.r;
-  int newRed   = (int) (fraction * delta) + color1.r;
-  
-  delta = color2.g - color1.g;
-  int newGreen = (int) (fraction * delta) + color1.g;
-  
-  delta = color2.b - color1.b;
-  int newBlue  = (int) (fraction * delta) + color1.b;
-  
-  return new RgbColor(newRed, newGreen, newBlue);
-  
-}
-
-class RgbColor {
-  int r;
-  int g; 
-  int b;
-  RgbColor(){}
-
-  RgbColor(int red, int green, int blue){
-  
-    r = red;
-    g = green;
-    b = blue;
-    
-  }
-
-}
 
 // returns offset from last main color, normalized to 255
 int get_time_as_normalized_offset(float hours_bet_colors) {
@@ -274,4 +239,42 @@ void debug_msg() {
   print("second_color = ", second_color, "; \n");
   print("r = ", r, ", g = ", g, ", b = ", b, ";\n");
   print("------------------------\n");
+}
+
+// assumption color is in correct range and fraction is between 0 and 1
+RgbColor interpolate_bet_colors(RgbColor color1, RgbColor color2, float fraction){
+
+  // difference between color2 and color 1
+  int delta;
+  
+  delta = color2.r - color1.r;
+  int newRed   = (int) (fraction * delta) + color1.r;
+  
+  delta = color2.g - color1.g;
+  int newGreen = (int) (fraction * delta) + color1.g;
+  
+  delta = color2.b - color1.b;
+  int newBlue  = (int) (fraction * delta) + color1.b;
+  
+  return new RgbColor(newRed, newGreen, newBlue);
+  
+}
+
+class RgbColor {
+  int r;
+  int g; 
+  int b;
+  RgbColor(){}
+
+  // values normalized to 255
+  RgbColor(int red, int green, int blue){
+  
+    r = red;
+    g = green;
+    b = blue;
+    
+  }
+  
+  // add constructor with values normalized to 1
+
 }
