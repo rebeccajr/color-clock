@@ -28,7 +28,7 @@ int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 int []     main_color_times;
 RgbColor[] main_colors;
 
-float hours_bet_colors = 12;
+float hours_bet_colors = 4;
 
 void setup(){
 
@@ -41,7 +41,7 @@ void setup(){
     
     // array of times 
     main_color_times = initialize_color_times(hours_bet_colors);
-    main_colors = initialize_main_colors();
+    main_colors      = initialize_main_colors();
 
     print("\n------------------------\n");
     
