@@ -157,28 +157,12 @@ void draw(){
   //set_colors();
   
   //fill(r, g, b);
-  fill(clock_color.r, clock_color.g, clock_color.b);
+  //fill(clock_color.r, clock_color.g, clock_color.b);
+  set_clock_color(clock_color);
+  
   noStroke();
     
 }
-
-// depending on time, sets RGB values
-// not written yet
-int[] set_colors() {
-  int [] rgb;
-  rgb = new int[3];
-  
-  rgb[0] = 1;
-  rgb[1] = 2;
-  rgb[2] = 3;
-  
-  //print("\n", rgb[0], rgb[1], rgb[2]);
-  return rgb;
-  
-}
-
-
-
 
 // returns offset from last main color, normalized to 255
 int get_time_as_normalized_offset(float hours_bet_colors) {
@@ -277,4 +261,8 @@ class RgbColor {
   
   // add constructor with values normalized to 1
 
+}
+
+void set_clock_color(RgbColor fill_color){
+  fill(fill_color.r, fill_color.g, fill_color.b);
 }
