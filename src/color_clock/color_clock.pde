@@ -28,7 +28,6 @@ color of main colors
 ********************************/
 
 int r, g, b;
-int sec_since_midnight;
 
 int second_color;
 
@@ -167,7 +166,7 @@ void draw(){
 // returns offset from last main color, normalized to 255
 int get_time_as_normalized_offset(float hours_bet_colors) {
 
-  sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
+  int sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
   hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
 
   // offset from bin - normalized as a fraction of bin size (hours between colors)
@@ -180,6 +179,26 @@ int get_time_as_normalized_offset(float hours_bet_colors) {
 
 }
 
+float get_time_as_fractional_offset(int[] color_times) {
+  
+  int   sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
+  float hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
+
+  /*
+  // offset from bin - normalized as a fraction of bin size (hours between colors)
+  float fractional_offset_from_color = (hours_since_midnight % hours_bet_colors)/hours_bet_colors;
+  
+  // offset from bin normalized to MAX_VAL
+  normalized_offset = int(fractional_offset_from_color * MAX_VAL);
+  
+  return normalized_offset;*/
+  
+  return 0.0;
+
+}
+
+
+
 int convert_hr_to_sec_since_midnight(float hrs_since_midnight){
   return (int) (1.0 * SEC_IN_HR * hrs_since_midnight); 
 }
@@ -187,6 +206,7 @@ int convert_hr_to_sec_since_midnight(float hrs_since_midnight){
 
 
 // initialize array that stores times of main colors
+// times are in hours
 int [] initialize_color_times(float hours_between_colors) {
 
   int [] color_times = new int[7];
@@ -200,16 +220,16 @@ int [] initialize_color_times(float hours_between_colors) {
 
 // initialize array that contains main colors 
 // currently hard-coded
-int [] initialize_main_colors(){
+RgbColor [] initialize_main_colors(){
   
-  int [] colors = new int[6];
+  RgbColor [] colors = new RgbColor[6];
   
-  colors[0] = 0xFF0000; // red
-  colors[1] = 0xFFFF00; // yellow
-  colors[2] = 0x00FF00; // green
-  colors[3] = 0x00FFFF; // cyan
-  colors[4] = 0x0000FF; // blue
-  colors[5] = 0xFF00FF; // magenta
+  colors[0] = new RgbColor(0xFF, 0x00, 0x00); // red
+  colors[1] = new RgbColor(0xFF, 0xFF, 0x00); // yellow
+  colors[2] = new RgbColor(0x00, 0xFF, 0x00); // green
+  colors[3] = new RgbColor(0x00, 0xFF, 0xFF);  // cyan
+  colors[4] = new RgbColor(0x00, 0x00, 0xFF);  // blue
+  colors[5] = new RgbColor(0xFF, 0x00, 0xFF); // magenta
   
   return colors;
 }
