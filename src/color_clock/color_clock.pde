@@ -17,24 +17,6 @@
                 
 ***************************************************************/
 
-
-/********************************
-future development
-
-user selection of main colors
-number of main colors
-color of main colors
-
-********************************/
-
-import java.util.Map;
-
-HashMap<RgbColor, Integer> color_map;
-
-int r, g, b;
-
-int second_color;
-
 // set constants
 int MAX_VAL    = 255;
 int MIN_VAL    = 0;
@@ -43,15 +25,10 @@ int MIN_IN_HR  = 60;
 int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 
-int [] main_color_times;
+int []     main_color_times;
 RgbColor[] main_colors;
-boolean time_interval;
 
-float hours_since_midnight, fractional_offset_from_color, hours_bet_colors;
-int normalized_offset;
-
-RgbColor clock_color;
-
+float hours_bet_colors = 12;
 
 void setup(){
 
@@ -61,11 +38,6 @@ void setup(){
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     ellipseMode(RADIUS);
     frameRate(50);
-    
-    clock_color = new RgbColor(MAX_VAL, MAX_VAL, MAX_VAL);
-    
-    // hours_bet_colors: hours between each of 6 colors
-    hours_bet_colors = 4;
     
     // array of times 
     main_color_times = initialize_color_times(hours_bet_colors);
@@ -77,128 +49,23 @@ void setup(){
 
 void draw(){
   ellipse(150, 150, 100, 50);
-  
-
-  // returns current time as an offset from the last major color
-  get_time_as_normalized_offset(hours_bet_colors);
-  
-  // time interval: boolean noting that time is moving in direction of
-  //                even or odd color
-  //
-  // false => moving towards primary color (red, green, blue)
-  // true  => moving towards secondary color (yellow, cyan, magenta)
-  time_interval = (int(hours_since_midnight) % (hours_bet_colors * 2))  < (hours_bet_colors);
-  
-  //print("\nint hours_since_midnight: ", int(hours_since_midnight), "\n");
- 
-  
-  // array of main colors
-  // array of time for each color?
-  // given current time, and above arrays
-
-
-  // !time_interval => moving towards R, G, B
-  if (!time_interval) {
-    second_color = MAX_VAL - normalized_offset;
-    if (second_color < MIN_VAL) {
-      second_color = MIN_VAL;
-    }
-  }
-  
-  // time_interval => moving towards yellow, cyan, magenta
-  else {
-    second_color = normalized_offset;
-    if (normalized_offset < MIN_VAL) second_color = MIN_VAL;
-  }
-  
-
-  
-  if (hours_since_midnight >= main_color_times[6]) hours_since_midnight = 0;
-  
-  if (hours_since_midnight >= main_color_times[0] && hours_since_midnight <= main_color_times[1]) {
-    clock_color.r = MAX_VAL;
-    clock_color.b = MIN_VAL;
-    clock_color.g = second_color;
-    //print("red to yellow\n");
-  }
-  
-  if (hours_since_midnight >= main_color_times[1] && hours_since_midnight <= main_color_times[2]) {
-    clock_color.r = second_color;
-    clock_color.b = MIN_VAL;
-    clock_color.g = MAX_VAL;
-    //print("yellow to green\n");
-  }
-  
-  if (hours_since_midnight >= main_color_times[2] && hours_since_midnight <= main_color_times[3]) {
-    g = MAX_VAL;
-    r = MIN_VAL;
-    b = second_color;
-    //print("green to cyan\n");
-  }  
- 
-  if (hours_since_midnight >= main_color_times[3] && hours_since_midnight <= main_color_times[4]) {
-    clock_color.g = second_color;
-    clock_color.b = MAX_VAL;
-    clock_color.r = MIN_VAL;
-    //print("cyan to blue\n");
-  }
- 
-  if (hours_since_midnight >= main_color_times[4] && hours_since_midnight <= main_color_times[5]) {
-    clock_color.b = MAX_VAL;
-    clock_color.g = MIN_VAL;
-    clock_color.r = second_color;
-    //print("blue to magenta\n");
-  }
-  
-  if (hours_since_midnight >= main_color_times[5] && hours_since_midnight <= main_color_times[6]) {
-    clock_color.b = second_color;
-    clock_color.g = MIN_VAL;
-    clock_color.r = MAX_VAL;
-    //print("magenta to red\n");
-  }
-  
-  //debug_msg();
-  
-  //set_colors();
-  
-  //fill(r, g, b);
-  //fill(clock_color.r, clock_color.g, clock_color.b);
-  //set_clock_color(clock_color);
   set_clock_color(map_time_to_color(main_color_times, main_colors));
   noStroke();
     
 }
-/////////////////////////////////////////////////////////////////
-// returns offset from last main color, normalized to 255
-int get_time_as_normalized_offset(float hours_bet_colors) {
-
-  int sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
-  hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
-
-  // offset from bin - normalized as a fraction of bin size (hours between colors)
-  fractional_offset_from_color = (hours_since_midnight % hours_bet_colors)/hours_bet_colors;
-  
-  // offset from bin normalized to MAX_VAL
-  normalized_offset = int(fractional_offset_from_color * MAX_VAL);
-  
-  return normalized_offset;
-
-}
-
-int convert_hr_to_sec_since_midnight(float hrs_since_midnight){
-  return (int) (1.0 * SEC_IN_HR * hrs_since_midnight); 
-}
-
-////////////////////////////////////////////////////////////
-
 
 RgbColor map_time_to_color(int[] times, RgbColor[] colors){
   RgbColor crnt_color_time;
   
   float hrs_since_midnight = get_hours_since_midnight();
-  int[] index = get_indices_of_colors(times, hrs_since_midnight);
-  float fraction = get_time_as_fractional_offset(times[index[0]], times[index[1]], hrs_since_midnight);
-  crnt_color_time = interpolate_bet_colors(colors[index[0]], colors[index[1]], fraction);
+  int[] index              = get_indices_of_colors(times, hrs_since_midnight);
+  
+  float fraction  = get_time_as_fractional_offset(times[index[0]], times[index[1]], 
+                                                  hrs_since_midnight);
+                                                  
+  crnt_color_time = interpolate_bet_colors(colors[index[0]], 
+                                           colors[index[1]], fraction);
+  
   return crnt_color_time;
 
 }
@@ -208,19 +75,23 @@ float get_time_as_fractional_offset(int time0, int time1, float crnt_time){
   // ensure time1 is greater than time0
   // if not, swap
   if (time0 > time1) {
+    
     time0 += time1;
     time1  = time0 - time1;
-    time0  = time0 - time1; 
+    time0  = time0 - time1;
+    
   }
   
   float fractional_offset    = (crnt_time - time0) / (time1 - time0);
   
   return fractional_offset;
 }
-
-// returns an array with two elements - the indices of the color times
-// that the current time falls between
+//--------------------------------------------------------------
+// returns an array with two elements - the indices of the main
+// color times that the current time falls between
 // assumption that color times are in order
+//
+// arguments: color_times - array of times
 int [] get_indices_of_colors (int[] color_times, float hours_since_midnight){
   
   int [] indices = new int[2];
@@ -245,7 +116,6 @@ int [] get_indices_of_colors (int[] color_times, float hours_since_midnight){
   indices[0] = i - 1;
   indices[1] = i;
 
-  
   return indices;
 }
 
@@ -326,18 +196,4 @@ class RgbColor {
 
 void set_clock_color(RgbColor fill_color){
   fill(fill_color.r, fill_color.g, fill_color.b);
-}
-
-
-
-// prints values valuable for debugging
-void debug_msg() {
-  /*
-  print("hour = ", hour(), "\n");  
-  print("hours_since_midnight = ", get_hours_since_midnight(), ", ", "fractional_offset_from_color = ", fractional_offset_from_color, ", normalized_offset = ", normalized_offset, ", ");
-  print ("time_interval = ", time_interval, "\n");
-  
-  print("second_color = ", second_color, "; \n");
-  print("r = ", r, ", g = ", g, ", b = ", b, ";\n");
-  print("------------------------\n");*/
 }
