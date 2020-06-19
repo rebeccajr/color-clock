@@ -17,7 +17,9 @@
                 
 ***************************************************************/
 
+//--------------------------------------------------------------
 // set constants
+//--------------------------------------------------------------
 int MAX_VAL    = 255;
 int MIN_VAL    = 0;
 int SEC_IN_MIN = 60;
@@ -30,6 +32,7 @@ RgbColor[] main_colors;
 
 float hours_bet_colors = 4;
 
+//--------------------------------------------------------------
 void setup(){
 
     // housekeeping
@@ -39,7 +42,8 @@ void setup(){
     ellipseMode(RADIUS);
     frameRate(50);
     
-    // array of times 
+    // array of times  and colors
+    // indices of these two arrays correspond to one another
     main_color_times = initialize_color_times(hours_bet_colors);
     main_colors      = initialize_main_colors();
 
@@ -54,23 +58,36 @@ void draw(){
     
 }
 
+//--------------------------------------------------------------
+// assigns current time to color as specified by arrays
+// times and colors
+//
+// arguments:
+// times  - array of times that correspond with main colors
+// colors - array of main colors
+//--------------------------------------------------------------
 RgbColor map_time_to_color(int[] times, RgbColor[] colors){
-  RgbColor crnt_color_time;
   
   float hrs_since_midnight = get_hours_since_midnight();
   int[] index              = get_indices_of_colors(times, hrs_since_midnight);
   
-  float fraction  = get_time_as_fractional_offset(times[index[0]], times[index[1]], 
+  float fraction  = get_time_as_fractional_offset(times[index[0]],
+                                                  times[index[1]], 
                                                   hrs_since_midnight);
                                                   
-  crnt_color_time = interpolate_bet_colors(colors[index[0]], 
+  RgbColor crnt_color_time = interpolate_bet_colors(colors[index[0]], 
                                            colors[index[1]], fraction);
   
   return crnt_color_time;
 
 }
 
+//--------------------------------------------------------------
 // calculates current time as a fraction between two times
+//
+// assumption:
+// time0, time1 and crnt_time are in hours
+//--------------------------------------------------------------
 float get_time_as_fractional_offset(int time0, int time1, float crnt_time){
   // ensure time1 is greater than time0
   // if not, swap
@@ -86,20 +103,26 @@ float get_time_as_fractional_offset(int time0, int time1, float crnt_time){
   
   return fractional_offset;
 }
+
 //--------------------------------------------------------------
 // returns an array with two elements - the indices of the main
-// color times that the current time falls between
-// assumption that color times are in order
+// color times that time_in_hrs falls between
 //
-// arguments: color_times - array of times
-int [] get_indices_of_colors (int[] color_times, float hours_since_midnight){
+// assumption:
+// color times are in order
+//
+// arguments:
+// color_times - array of times in hours                                  
+// time_in_hrs - time to determine
+//--------------------------------------------------------------
+int [] get_indices_of_colors (int[] color_times, float time_in_hrs){
   
   int [] indices = new int[2];
   int i = 0;
   
-  while (hours_since_midnight >= color_times[i]){
+  while (time_in_hrs >= color_times[i]){
     
-    if (hours_since_midnight == color_times[i]){
+    if (time_in_hrs == color_times[i]){
       indices[0] = i;
       indices[1] = i;
       return indices;
@@ -119,14 +142,21 @@ int [] get_indices_of_colors (int[] color_times, float hours_since_midnight){
   return indices;
 }
 
+//--------------------------------------------------------------
+// returns current time in units of hours since midnight
+//--------------------------------------------------------------
 float get_hours_since_midnight(){
   int    sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
   float  hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
   return hours_since_midnight;
 }
 
+//--------------------------------------------------------------
 // initialize array that stores times of main colors
+//
+// assumption:
 // times are in hours
+//--------------------------------------------------------------
 int [] initialize_color_times(float hours_between_colors) {
 
   int [] color_times = new int[7];
@@ -138,8 +168,10 @@ int [] initialize_color_times(float hours_between_colors) {
   return color_times;
 }
 
+//--------------------------------------------------------------
 // initialize array that contains main colors 
 // currently hard-coded
+//--------------------------------------------------------------
 RgbColor [] initialize_main_colors(){
   
   RgbColor [] colors = new RgbColor[7];
@@ -155,10 +187,17 @@ RgbColor [] initialize_main_colors(){
   return colors;
 }
 
-// assumption color is in correct range and fraction is between 0 and 1
-RgbColor interpolate_bet_colors(RgbColor color1, RgbColor color2, float fraction){
+//--------------------------------------------------------------
+// returns new RgbColor object that falls between two colors 
+//
+// assumption:
+// color is in correct range and fraction is between 0 and 1
+//--------------------------------------------------------------
+RgbColor interpolate_bet_colors(RgbColor color1, 
+                                RgbColor color2, 
+                                float    fraction){
 
-  // difference between color2 and color 1
+  // difference between color2 and color1
   int delta;
   
   delta = color2.r - color1.r;
@@ -174,7 +213,9 @@ RgbColor interpolate_bet_colors(RgbColor color1, RgbColor color2, float fraction
   
 }
 
-// class that holds an rgb color
+//--------------------------------------------------------------
+// object that holds values an RGB value
+//--------------------------------------------------------------
 class RgbColor {
   int r;
   int g; 
@@ -194,6 +235,12 @@ class RgbColor {
 
 }
 
+//--------------------------------------------------------------
+// function that fills ellipse with color
+//
+// argument:
+// fill_color - color to fill object with
+//--------------------------------------------------------------
 void set_clock_color(RgbColor fill_color){
   fill(fill_color.r, fill_color.g, fill_color.b);
 }
