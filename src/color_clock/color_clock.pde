@@ -20,27 +20,33 @@
 //--------------------------------------------------------------
 // set constants
 //--------------------------------------------------------------
-int MAX_VAL    = 255;
-int MIN_VAL    = 0;
-int SEC_IN_MIN = 60;
-int MIN_IN_HR  = 60;
-int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
+final int MAX_VAL    = 255;
+final int MIN_VAL    = 0;
+final int SEC_IN_MIN = 60;
+final int MIN_IN_HR  = 60;
+final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 
-int []     main_color_times;
+float []   main_color_times;
 RgbColor[] main_colors;
 
-float hours_bet_colors = 4;
+
+final float cycle_time_in_hours = .01; //<---- change this
+final int   cycle_partitions    = 6;
+final float hours_bet_colors 
+            = cycle_time_in_hours / cycle_partitions;
 
 //--------------------------------------------------------------
 void setup(){
+  
+    print("hours between colors: ", hours_bet_colors);
 
     // housekeeping
     size(300, 300);
     background(0);
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     ellipseMode(RADIUS);
-    frameRate(50);
+    frameRate(100);
     
     // array of times  and colors
     // indices of these two arrays correspond to one another
@@ -66,14 +72,24 @@ void draw(){
 // times  - array of times that correspond with main colors
 // colors - array of main colors
 //--------------------------------------------------------------
-RgbColor map_time_to_color(int[] times, RgbColor[] colors){
+RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   
   float hrs_since_midnight = get_hours_since_midnight();
-  int[] index              = get_indices_of_colors(times, hrs_since_midnight);
+  
+  // figure out offset from beginning of cycle
+  float multiple = hrs_since_midnight / cycle_time_in_hours;
+  
+  float temp =(int) multiple * cycle_time_in_hours;
+  
+  float hrs_since_cycle_restart = hrs_since_midnight - temp;
+  
+  print("\nhours since cycle restart: ", hrs_since_cycle_restart);
+  
+  int[] index              = get_indices_of_colors(times, hrs_since_cycle_restart);
   
   float fraction  = get_time_as_fractional_offset(times[index[0]],
                                                   times[index[1]], 
-                                                  hrs_since_midnight);
+                                                  hrs_since_cycle_restart);
                                                   
   RgbColor crnt_color_time = interpolate_bet_colors(colors[index[0]], 
                                            colors[index[1]], fraction);
@@ -88,7 +104,7 @@ RgbColor map_time_to_color(int[] times, RgbColor[] colors){
 // assumption:
 // time0, time1 and crnt_time are in hours
 //--------------------------------------------------------------
-float get_time_as_fractional_offset(int time0, int time1, float crnt_time){
+float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
   // ensure time1 is greater than time0
   // if not, swap
   if (time0 > time1) {
@@ -115,7 +131,7 @@ float get_time_as_fractional_offset(int time0, int time1, float crnt_time){
 // color_times - array of times in hours                                  
 // time_in_hrs - time to determine
 //--------------------------------------------------------------
-int [] get_indices_of_colors (int[] color_times, float time_in_hrs){
+int [] get_indices_of_colors (float[] color_times, float time_in_hrs){
   
   int [] indices = new int[2];
   int i = 0;
@@ -148,6 +164,10 @@ int [] get_indices_of_colors (int[] color_times, float time_in_hrs){
 float get_hours_since_midnight(){
   int    sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
   float  hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
+  
+  print("\n-------");
+  print("\nhours since midnight: ", hours_since_midnight);
+  
   return hours_since_midnight;
 }
 
@@ -157,12 +177,12 @@ float get_hours_since_midnight(){
 // assumption:
 // times are in hours
 //--------------------------------------------------------------
-int [] initialize_color_times(float hours_between_colors) {
+float [] initialize_color_times(float hours_between_colors) {
 
-  int [] color_times = new int[7];
-  for (int i = 0; i < 7; i++) {
-    color_times[i] = i * int(hours_between_colors);
-    print("color_times: ", i, "---->", color_times[i], "\n");
+  float [] color_times = new float[cycle_partitions + 1];
+  for (int i = 0; i < (cycle_partitions + 1); i++) {
+    color_times[i] = i * (hours_between_colors);
+    print("\ncolor_times index ", i, "----> hour ", color_times[i]);
   }
   
   return color_times;
@@ -174,7 +194,7 @@ int [] initialize_color_times(float hours_between_colors) {
 //--------------------------------------------------------------
 RgbColor [] initialize_main_colors(){
   
-  RgbColor [] colors = new RgbColor[7];
+  RgbColor [] colors = new RgbColor[cycle_partitions + 1];
   
   colors[0] = new RgbColor(0xFF, 0x00, 0x00);  // red
   colors[1] = new RgbColor(0xFF, 0xFF, 0x00);  // yellow
@@ -182,7 +202,7 @@ RgbColor [] initialize_main_colors(){
   colors[3] = new RgbColor(0x00, 0xFF, 0xFF);  // cyan
   colors[4] = new RgbColor(0x00, 0x00, 0xFF);  // blue
   colors[5] = new RgbColor(0xFF, 0x00, 0xFF);  // magenta
-  colors[6] = new RgbColor(0xFF, 0x00, 0x00);  // red
+  colors[cycle_partitions] = colors[0];
   
   return colors;
 }
@@ -196,7 +216,10 @@ RgbColor [] initialize_main_colors(){
 RgbColor interpolate_bet_colors(RgbColor color1, 
                                 RgbColor color2, 
                                 float    fraction){
-
+                                  
+  print("\ncolor1: ", color1.b, "\ncolor2: ", color2.b);
+  print("\nfraction: ", fraction);
+  
   // difference between color2 and color1
   int delta;
   
@@ -207,7 +230,7 @@ RgbColor interpolate_bet_colors(RgbColor color1,
   int newGreen = (int) (fraction * delta) + color1.g;
   
   delta = color2.b - color1.b;
-  int newBlue  = (int) (fraction * delta) + color1.b;
+  int newBlue  = (int) (fraction * delta) + color1.b; 
   
   return new RgbColor(newRed, newGreen, newBlue);
   
@@ -242,5 +265,6 @@ class RgbColor {
 // fill_color - color to fill object with
 //--------------------------------------------------------------
 void set_clock_color(RgbColor fill_color){
+  print("\nr: ", fill_color.r, ", g: ", fill_color.g, ", b: ", fill_color.b);
   fill(fill_color.r, fill_color.g, fill_color.b);
 }
