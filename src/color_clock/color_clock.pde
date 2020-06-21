@@ -27,14 +27,18 @@ final int MIN_IN_HR  = 60;
 final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 
-float []   main_color_times;
+float   [] main_color_times;
 RgbColor[] main_colors;
+RgbColor[] color_selection = initialize_color_selection();
+
 
 
 final float cycle_time_in_hours = .01; //<---- change this
-final int   cycle_partitions    = 6;
+final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
+            
+final 
 
 //--------------------------------------------------------------
 void setup(){
@@ -194,7 +198,25 @@ float [] initialize_color_times(float hours_between_colors) {
 //--------------------------------------------------------------
 RgbColor [] initialize_main_colors(){
   
-  RgbColor [] colors = new RgbColor[cycle_partitions + 1];
+  int len = cycle_partitions + 1;
+  RgbColor [] colors = new RgbColor[len];
+  
+  for(int i = 0; i < cycle_partitions; i++){
+    colors[i] = color_selection[i];
+  }
+  
+  colors[cycle_partitions] = colors[0];
+  
+  return colors;
+}
+
+//--------------------------------------------------------------
+// initialize array that contains main colors 
+// currently hard-coded
+//--------------------------------------------------------------
+RgbColor [] initialize_color_selection(){
+  
+  RgbColor [] colors = new RgbColor[6];
   
   colors[0] = new RgbColor(0xFF, 0x00, 0x00);  // red
   colors[1] = new RgbColor(0xFF, 0xFF, 0x00);  // yellow
@@ -202,7 +224,6 @@ RgbColor [] initialize_main_colors(){
   colors[3] = new RgbColor(0x00, 0xFF, 0xFF);  // cyan
   colors[4] = new RgbColor(0x00, 0x00, 0xFF);  // blue
   colors[5] = new RgbColor(0xFF, 0x00, 0xFF);  // magenta
-  colors[cycle_partitions] = colors[0];
   
   return colors;
 }
