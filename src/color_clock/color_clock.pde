@@ -33,7 +33,7 @@ RgbColor[] color_selection = initialize_color_selection();
 
 
 
-final float cycle_time_in_hours = .01; //<---- change this
+final float cycle_time_in_hours =   1; //<---- change this
 final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
@@ -193,8 +193,7 @@ float [] initialize_color_times(float hours_between_colors) {
 }
 
 //--------------------------------------------------------------
-// initialize array that contains main colors 
-// currently hard-coded
+// initialize array that contains main colors
 //--------------------------------------------------------------
 RgbColor [] initialize_main_colors(){
   
@@ -238,8 +237,8 @@ RgbColor interpolate_bet_colors(RgbColor color1,
                                 RgbColor color2, 
                                 float    fraction){
                                   
-  print("\ncolor1: ", color1.b, "\ncolor2: ", color2.b);
-  print("\nfraction: ", fraction);
+  //print("\ncolor1: ", color1.b, "\ncolor2: ", color2.b);
+  //print("\nfraction: ", fraction);
   
   // difference between color2 and color1
   int delta;
