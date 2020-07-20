@@ -33,12 +33,10 @@ RgbColor[] color_selection = initialize_color_selection();
 
 
 
-final float cycle_time_in_hours =   1; //<---- change this
+final float cycle_time_in_hours =   .05; //<---- change this
 final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
-            
-final 
 
 //--------------------------------------------------------------
 void setup(){
@@ -83,9 +81,12 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   // figure out offset from beginning of cycle
   float multiple = hrs_since_midnight / cycle_time_in_hours;
   
+  // 
   float temp =(int) multiple * cycle_time_in_hours;
   
   float hrs_since_cycle_restart = hrs_since_midnight - temp;
+  
+  if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
   
   print("\nhours since cycle restart: ", hrs_since_cycle_restart);
   
@@ -106,7 +107,7 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
 // calculates current time as a fraction between two times
 //
 // assumption:
-// time0, time1 and crnt_time are in hours
+// time0, time1 and crnt_time are in same units
 //--------------------------------------------------------------
 float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
   // ensure time1 is greater than time0
@@ -132,17 +133,17 @@ float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
 // color times are in order
 //
 // arguments:
-// color_times - array of times in hours                                  
-// time_in_hrs - time to determine
+// color_times - array of times in same units as time                                  
+// time        - time for which to determine indices
 //--------------------------------------------------------------
-int [] get_indices_of_colors (float[] color_times, float time_in_hrs){
+int [] get_indices_of_colors (float[] color_times, float time){
   
   int [] indices = new int[2];
   int i = 0;
   
-  while (time_in_hrs >= color_times[i]){
+  while (time >= color_times[i]){
     
-    if (time_in_hrs == color_times[i]){
+    if (time == color_times[i]){
       indices[0] = i;
       indices[1] = i;
       return indices;
@@ -227,6 +228,7 @@ RgbColor [] initialize_color_selection(){
   return colors;
 }
 
+// figure out brightness using HSB or HLS the convert back to RGB
 //--------------------------------------------------------------
 // returns new RgbColor object that falls between two colors 
 //
