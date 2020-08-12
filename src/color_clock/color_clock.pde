@@ -20,6 +20,7 @@
 // next tasks:
 // convert hsv to rgb
 // make transitions smoother - use intervals less than 1 sec
+// preset color schemes?
 
 
 //--------------------------------------------------------------
@@ -68,8 +69,11 @@ void draw(){
   ellipse(150, 150, 100, 50);
   
   RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
-  
   HsvColor crnt_hsv = rgb_to_hsv(crnt_rgb);
+  
+  print("\n\n");
+  crnt_rgb.print_me();
+  
   print("\n");
   crnt_hsv.print_me();
   
@@ -361,9 +365,9 @@ class RgbColor {
   
   String to_string(){
   
-  return "red: "   + str(this.r) +
-         "; grn: " + str(this.g) + 
-         "; blu: " + str(this.b);
+  return "red: "   + nf(this.r, 3, 3) +
+         "; grn: " + nf(this.g, 3, 3) + 
+         "; blu: " + nf(this.b, 3, 3);
   
   }
   
@@ -392,9 +396,9 @@ class HsvColor {
   
   String to_string(){
   
-  return "hue: "   + str(this.h) +
-         "; sat: " + str(this.s) + 
-         "; val: " + str(this.v);
+  return "hue: "   + nf(this.h, 3, 3) +
+         "; sat: " + nf(this.s, 3, 3) + 
+         "; val: " + nf(this.v, 3, 3);
   
   }
   
@@ -410,9 +414,5 @@ class HsvColor {
 // fill_color - color to fill object with
 //--------------------------------------------------------------
 void set_clock_color(RgbColor fill_color){
-  
-  print("\n");
-  fill_color.print_me();
-  //print("\nr: ", fill_color.r, ", g: ", fill_color.g, ", b: ", fill_color.b);
   fill(fill_color.r, fill_color.g, fill_color.b);
 }
