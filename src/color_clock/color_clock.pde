@@ -359,7 +359,17 @@ class RgbColor {
     
   }
   
-  // add constructor with values normalized to 1
+  String to_string(){
+  
+  return "red: "   + str(this.r) +
+         "; grn: " + str(this.g) + 
+         "; blu: " + str(this.b);
+  
+  }
+  
+  void print_me(){
+    print(this.to_string());
+  }
 
 }
 
@@ -400,6 +410,9 @@ class HsvColor {
 // fill_color - color to fill object with
 //--------------------------------------------------------------
 void set_clock_color(RgbColor fill_color){
-  print("\nr: ", fill_color.r, ", g: ", fill_color.g, ", b: ", fill_color.b);
+  
+  print("\n");
+  fill_color.print_me();
+  //print("\nr: ", fill_color.r, ", g: ", fill_color.g, ", b: ", fill_color.b);
   fill(fill_color.r, fill_color.g, fill_color.b);
 }
