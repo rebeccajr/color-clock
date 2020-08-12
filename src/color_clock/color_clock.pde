@@ -17,6 +17,11 @@
                 
 ***************************************************************/
 
+// next tasks:
+// convert hsv to rgb
+// make transitions smoother - use intervals less than 1 sec
+
+
 //--------------------------------------------------------------
 // set constants
 //--------------------------------------------------------------
@@ -225,12 +230,22 @@ RgbColor [] initialize_color_selection(){
   
   RgbColor [] colors = new RgbColor[6];
   
+  /*
   colors[0] = new RgbColor(0xFF, 0x00, 0x00);  // red
   colors[1] = new RgbColor(0xFF, 0xFF, 0x00);  // yellow
   colors[2] = new RgbColor(0x00, 0xFF, 0x00);  // green
   colors[3] = new RgbColor(0x00, 0xFF, 0xFF);  // cyan
   colors[4] = new RgbColor(0x00, 0x00, 0xFF);  // blue
   colors[5] = new RgbColor(0xFF, 0x00, 0xFF);  // magenta
+  */
+  
+  
+  colors[0] = new RgbColor(0xAA, 0x00, 0x00);  // red
+  colors[1] = new RgbColor(0xAA, 0xAA, 0x00);  // yellow
+  colors[2] = new RgbColor(0x00, 0xAA, 0x00);  // green
+  colors[3] = new RgbColor(0x00, 0xAA, 0xAA);  // cyan
+  colors[4] = new RgbColor(0x00, 0x00, 0xAA);  // blue
+  colors[5] = new RgbColor(0xAA, 0x00, 0xAA);  // magenta
   
   return colors;
 }
@@ -264,16 +279,16 @@ RgbColor interpolate_bet_colors(RgbColor color1,
   return new RgbColor(newRed, newGreen, newBlue);
   
 }
-
+//--------------------------------------------------------------
 // this code was heavily inspired by a program posted
 // by Geeks For Geeks "Program to Change RGB color model
 // to HSV color model" found:
 // https://www.geeksforgeeks.org/program-change-rgb-color-model-hsv-color-model/
 HsvColor rgb_to_hsv(RgbColor some_color){
 
-  float red_norm   = some_color.r/255;
-  float green_norm = some_color.g/255;
-  float blue_norm  = some_color.b/255;
+  float red_norm   = some_color.r/255.0;
+  float green_norm = some_color.g/255.0;
+  float blue_norm  = some_color.b/255.0;
   
   // get max of normalized values
   float cmax = max(red_norm,
@@ -290,6 +305,9 @@ HsvColor rgb_to_hsv(RgbColor some_color){
   // hue calculation
   float hue = -1;
 
+  // if r, g, and b are equal, then the color is grey
+  // i.e. the hue doesn't matter
+  // this if condition lets us avoid a div by 0 error
   if (diff == 0)
     hue = 0;
   else if (cmax == red_norm)
@@ -301,17 +319,26 @@ HsvColor rgb_to_hsv(RgbColor some_color){
  
   // sat calculation
   float sat = -1;
-  if (cmax == 0)
-    sat = 0;
-  else
-    sat = (diff / cmax) * 100;
+  
+  if (cmax == 0) sat = 0;
+  else           sat = (diff / cmax) * 100;
     
   // value computations
   float value = cmax * 100;
-  
-  
+
   return new HsvColor(hue, sat, value);
    
+}
+//--------------------------------------------------------------
+RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
+  
+  float cmax = (some_hsvcolor.v / 100) * 255;
+  float diff = (some_hsvcolor.s / 100) * cmax;
+  float cmin = cmax - diff;
+  
+  // need to look up rgb values from plot
+
+  return new RgbColor();
 }
 
 //--------------------------------------------------------------
