@@ -61,7 +61,14 @@ void setup(){
 
 void draw(){
   ellipse(150, 150, 100, 50);
-  set_clock_color(map_time_to_color(main_color_times, main_colors));
+  
+  RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
+  
+  HsvColor crnt_hsv = rgb_to_hsv(crnt_rgb);
+  print("\n");
+  crnt_hsv.print_me();
+  
+  set_clock_color(crnt_rgb);
   noStroke();
     
 }
@@ -258,8 +265,57 @@ RgbColor interpolate_bet_colors(RgbColor color1,
   
 }
 
+// this code was heavily inspired by a program posted
+// by Geeks For Geeks "Program to Change RGB color model
+// to HSV color model" found:
+// https://www.geeksforgeeks.org/program-change-rgb-color-model-hsv-color-model/
+HsvColor rgb_to_hsv(RgbColor some_color){
+
+  float red_norm   = some_color.r/255;
+  float green_norm = some_color.g/255;
+  float blue_norm  = some_color.b/255;
+  
+  // get max of normalized values
+  float cmax = max(red_norm,
+                   green_norm,
+                   blue_norm);
+  
+  // get min of normalized values
+  float cmin = min(red_norm,
+                   green_norm,
+                   blue_norm);
+                   
+  float diff = cmax - cmin;
+  
+  // hue calculation
+  float hue = -1;
+
+  if (diff == 0)
+    hue = 0;
+  else if (cmax == red_norm)
+    hue = (60.0 * ((green_norm - blue_norm) / diff) + 360) % 360.0;
+  else if (cmax == green_norm)
+    hue = (60.0 * ((blue_norm - red_norm)   / diff) + 120) % 120.0;
+  else if (cmax == blue_norm)
+    hue = (60.0 * ((red_norm - green_norm)  / diff) + 240) % 120.0;
+ 
+  // sat calculation
+  float sat = -1;
+  if (cmax == 0)
+    sat = 0;
+  else
+    sat = (diff / cmax) * 100;
+    
+  // value computations
+  float value = cmax * 100;
+  
+  
+  return new HsvColor(hue, sat, value);
+   
+}
+
 //--------------------------------------------------------------
-// object that holds values an RGB value
+// object that holds an RGB color
 //--------------------------------------------------------------
 class RgbColor {
   int r;
@@ -278,6 +334,36 @@ class RgbColor {
   
   // add constructor with values normalized to 1
 
+}
+
+//--------------------------------------------------------------
+// object that holds an HSV color
+//--------------------------------------------------------------
+class HsvColor {
+  float h;
+  float s; 
+  float v;
+  HsvColor(){}
+
+  HsvColor(float hue, float sat, float value){
+  
+    h = hue;
+    s = sat;
+    v = value;
+ 
+  }
+  
+  String to_string(){
+  
+  return "hue: "   + str(this.h) +
+         "; sat: " + str(this.s) + 
+         "; val: " + str(this.v);
+  
+  }
+  
+  void print_me(){
+    print(this.to_string());
+  }
 }
 
 //--------------------------------------------------------------
