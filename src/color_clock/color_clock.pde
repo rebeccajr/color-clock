@@ -99,12 +99,8 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   float hrs_since_midnight = get_hours_since_midnight();
   
   // figure out offset from beginning of cycle
-  float multiple = hrs_since_midnight / cycle_time_in_hours;
+  float hrs_since_cycle_restart = hrs_since_midnight % cycle_time_in_hours;
   
-  // 
-  float temp =(int) multiple * cycle_time_in_hours;
-  
-  float hrs_since_cycle_restart = hrs_since_midnight - temp;
   
   // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
@@ -143,6 +139,7 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
 // time0, time1 and crnt_time are in same units
 //--------------------------------------------------------------
 float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
+  
   // ensure time1 is greater than time0
   // if not, swap
   if (time0 > time1) {
@@ -156,7 +153,6 @@ float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
   float fractional_offset    = (crnt_time - time0) / (time1 - time0);
   
   print("\nfractional_offset: " + str(fractional_offset));
-  
   
   return fractional_offset;
 }
