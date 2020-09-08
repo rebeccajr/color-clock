@@ -32,6 +32,10 @@ final int SEC_IN_MIN = 60;
 final int MIN_IN_HR  = 60;
 final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
+final float PROG_START_HR  = hour();
+final float PROG_START_MIN = minute();
+final float PROG_START_SEC = second();
+
 
 float   [] main_color_times;
 RgbColor[] main_colors;
@@ -70,16 +74,12 @@ void draw(){
   
   RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
   HsvColor crnt_hsv = rgb_to_hsv(crnt_rgb);
-  RgbColor check = hsv_to_rgb(crnt_hsv);
   
   print("\n\n");
   crnt_rgb.print_me();
   
   print("\n");
   crnt_hsv.print_me();
-  
-  print("\n");
-  check.print_me();
   
   set_clock_color(crnt_rgb);
   noStroke();
@@ -106,20 +106,33 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   
   float hrs_since_cycle_restart = hrs_since_midnight - temp;
   
+  // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
   
   print("\nhours since cycle restart: ", hrs_since_cycle_restart);
   
-  int[] index              = get_indices_of_colors(times, hrs_since_cycle_restart);
+  // returns the indices of the colors from the main_colors array
+  // in which the current time falls between
+  int[] index = get_indices_of_colors(times, hrs_since_cycle_restart);
+  
+  print("\n\nindices of boundary colors: " + str(index[0]) + ", " + str(index[1]));
   
   float fraction  = get_time_as_fractional_offset(times[index[0]],
                                                   times[index[1]], 
                                                   hrs_since_cycle_restart);
-                                                  
-  RgbColor crnt_color_time = interpolate_bet_colors(colors[index[0]], 
-                                           colors[index[1]], fraction);
   
-  return crnt_color_time;
+  // convert colors from main_colors array to hsv
+  // for smoother transitions between colors
+  HsvColor hsvcolor0 = rgb_to_hsv(colors[index[0]]);
+  HsvColor hsvcolor1 = rgb_to_hsv(colors[index[1]]);
+  
+  HsvColor crnt_hsvcolor_time 
+    = interpolate_bet_hsvcolors(hsvcolor0, hsvcolor1, fraction);                                          
+  
+  // convert hsv to rgb in order to display properly
+  RgbColor crnt_rgbcolor_time = hsv_to_rgb(crnt_hsvcolor_time);
+  
+  return crnt_rgbcolor_time;
 
 }
 
@@ -141,6 +154,9 @@ float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
   }
   
   float fractional_offset    = (crnt_time - time0) / (time1 - time0);
+  
+  print("\nfractional_offset: " + str(fractional_offset));
+  
   
   return fractional_offset;
 }
@@ -187,8 +203,15 @@ int [] get_indices_of_colors (float[] color_times, float time){
 // returns current time in units of hours since midnight
 //--------------------------------------------------------------
 float get_hours_since_midnight(){
-  int    sec_since_midnight   = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second());
+  
+  float millis = (millis() - PROG_START_SEC * 1000) % 1000;
+  
+  float  sec_since_midnight   
+    = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second() + millis / 1000);
   float  hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
+  
+  //float millis = (millis() - PROG_START_SEC * 1000) % 1000;
+  
   
   print("\n-------");
   print("\nhours since midnight: ", hours_since_midnight);
@@ -248,7 +271,7 @@ RgbColor [] initialize_color_selection(){
   */
   
   
-  colors[0] = new RgbColor(0xAA, 0x00, 0x00);  // red
+  colors[0] = new RgbColor(0xAA0000);  // red
   colors[1] = new RgbColor(0xAA, 0xAA, 0x00);  // yellow
   colors[2] = new RgbColor(0x00, 0xAA, 0x00);  // green
   colors[3] = new RgbColor(0x00, 0xAA, 0xAA);  // cyan
@@ -258,14 +281,13 @@ RgbColor [] initialize_color_selection(){
   return colors;
 }
 
-// figure out brightness using HSB or HLS the convert back to RGB
 //--------------------------------------------------------------
 // returns new RgbColor object that falls between two colors 
 //
 // assumption:
 // color is in correct range and fraction is between 0 and 1
 //--------------------------------------------------------------
-RgbColor interpolate_bet_colors(RgbColor color1, 
+RgbColor interpolate_bet_rgbcolors(RgbColor color1, 
                                 RgbColor color2, 
                                 float    fraction){
   
@@ -273,17 +295,43 @@ RgbColor interpolate_bet_colors(RgbColor color1,
   int delta;
   
   delta = color2.r - color1.r;
-  int newRed   = (int) (fraction * delta) + color1.r;
+  int new_red   = (int) (fraction * delta) + color1.r;
   
   delta = color2.g - color1.g;
-  int newGreen = (int) (fraction * delta) + color1.g;
+  int new_green = (int) (fraction * delta) + color1.g;
   
   delta = color2.b - color1.b;
-  int newBlue  = (int) (fraction * delta) + color1.b; 
+  int new_blue  = (int) (fraction * delta) + color1.b; 
   
-  return new RgbColor(newRed, newGreen, newBlue);
+  return new RgbColor(new_red, new_green, new_blue);
   
 }
+
+//--------------------------------------------------------------
+// returns new HsvColor object that falls between two HsvColors 
+//
+// assumption:
+// color is in correct range and fraction is between 0 and 1
+//--------------------------------------------------------------
+HsvColor interpolate_bet_hsvcolors(HsvColor color1, 
+                                   HsvColor color2, 
+                                   float    fraction){
+                                   
+  float delta;
+  
+  delta = color2.h - color1.h;
+  delta = (delta + 360.0) % 360.0;
+  float new_hue = (fraction * delta) + color1.h;
+  
+  delta = color2.s - color1.s;
+  float new_sat = (fraction * delta) + color1.s;
+  
+  delta = color2.v - color1.v;
+  float new_val  = (fraction * delta) + color1.v; 
+  
+  return new HsvColor(new_hue, new_sat, new_val);                                  
+}
+
 //--------------------------------------------------------------
 // This code was heavily inspired by a program posted
 // by Geeks For Geeks "Program to Change RGB color model
@@ -414,6 +462,14 @@ class RgbColor {
     g = green;
     b = blue;
     
+  }
+  
+  RgbColor(int rgb_hex){
+    
+    r = (rgb_hex & 0xFF0000) >> 16;
+    g = (rgb_hex & 0x00FF00) >> 8;
+    b = (rgb_hex & 0x0000FF);
+     
   }
   
   // converts RgbColor to string
