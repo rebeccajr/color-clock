@@ -39,7 +39,7 @@ RgbColor[] color_selection = initialize_color_selection();
 
 
 
-final float cycle_time_in_hours =   .05; //<---- change this
+final float cycle_time_in_hours =   .005; //<---- change this
 final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
@@ -70,12 +70,16 @@ void draw(){
   
   RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
   HsvColor crnt_hsv = rgb_to_hsv(crnt_rgb);
+  RgbColor check = hsv_to_rgb(crnt_hsv);
   
   print("\n\n");
   crnt_rgb.print_me();
   
   print("\n");
   crnt_hsv.print_me();
+  
+  print("\n");
+  check.print_me();
   
   set_clock_color(crnt_rgb);
   noStroke();
@@ -264,9 +268,6 @@ RgbColor [] initialize_color_selection(){
 RgbColor interpolate_bet_colors(RgbColor color1, 
                                 RgbColor color2, 
                                 float    fraction){
-                                  
-  //print("\ncolor1: ", color1.b, "\ncolor2: ", color2.b);
-  //print("\nfraction: ", fraction);
   
   // difference between color2 and color1
   int delta;
@@ -284,10 +285,13 @@ RgbColor interpolate_bet_colors(RgbColor color1,
   
 }
 //--------------------------------------------------------------
-// this code was heavily inspired by a program posted
+// This code was heavily inspired by a program posted
 // by Geeks For Geeks "Program to Change RGB color model
 // to HSV color model" found:
 // https://www.geeksforgeeks.org/program-change-rgb-color-model-hsv-color-model/
+//
+// and the algorithm posted here
+// https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 HsvColor rgb_to_hsv(RgbColor some_color){
 
   float red_norm   = some_color.r/255.0;
@@ -315,11 +319,15 @@ HsvColor rgb_to_hsv(RgbColor some_color){
   if (diff == 0)
     hue = 0;
   else if (cmax == red_norm)
-    hue = (60.0 * ((green_norm - blue_norm) / diff) + 360) % 360.0;
+    hue = 60.0 * (((green_norm - blue_norm) / diff) + 360);
+  
   else if (cmax == green_norm)
-    hue = (60.0 * ((blue_norm - red_norm)   / diff) + 120) % 120.0;
+    hue = 60.0 * (((blue_norm - red_norm)   / diff) + 2);
+  
   else if (cmax == blue_norm)
-    hue = (60.0 * ((red_norm - green_norm)  / diff) + 240) % 120.0;
+    hue = 60.0 * (((red_norm - green_norm)  / diff) + 4);
+ 
+  hue = (hue + 360) % 360;
  
   // sat calculation
   float sat = -1;
@@ -334,24 +342,69 @@ HsvColor rgb_to_hsv(RgbColor some_color){
    
 }
 //--------------------------------------------------------------
+// This code is implementing the algorithm posted here:
+// https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
   
-  float cmax = (some_hsvcolor.v / 100) * 255;
-  float diff = (some_hsvcolor.s / 100) * cmax;
-  float cmin = cmax - diff;
+  float hue = some_hsvcolor.h;
+  float sat = some_hsvcolor.s / 100;
+  float val = some_hsvcolor.v / 100;
   
-  // need to look up rgb values from plot
+  float c = val * sat;
+  float x = c * (1 - abs((hue / 60) % 2 - 1));
+  float m = val - c;
+  
+  float r_prime = 0;
+  float g_prime = 0;
+  float b_prime = 0;
+  
+  if (0 <= hue && hue < 60) {
+    r_prime = c;
+    g_prime = x;
+    b_prime = 0;
+  }
+  else if ( 60 <= hue && hue < 120) {
+    r_prime = x;
+    g_prime = c;
+    b_prime = 0;
+  }
+  else if (120 <= hue && hue < 180) {
+    r_prime = 0;
+    g_prime = c;
+    b_prime = x;
+  }
+  else if (180 <= hue && hue < 240) {
+    r_prime = 0;
+    g_prime = x;
+    b_prime = c;
+  }
+  else if (240 <= hue && hue < 300) {
+    r_prime = x;
+    g_prime = 0;
+    b_prime = c;
+  }
+  else if (300 <= hue && hue < 360) {
+    r_prime = c;
+    g_prime = 0;
+    b_prime = x;
+  }
 
-  return new RgbColor();
+  int r = round((r_prime + m) * 255);
+  int g = round((g_prime + m) * 255);
+  int b = round((b_prime + m) * 255);
+
+  return new RgbColor(r, g, b);
 }
 
 //--------------------------------------------------------------
 // object that holds an RGB color
+// assumptions:  0 <= r, g, b < 255
 //--------------------------------------------------------------
 class RgbColor {
-  int r;
-  int g; 
-  int b;
+  int r;      // red
+  int g;      // green
+  int b;      // blue
+  
   RgbColor(){}
 
   // values normalized to 255
@@ -363,6 +416,7 @@ class RgbColor {
     
   }
   
+  // converts RgbColor to string
   String to_string(){
   
   return "red: "   + nf(this.r, 3, 3) +
@@ -371,6 +425,7 @@ class RgbColor {
   
   }
   
+  // prints RgbColor string to screen
   void print_me(){
     print(this.to_string());
   }
@@ -379,6 +434,9 @@ class RgbColor {
 
 //--------------------------------------------------------------
 // object that holds an HSV color
+// assumptions:  0 <= hue < 360
+//               0 <= sat < 100
+//               0 <= val < 100
 //--------------------------------------------------------------
 class HsvColor {
   float h;
