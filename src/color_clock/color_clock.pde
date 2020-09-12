@@ -19,6 +19,7 @@
 
 // next tasks:
 // port to hardware!!
+// modify to allow for cycle time to be in days
 // preset color schemes?
 
 
@@ -44,16 +45,28 @@ final float cycle_time_in_hours =   6.0/3600; //<---- change this
 final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
-
+            
+            
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+final int WINDOW_WIDTH_IN_PX  = 800;
+final int WINDOW_HEIGHT_IN_PX = 800;
+final int SHAPE_CENTER_X      = WINDOW_WIDTH_IN_PX  / 2;
+final int SHAPE_CENTER_Y      = WINDOW_HEIGHT_IN_PX / 2;
+final int SHAPE_WIDTH         = int (WINDOW_WIDTH_IN_PX  * 0.8/2);
+final int SHAPE_HEIGHT        = int (WINDOW_HEIGHT_IN_PX * 0.8/2);
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 //--------------------------------------------------------------
 void setup(){
   
     print("hours between colors: ", hours_bet_colors);
-
     // housekeeping
-    size(300, 300);
-    background(0);
+    size(800, 800);       //width, height
+    background(0x222222);
+    
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
+    
     ellipseMode(RADIUS);
     frameRate(600);
     
@@ -67,7 +80,7 @@ void setup(){
 }
 
 void draw(){
-  ellipse(150, 150, 100, 50);
+  ellipse(SHAPE_CENTER_X, SHAPE_CENTER_Y, SHAPE_WIDTH, SHAPE_HEIGHT);
   print("\n\n-----");
   
   RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
@@ -85,8 +98,19 @@ void draw(){
 }
 
 //--------------------------------------------------------------
-// assigns current time to color as specified by arrays
-// times and colors
+// function that fills ellipse with color
+//
+// argument:
+// fill_color - color to fill object with
+//--------------------------------------------------------------
+void set_clock_color(RgbColor fill_color){
+  fill(fill_color.r, fill_color.g, fill_color.b);
+}
+
+//--------------------------------------------------------------
+// This function is the "main" part of the program that
+// determines the RgbColor associated with the current time
+// based on the program presets.
 //
 // arguments:
 // times  - array of times that correspond with main colors
@@ -99,7 +123,6 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   // figure out offset from beginning of cycle
   float hrs_since_cycle_restart = hrs_since_midnight % cycle_time_in_hours;
   
-  
   // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
   
@@ -111,15 +134,14 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   
   print("\n\nindices of boundary colors: " + str(index[0]) + ", " + str(index[1]));
   
-  float fraction  = get_time_as_fractional_offset(times[index[0]],
-                                                  times[index[1]], 
-                                                  hrs_since_cycle_restart);
-
-  
   // convert colors from main_colors array to hsv
   // for smoother transitions between colors
   HsvColor hsvcolor0 = rgb_to_hsv(colors[index[0]]);
   HsvColor hsvcolor1 = rgb_to_hsv(colors[index[1]]);
+  
+  float fraction  = get_time_as_fractional_offset(times[index[0]],
+                                                  times[index[1]], 
+                                                  hrs_since_cycle_restart); 
   
   HsvColor crnt_hsvcolor_time 
     = interpolate_bet_hsvcolors(hsvcolor0, hsvcolor1, fraction);                                          
@@ -130,12 +152,22 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   return crnt_rgbcolor_time;
 
 }
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+// TIME CALCULATIONS
+//
+// This section of code includes functions used to
+// determine time variables as they will be used to determine
+// the current color.
+//--------------------------------------------------------------
 
 //--------------------------------------------------------------
-// calculates current time as a fraction between two times
+// This funtion calculates the fraction of where a specific time
+// falls between two other times.
 //
 // assumption:
-// time0, time1 and crnt_time are in same units
+// time0, time1 and crnt_time are in same units, and crnt_time
+// falls between time0 and time1
 //--------------------------------------------------------------
 float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
   
@@ -156,45 +188,6 @@ float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
   return fractional_offset;
 }
 
-//--------------------------------------------------------------
-// returns an array with two elements - the indices of the main
-// color times that time_in_hrs falls between
-//
-// assumption:
-// color times are in order
-//
-// arguments:
-// color_times - array of times in same units as time                                  
-// time        - time for which to determine indices
-//--------------------------------------------------------------
-int [] get_indices_of_colors (float[] color_times, float time){
-  
-  //print("time: " + time);
-  
-  int [] indices = new int[2];
-  int i = 0;
-  
-  while (time >= color_times[i]){
-    
-    if (time == color_times[i]){
-      indices[0] = i;
-      indices[1] = i;
-      return indices;
-    }
-    
-    if (i < color_times.length - 1){
-      i++;
-    }
-    else {
-      break;
-    }
-  }
-  
-  indices[0] = i - 1;
-  indices[1] = i;
-
-  return indices;
-}
 
 //--------------------------------------------------------------
 // returns current time in units of hours since midnight
@@ -251,6 +244,50 @@ void set_millis_offset(int crnt_sec){
   }
   
     prev_sec = crnt_sec;  
+}
+//--------------------------------------------------------------
+// END OF TIME CALCULATION SECTION
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//--------------------------------------------------------------
+// returns an array with two elements - the indices of the main
+// color times that time_in_hrs falls between
+//
+// assumption:
+// color times are in order
+//
+// arguments:
+// color_times - array of times in same units as time                                  
+// time        - time for which to determine indices
+//--------------------------------------------------------------
+int [] get_indices_of_colors (float[] color_times, float time){
+  
+  //print("time: " + time);
+  
+  int [] indices = new int[2];
+  int i = 0;
+  
+  while (time >= color_times[i]){
+    
+    if (time == color_times[i]){
+      indices[0] = i;
+      indices[1] = i;
+      return indices;
+    }
+    
+    if (i < color_times.length - 1){
+      i++;
+    }
+    else {
+      break;
+    }
+  }
+  
+  indices[0] = i - 1;
+  indices[1] = i;
+
+  return indices;
 }
 
 //--------------------------------------------------------------
@@ -617,16 +654,6 @@ class HsvColor {
 // END OF COLOR CLASSES SECTION
 //--------------------------------------------------------------
 //--------------------------------------------------------------
-
-//--------------------------------------------------------------
-// function that fills ellipse with color
-//
-// argument:
-// fill_color - color to fill object with
-//--------------------------------------------------------------
-void set_clock_color(RgbColor fill_color){
-  fill(fill_color.r, fill_color.g, fill_color.b);
-}
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
