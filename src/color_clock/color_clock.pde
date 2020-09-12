@@ -18,8 +18,9 @@
 ***************************************************************/
 
 // next tasks:
-// make transitions smoother - use intervals less than 1 sec
+// port to hardware!!
 // preset color schemes?
+
 
 
 //--------------------------------------------------------------
@@ -32,24 +33,14 @@ final int MIN_IN_HR  = 60;
 final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 // variables used to get offset of time in millis
-boolean millis_offset_first_run = true;
-boolean millis_offset_initialized = false;  // has offset been set yet
 int MILLIS_OFFSET = 0;
-int crnt_sec = 0;
 int prev_sec = 0;
-
-final float PROG_START_HR  = hour();
-final float PROG_START_MIN = minute();
-final float PROG_START_SEC = second();
-
 
 float   [] main_color_times;
 RgbColor[] main_colors;
 RgbColor[] color_selection = initialize_color_selection();
 
-
-
-final float cycle_time_in_hours =   1.0/60; //<---- change this
+final float cycle_time_in_hours =   6.0/3600; //<---- change this
 final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
@@ -64,7 +55,7 @@ void setup(){
     background(0);
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     ellipseMode(RADIUS);
-    frameRate(10);
+    frameRate(600);
     
     // array of times and colors
     // indices of these two arrays correspond to one another
@@ -253,15 +244,24 @@ float get_hours_since_midnight(){
 void set_millis_offset(int crnt_sec){
   
   // check if beginning of new second
-  if (prev_sec != crnt_sec){
-    
+  if (prev_sec != crnt_sec){    
     MILLIS_OFFSET = millis();
-    print("\nmillis offset set!!: " + MILLIS_OFFSET);
+    print("\nmillis offset set!!: " + MILLIS_OFFSET + "\n");
     print("\n");
   }
   
     prev_sec = crnt_sec;  
 }
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+// ARRAY INITIALIZATION FUNCTIONS
+//
+// The following section of code includes functions to
+// initialize arrays used for color and time.
+//
+// (This description needs improvement)
+//--------------------------------------------------------------
 
 //--------------------------------------------------------------
 // initialize array that stores times of main colors
@@ -324,16 +324,34 @@ RgbColor [] initialize_color_selection(){
   
   return colors;
 }
+//--------------------------------------------------------------
+// END OF ARRAY INITIALIZATION SECTION
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
 
 //--------------------------------------------------------------
-// returns new RgbColor object that falls between two colors 
+//--------------------------------------------------------------
+// COLOR INTERPOLATION FUNCTIONS
+//
+// The following section of code includes functions that
+// convert color objects to different types of color objects,
+// e.g. RgbColor to HsvColor and vice versa
+//--------------------------------------------------------------
+
+//--------------------------------------------------------------
+// This function returns a new RgbColor object that falls
+// between two RgbColors based on a fraction that represents
+// the percentage distance from one color to another.
+//
+// Note that this function is not currently used.
 //
 // assumption:
 // color is in correct range and fraction is between 0 and 1
 //--------------------------------------------------------------
 RgbColor interpolate_bet_rgbcolors(RgbColor color1, 
-                                RgbColor color2, 
-                                float    fraction){
+                                   RgbColor color2, 
+                                   float    fraction){
   
   // difference between color2 and color1
   int delta;
@@ -352,7 +370,9 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
 }
 
 //--------------------------------------------------------------
-// returns new HsvColor object that falls between two HsvColors 
+// This function returns a new HsvColor object that falls
+// between two HsvColors based on a fraction that represents
+// the percentage distance from one color to another.
 //
 // assumption:
 // color is in correct range and fraction is between 0 and 1
@@ -375,6 +395,20 @@ HsvColor interpolate_bet_hsvcolors(HsvColor color1,
   
   return new HsvColor(new_hue, new_sat, new_val);                                  
 }
+//--------------------------------------------------------------
+// END OF COLOR INTERPOLATION SECTION
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+// COLOR TYPE CONVERSIONS
+//
+// The following section of code includes functions that
+// convert color objects to different types of color objects,
+// e.g. RgbColor to HsvColor and vice versa
+//--------------------------------------------------------------
 
 //--------------------------------------------------------------
 // This code was heavily inspired by a program posted
@@ -487,6 +521,19 @@ RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
 
   return new RgbColor(r, g, b);
 }
+//--------------------------------------------------------------
+// END OF COLOR CONVERSIONS SECTION
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+// COLOR CLASSES
+//
+// The following section of code includes the classes to hold
+// color objects.
+//--------------------------------------------------------------
 
 //--------------------------------------------------------------
 // object that holds an RGB color
@@ -567,6 +614,11 @@ class HsvColor {
 }
 
 //--------------------------------------------------------------
+// END OF COLOR CLASSES SECTION
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//--------------------------------------------------------------
 // function that fills ellipse with color
 //
 // argument:
@@ -574,4 +626,14 @@ class HsvColor {
 //--------------------------------------------------------------
 void set_clock_color(RgbColor fill_color){
   fill(fill_color.r, fill_color.g, fill_color.b);
+}
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+void print_debug_value(String variable_name, double value,
+                       boolean skip_extra_line){
+
+          
+                         
 }
