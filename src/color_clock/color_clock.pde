@@ -232,7 +232,23 @@ float get_hours_since_midnight(){
 }
 
 //--------------------------------------------------------------
-// sets the difference in milliseconds between offset of where in the second the time  
+// The function millis() returns the number of milliseconds
+// since the beginning of program execution, while the functions
+// second(), minute(), and hour() return the current second,
+// minute, and hour of the day, respectively.
+//
+// The functon millis() is not coordinated with the time of day,
+// so the following function, set_millis_offset is used to
+// align the return value of millis() with the time of day.
+//
+// Every time a second passes, the millisecond offset between
+// when the program started and the start of the last second
+// is recalculated.
+// 
+// This function does not determine the precise millisecond of
+// the current time, however, it suits the purposes of this
+// program in that milliseconds will increase for the duration
+// of a second in time, and then reset.
 //--------------------------------------------------------------
 void set_millis_offset(int crnt_sec){
   
@@ -241,6 +257,7 @@ void set_millis_offset(int crnt_sec){
     
     MILLIS_OFFSET = millis();
     print("\nmillis offset set!!: " + MILLIS_OFFSET);
+    print("\n");
   }
   
     prev_sec = crnt_sec;  
