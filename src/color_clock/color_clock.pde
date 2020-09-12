@@ -18,7 +18,6 @@
 ***************************************************************/
 
 // next tasks:
-// convert hsv to rgb
 // make transitions smoother - use intervals less than 1 sec
 // preset color schemes?
 
@@ -32,6 +31,13 @@ final int SEC_IN_MIN = 60;
 final int MIN_IN_HR  = 60;
 final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
+// variables used to get offset of time in millis
+boolean millis_offset_first_run = true;
+boolean millis_offset_initialized = false;  // has offset been set yet
+int MILLIS_OFFSET = 0;
+int crnt_sec = 0;
+int prev_sec = 0;
+
 final float PROG_START_HR  = hour();
 final float PROG_START_MIN = minute();
 final float PROG_START_SEC = second();
@@ -43,7 +49,7 @@ RgbColor[] color_selection = initialize_color_selection();
 
 
 
-final float cycle_time_in_hours =   .005; //<---- change this
+final float cycle_time_in_hours =   1.0/60; //<---- change this
 final int   cycle_partitions    =   6;
 final float hours_bet_colors 
             = cycle_time_in_hours / cycle_partitions;
@@ -58,9 +64,9 @@ void setup(){
     background(0);
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     ellipseMode(RADIUS);
-    frameRate(100);
+    frameRate(10);
     
-    // array of times  and colors
+    // array of times and colors
     // indices of these two arrays correspond to one another
     main_color_times = initialize_color_times(hours_bet_colors);
     main_colors      = initialize_main_colors();
@@ -71,6 +77,7 @@ void setup(){
 
 void draw(){
   ellipse(150, 150, 100, 50);
+  print("\n\n-----");
   
   RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
   HsvColor crnt_hsv = rgb_to_hsv(crnt_rgb);
@@ -116,6 +123,7 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   float fraction  = get_time_as_fractional_offset(times[index[0]],
                                                   times[index[1]], 
                                                   hrs_since_cycle_restart);
+
   
   // convert colors from main_colors array to hsv
   // for smoother transitions between colors
@@ -170,6 +178,8 @@ float get_time_as_fractional_offset(float time0, float time1, float crnt_time){
 //--------------------------------------------------------------
 int [] get_indices_of_colors (float[] color_times, float time){
   
+  //print("time: " + time);
+  
   int [] indices = new int[2];
   int i = 0;
   
@@ -199,20 +209,41 @@ int [] get_indices_of_colors (float[] color_times, float time){
 // returns current time in units of hours since midnight
 //--------------------------------------------------------------
 float get_hours_since_midnight(){
+
+  int crnt_hr  = hour();
+  int crnt_min = minute();
+  int crnt_sec = second();
   
-  float millis = (millis() - PROG_START_SEC * 1000) % 1000;
+  set_millis_offset(crnt_sec);
+  
+  float millis = (millis() - MILLIS_OFFSET) % 1000;
   
   float  sec_since_midnight   
-    = (SEC_IN_MIN * (hour() * MIN_IN_HR + minute()) + second() + millis / 1000);
-  float  hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));
+    = (SEC_IN_MIN * (crnt_hr * MIN_IN_HR + crnt_min) + crnt_sec + millis / 1000);
+  float  hours_since_midnight = (sec_since_midnight/(1.0 * SEC_IN_HR));  
   
-  //float millis = (millis() - PROG_START_SEC * 1000) % 1000;
-  
-  
-  print("\n-------");
-  print("\nhours since midnight: ", hours_since_midnight);
+  print("\ncurrent hour:         ", crnt_hr);
+  print("\ncurrent minute:       ", crnt_min);
+  print("\ncurrent second:       ", crnt_sec);
+  print("\ncurrent millis:       ", millis);
+  print("\n\nhours since midnight: ", hours_since_midnight);
   
   return hours_since_midnight;
+}
+
+//--------------------------------------------------------------
+// sets the difference in milliseconds between offset of where in the second the time  
+//--------------------------------------------------------------
+void set_millis_offset(int crnt_sec){
+  
+  // check if beginning of new second
+  if (prev_sec != crnt_sec){
+    
+    MILLIS_OFFSET = millis();
+    print("\nmillis offset set!!: " + MILLIS_OFFSET);
+  }
+  
+    prev_sec = crnt_sec;  
 }
 
 //--------------------------------------------------------------
@@ -363,7 +394,7 @@ HsvColor rgb_to_hsv(RgbColor some_color){
   if (diff == 0)
     hue = 0;
   else if (cmax == red_norm)
-    hue = 60.0 * (((green_norm - blue_norm) / diff) + 360);
+    hue = (60.0 * (green_norm - blue_norm) / diff + 360) % 360;
   
   else if (cmax == green_norm)
     hue = 60.0 * (((blue_norm - red_norm)   / diff) + 2);
@@ -460,6 +491,7 @@ class RgbColor {
     
   }
   
+  // enables user to enter RGB values using a 6 digit hex int
   RgbColor(int rgb_hex){
     
     r = (rgb_hex & 0xFF0000) >> 16;
