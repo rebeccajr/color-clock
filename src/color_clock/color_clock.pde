@@ -22,6 +22,26 @@
  1) cycle time -length of time for clock to cycle through all colors
  2) number of colors to cycle through
  3) specific colors to cycle through
+ 
+ -
+ CLASSES
+ 
+ This program introduces two object types: RgbColor and HsvColor.
+ 
+ RgbColor contains three member variables:
+ r (red)    range: [0, 255] or [0x00, 0xFF]
+ g (green)  range: [0, 255] or [0x00, 0xFF]
+ b (blue)   range: [0, 255] or [0x00, 0xFF]
+ 
+ RGB colors are used to define the main colors that the clock will cycle
+ through.
+ 
+ HsvColor contains three member variables:
+ h (hue)        range: [0, 360]
+ s (saturation) range: [0, 100]
+ v (value)      range: [0, 100]
+ 
+ HsvColor is used for calculations because they provide a smoother transition.
                 
 ------------------------------------------------------------------------------*/
 
@@ -39,19 +59,12 @@ float   [] main_color_times;
 RgbColor[] main_colors;
 RgbColor[] color_selection = initialize_color_selection();
 
-// 
-final float CYCLE_TIME_IN_HOURS =   6.0/3600; //<---- change this
+// constants associated with timing
+final float CYCLE_TIME_IN_HOURS =   2.0/3600; //<---- change this
 final int   CYCLE_PARTITIONS    =   6;
 final float HOURS_BET_COLORS 
             = CYCLE_TIME_IN_HOURS / CYCLE_PARTITIONS;
 
-// max and min rgb values
-final int MAX_VAL    = 255;
-final int MIN_VAL    = 0;
-final int MAX_COLOR_VAL = 0xAA;
-final int MIN_COLOR_VAL = 0x11;
-
-// constants associated with time
 final int SEC_IN_MIN = 60;
 final int MIN_IN_HR  = 60;
 final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
@@ -60,6 +73,11 @@ final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 int MILLIS_OFFSET = 0;
 int prev_sec      = 0;
 
+// max and min rgb values
+final int MAX_VAL    = 255;
+final int MIN_VAL    = 0;
+final int MAX_COLOR_VAL = 0xAA;
+final int MIN_COLOR_VAL = 0x11;
 
 //--------------------------------------------------------------
 // VISUAL OUTPUT VARIABLES
@@ -75,6 +93,7 @@ final int FRAME_RATE          = 600;
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
+
 void setup(){
   
     print("hours between colors: ", HOURS_BET_COLORS);
@@ -100,6 +119,10 @@ void draw(){
   print("\n\n-----");
   
   RgbColor crnt_rgb = map_time_to_color(main_color_times, main_colors);
+  set_clock_color(crnt_rgb);
+  noStroke();
+  
+  // debug code
   HsvColor crnt_hsv = rgb_to_hsv(crnt_rgb);
   
   print("\n\n");
@@ -107,10 +130,6 @@ void draw(){
   
   print("\n");
   crnt_hsv.print_me();
-  
-  set_clock_color(crnt_rgb);
-  noStroke();
-    
 }
 
 //--------------------------------------------------------------
