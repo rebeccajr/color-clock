@@ -1,53 +1,68 @@
-/***************************************************************
- Created by:    Rebecca
-
- Description:   This program maps the current time to a color.
+/*------------------------------------------------------------------------------
  
-                Time is displayed as a colored ellipse.
-                color will cycle through "main colors" i.e.
-                red, yellow, green, cyan, blue, and magenta
-                with the following RGB values:
+ -
+ PROJECT NAME
+ Color Clock
+ 
+ -
+ DESIGNER
+ Rebecca 
+
+ -
+ DESCRIPTION   
+ 
+ This program is a software prototype of the Color Clock.
+ 
+ The Color Clock is a colored light that maps the current time
+ to a color. The clock will cycle through a series of colors over a period
+ of time. A viewer can tell the approximate time from the color 
+ of the light.
+ 
+ The user defined presets include:
+ 1) cycle time -length of time for clock to cycle through all colors
+ 2) number of colors to cycle through
+ 3) specific colors to cycle through
                 
-                red     0xFF0000
-                yellow  0xFF0000
-                green   0x00FF00 
-                cyan    0x00FFFF
-                blue    0x0000FF
-                magenta 0xFF00FF
-                
-***************************************************************/
+------------------------------------------------------------------------------*/
 
 // next tasks:
 // port to hardware!!
 // modify to allow for cycle time to be in days
 // preset color schemes?
 
-
-
 //--------------------------------------------------------------
-// set constants
+// GLOBAL VARIABLES
 //--------------------------------------------------------------
+
+// arrays used for initialization of the clock
+float   [] main_color_times;
+RgbColor[] main_colors;
+RgbColor[] color_selection = initialize_color_selection();
+
+// 
+final float CYCLE_TIME_IN_HOURS =   6.0/3600; //<---- change this
+final int   CYCLE_PARTITIONS    =   6;
+final float HOURS_BET_COLORS 
+            = CYCLE_TIME_IN_HOURS / CYCLE_PARTITIONS;
+
+// max and min rgb values
 final int MAX_VAL    = 255;
 final int MIN_VAL    = 0;
+final int MAX_COLOR_VAL = 0xAA;
+final int MIN_COLOR_VAL = 0x11;
+
+// constants associated with time
 final int SEC_IN_MIN = 60;
 final int MIN_IN_HR  = 60;
 final int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 // variables used to get offset of time in millis
 int MILLIS_OFFSET = 0;
-int prev_sec = 0;
+int prev_sec      = 0;
 
-float   [] main_color_times;
-RgbColor[] main_colors;
-RgbColor[] color_selection = initialize_color_selection();
 
-final float cycle_time_in_hours =   6.0/3600; //<---- change this
-final int   cycle_partitions    =   6;
-final float hours_bet_colors 
-            = cycle_time_in_hours / cycle_partitions;
-            
-            
 //--------------------------------------------------------------
+// VISUAL OUTPUT VARIABLES
 //--------------------------------------------------------------
 final int WINDOW_WIDTH_IN_PX  = 800;
 final int WINDOW_HEIGHT_IN_PX = 800;
@@ -55,24 +70,25 @@ final int SHAPE_CENTER_X      = WINDOW_WIDTH_IN_PX  / 2;
 final int SHAPE_CENTER_Y      = WINDOW_HEIGHT_IN_PX / 2;
 final int SHAPE_WIDTH         = int (WINDOW_WIDTH_IN_PX  * 0.8/2);
 final int SHAPE_HEIGHT        = int (WINDOW_HEIGHT_IN_PX * 0.8/2);
+final int BACKGROUND_COLOR    = 0x111111;
+final int FRAME_RATE          = 600;
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 void setup(){
   
-    print("hours between colors: ", hours_bet_colors);
+    print("hours between colors: ", HOURS_BET_COLORS);
     // housekeeping
     size(800, 800);       //width, height
-    background(0x222222);
-    
+    background(BACKGROUND_COLOR);
     colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
     
     ellipseMode(RADIUS);
-    frameRate(600);
+    frameRate(FRAME_RATE);
     
     // array of times and colors
     // indices of these two arrays correspond to one another
-    main_color_times = initialize_color_times(hours_bet_colors);
+    main_color_times = initialize_color_times(HOURS_BET_COLORS);
     main_colors      = initialize_main_colors();
 
     print("\n------------------------\n");
@@ -121,7 +137,7 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   float hrs_since_midnight = get_hours_since_midnight();
   
   // figure out offset from beginning of cycle
-  float hrs_since_cycle_restart = hrs_since_midnight % cycle_time_in_hours;
+  float hrs_since_cycle_restart = hrs_since_midnight % CYCLE_TIME_IN_HOURS;
   
   // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
@@ -308,8 +324,8 @@ int [] get_indices_of_colors (float[] color_times, float time){
 //--------------------------------------------------------------
 float [] initialize_color_times(float hours_between_colors) {
 
-  float [] color_times = new float[cycle_partitions + 1];
-  for (int i = 0; i < (cycle_partitions + 1); i++) {
+  float [] color_times = new float[CYCLE_PARTITIONS + 1];
+  for (int i = 0; i < (CYCLE_PARTITIONS + 1); i++) {
     color_times[i] = i * (hours_between_colors);
     print("\ncolor_times index ", i, "----> hour ", color_times[i]);
   }
@@ -322,14 +338,14 @@ float [] initialize_color_times(float hours_between_colors) {
 //--------------------------------------------------------------
 RgbColor [] initialize_main_colors(){
   
-  int len = cycle_partitions + 1;
+  int len = CYCLE_PARTITIONS + 1;
   RgbColor [] colors = new RgbColor[len];
   
-  for(int i = 0; i < cycle_partitions; i++){
+  for(int i = 0; i < CYCLE_PARTITIONS; i++){
     colors[i] = color_selection[i];
   }
   
-  colors[cycle_partitions] = colors[0];
+  colors[CYCLE_PARTITIONS] = colors[0];
   
   return colors;
 }
@@ -342,22 +358,12 @@ RgbColor [] initialize_color_selection(){
   
   RgbColor [] colors = new RgbColor[6];
   
-  /*
-  colors[0] = new RgbColor(0xFF, 0x00, 0x00);  // red
-  colors[1] = new RgbColor(0xFF, 0xFF, 0x00);  // yellow
-  colors[2] = new RgbColor(0x00, 0xFF, 0x00);  // green
-  colors[3] = new RgbColor(0x00, 0xFF, 0xFF);  // cyan
-  colors[4] = new RgbColor(0x00, 0x00, 0xFF);  // blue
-  colors[5] = new RgbColor(0xFF, 0x00, 0xFF);  // magenta
-  */
-  
-  
-  colors[0] = new RgbColor(0xAA0000);  // red
-  colors[1] = new RgbColor(0xAA, 0xAA, 0x00);  // yellow
-  colors[2] = new RgbColor(0x00, 0xAA, 0x00);  // green
-  colors[3] = new RgbColor(0x00, 0xAA, 0xAA);  // cyan
-  colors[4] = new RgbColor(0x00, 0x00, 0xAA);  // blue
-  colors[5] = new RgbColor(0xAA, 0x00, 0xAA);  // magenta
+  colors[0] = new RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MIN_COLOR_VAL);  // red
+  colors[1] = new RgbColor(MAX_COLOR_VAL, MAX_COLOR_VAL, MIN_COLOR_VAL);  // yellow
+  colors[2] = new RgbColor(MIN_COLOR_VAL, MAX_COLOR_VAL, MIN_COLOR_VAL);  // green
+  colors[3] = new RgbColor(MIN_COLOR_VAL, MAX_COLOR_VAL, MAX_COLOR_VAL);  // cyan
+  colors[4] = new RgbColor(MIN_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);  // blue
+  colors[5] = new RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);  // magenta
   
   return colors;
 }
