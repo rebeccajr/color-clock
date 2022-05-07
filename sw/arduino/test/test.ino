@@ -1,19 +1,40 @@
+//------------------------------------------------------------------------------
+// DESCRIPTION
+// This script tests the Adfruit LED alphanumeric display with backpack and
+// Chronodot clock module
+//
+//
+//------------------------------------------------------------------------------
 #include <Wire.h>
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
+
+Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
 
 void setup() {
+
+  Serial.begin(9600);
+
+  alpha4.begin(0x70);  
+
+  alpha4.writeDigitAscii(0, 'F');
+  alpha4.writeDigitAscii(1, 'L');
+  alpha4.writeDigitAscii(2, 'U');
+  alpha4.writeDigitAscii(3, 'X');
+  alpha4.writeDisplay();
+
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
 
-  Wire.begin();
-  Wire.onReceive(receiveEvent);
-  Serial.begin(9600);
+  //Wire.begin();
+  //Wire.onReceive(receiveEvent);
+  //Serial.begin(9600);
 }
 
-
-  
 // the loop function runs over and over again forever
 void loop() {
 
+  /*
   byte deviceAddress = 0xD0;
   byte wordAddress   = 0x02;
   byte hr            = 0x06;
@@ -42,5 +63,6 @@ void receiveEvent(int howMany)
   
   int x = Wire.read();        // receive byte as an integer
   Serial.println(x);          // print the integer
+  */
   
 }

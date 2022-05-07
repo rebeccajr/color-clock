@@ -29,7 +29,6 @@ void setup() {
 }
 
 void loop() {
-	// send what's going on to the serial monitor.
 	
 	// Start with the year
 	Serial.print("2");
@@ -67,6 +66,7 @@ void loop() {
 	Serial.print(" ");
   Serial.print("\nsec:   ");
 	Serial.print(clock0.getSecond(), DEC);
+  Serial.print("");
 
 
  /*
