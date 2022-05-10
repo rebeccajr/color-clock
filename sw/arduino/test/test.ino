@@ -6,14 +6,22 @@
 //
 //------------------------------------------------------------------------------
 #include <Wire.h>
+#include <DS3231.h>
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
 
 Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
+DS3231 clock0;
+
+byte set_hr  = 13;
+byte set_min = 54;
+
+bool h12Flag;
+bool pmFlag;
 
 void setup() {
 
-  Serial.begin(9600);
+  Serial.begin(57600);
 
   alpha4.begin(0x70);  
 
@@ -26,13 +34,44 @@ void setup() {
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
 
+  Wire.begin();
+
+  Serial.print("\n---------------------------");
+  Serial.print("\n---------------------------");
+  Serial.print("\n before setting");
+  Serial.print("\n---------------------------");
+  Serial.print("\nhour:  ");
+  Serial.print(clock0.getHour(h12Flag, pmFlag), DEC);
+  Serial.print(" ");
+  Serial.print("\nmin:   ");
+  Serial.print(clock0.getMinute(), DEC);
+ 
+
   //Wire.begin();
   //Wire.onReceive(receiveEvent);
   //Serial.begin(9600);
 }
 
+
+
 // the loop function runs over and over again forever
 void loop() {
+
+  clock0.setHour(set_hr);
+  clock0.setMinute(set_min);
+  Serial.print("\n---------------------------");
+  Serial.print("\n---------------------------");
+  Serial.print("\n clock stuff");
+  Serial.print("\n---------------------------");
+  Serial.print("\nhour:  ");
+  Serial.print(clock0.getHour(h12Flag, pmFlag), DEC);
+  Serial.print(" ");
+  Serial.print("\nmin:   ");
+  Serial.print(clock0.getMinute(), DEC);
+  Serial.print(" ");
+  Serial.print("\nsec:   ");
+  Serial.print(clock0.getSecond(), DEC);
+  delay(1000);
 
   /*
   byte deviceAddress = 0xD0;

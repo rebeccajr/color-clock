@@ -109,6 +109,9 @@ void loop() {
     Serial.print(" ");
     Serial.print("\nmin:   ");
     Serial.print(clock0.getMinute(), DEC);
+    Serial.print(" ");
+    Serial.print("\nsec:   ");
+    Serial.print(clock0.getSecond(), DEC);
 
     //if (!Serial.available())
       //Serial.print("Serial not available :(");
