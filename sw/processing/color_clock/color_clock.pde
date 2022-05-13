@@ -139,6 +139,7 @@ void draw(){
   crnt_hsv.print_me();
 }
 
+
 //--------------------------------------------------------------
 // function that fills ellipse with color
 //
@@ -148,6 +149,7 @@ void draw(){
 void set_clock_color(RgbColor fill_color){
   fill(fill_color.r, fill_color.g, fill_color.b);
 }
+
 
 //--------------------------------------------------------------
 // This function is the "main" part of the program that
@@ -163,7 +165,8 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
   float hrs_since_midnight = get_hours_since_midnight();
   
   // figure out offset from beginning of cycle
-  float hrs_since_cycle_restart = hrs_since_midnight % CYCLE_TIME_IN_HOURS;
+  float hrs_since_cycle_restart =
+    hrs_since_midnight % CYCLE_TIME_IN_HOURS;
   
   // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
@@ -205,7 +208,7 @@ RgbColor map_time_to_color(float[] times, RgbColor[] colors){
 //--------------------------------------------------------------
 
 //--------------------------------------------------------------
-// This funtion calculates the fraction of where a specific time
+// This function calculates the fraction of where a specific time
 // falls between two other times.
 //
 // assumption:
@@ -497,6 +500,7 @@ HsvColor interpolate_bet_hsvcolors(HsvColor color1,
 //
 // and the algorithm posted here
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+//--------------------------------------------------------------
 HsvColor rgb_to_hsv(RgbColor some_color){
 
   float red_norm   = some_color.r/255.0;
@@ -546,11 +550,13 @@ HsvColor rgb_to_hsv(RgbColor some_color){
   return new HsvColor(hue, sat, value);
    
 }
+
 //--------------------------------------------------------------
 // convert an Hsv color object to an Rgb color object
 // 
 // This code is implementing the algorithm posted here:
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+//--------------------------------------------------------------
 RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
   
   float hue = some_hsvcolor.h;
