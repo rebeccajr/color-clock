@@ -12,10 +12,10 @@
 #include "rgb-color.h"
 
 void get_rtc_time(byte* the_time, DS3231 clk);
+//void set_millis_offset(int crnt_sec);
 
 Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
-DS3231 clock0;
-
+DS3231 clk;
 
 //--------------------------------------------------------------
 // GLOBAL VARIABLES
@@ -40,34 +40,41 @@ byte set_min = 54;
 bool h12Flag;
 bool pmFlag;
 
+byte rtc_hr;
+byte rtc_min;
+byte rtc_sec;
+bool first_run = true;
+
 void setup() {
 
-  Serial.begin(57600);
+  Serial.begin(9600);
   alpha4.begin(0x70);
   
   Wire.begin();
-  
-  // initialize clock
-  clock0.setHour(set_hr);
-  clock0.setMinute(set_min);
 }
-
-
 
 // the loop function runs over and over again forever
 void loop() {
+
+  // initialize clock
+  if (first_run == true) {
+    clk.setHour(set_hr);
+    clk.setMinute(set_min);
+    first_run = false;
+  }
+  
   Serial.print("\n---------------------------");
   Serial.print("\n---------------------------");
   Serial.print("\n clock stuff");
   Serial.print("\n---------------------------");
 
   // get clock info
-  byte* the_time;
-  get_rtc_time(the_time, clock0);
+  byte the_time[3];
+  get_rtc_time(the_time, clk);
   
-  byte rtc_hr  = the_time[2]; 
-  byte rtc_min = the_time[1];
-  byte rtc_sec = the_time[0];
+  rtc_hr  = the_time[2]; 
+  rtc_min = the_time[1];
+  rtc_sec = the_time[0];
 
   //print("\ncurrent minute:       ", the_min);
   //print("\ncurrent second:       ", the_sec);
@@ -94,17 +101,18 @@ void loop() {
 }
 
 //------------------------------------------------------------------------------
-// Returns the time from a Real Time Clock as an array of bytes.
+// Populates a byte array with the time from a Real Time Clock
 //------------------------------------------------------------------------------
 void get_rtc_time(byte* the_time, DS3231 clk){
-  the_time[0] = clk.getHour(h12Flag, pmFlag);
+  the_time[2] = clk.getHour(h12Flag, pmFlag);
   the_time[1] = clk.getMinute();
-  the_time[2] = clk.getSecond();
+  the_time[0] = clk.getSecond();
 }
 
-//--------------------------------------------------------------
-// returns current time in units of hours since midnight
-//--------------------------------------------------------------
+/*
+//------------------------------------------------------------------------------
+// Returns current time in units of hours since midnight
+//------------------------------------------------------------------------------
 float get_hours_since_midnight(byte the_hr, byte the_min, byte the_sec) {
   
   set_millis_offset(the_sec);
@@ -150,3 +158,4 @@ void set_millis_offset(int crnt_sec){
   
     prev_sec = crnt_sec;  
 }
+*/
