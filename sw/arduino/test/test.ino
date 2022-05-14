@@ -12,7 +12,8 @@
 #include "rgb-color.h"
 
 void get_rtc_time(byte* the_time, DS3231 clk);
-//void set_millis_offset(int crnt_sec);
+float get_hrs_since_midnight(byte the_hr, byte the_min, byte the_sec);
+void set_millis_offset(int the_sec);
 
 Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
 DS3231 clk;
@@ -27,6 +28,8 @@ int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 // variables used to get offset of time in millis
 int MILLIS_OFFSET = 0;
 int prev_sec      = 0;
+
+float hrs_since_midnight = 0;
 
 // max and min rgb values
 int MAX_VAL    = 60;
@@ -76,11 +79,6 @@ void loop() {
   rtc_min = the_time[1];
   rtc_sec = the_time[0];
 
-  //print("\ncurrent minute:       ", the_min);
-  //print("\ncurrent second:       ", the_sec);
-  //print("\ncurrent millis:       ", millis);
-  //print("\n\nhours since midnight: ", hours_since_midnight);
-  
   Serial.print("\nhour:  ");
   Serial.print(rtc_hr, DEC);
   Serial.print(" ");
@@ -89,6 +87,11 @@ void loop() {
   Serial.print(" ");
   Serial.print("\nsec:   ");
   Serial.print(rtc_sec, DEC);
+  
+  hrs_since_midnight = get_hrs_since_midnight(rtc_hr, rtc_min, rtc_sec);
+  
+  Serial.print("\nhrs since midnight:   ");
+  Serial.print(hrs_since_midnight, DEC);
 
   alpha4.writeDigitAscii(3, 0x30 + rtc_sec % 10);
   alpha4.writeDigitAscii(2, 0x30 + rtc_sec / 10);
@@ -97,8 +100,8 @@ void loop() {
   alpha4.writeDisplay();
   
   delay(1000);
-  
 }
+
 
 //------------------------------------------------------------------------------
 // Populates a byte array with the time from a Real Time Clock
@@ -109,11 +112,11 @@ void get_rtc_time(byte* the_time, DS3231 clk){
   the_time[0] = clk.getSecond();
 }
 
-/*
+
 //------------------------------------------------------------------------------
 // Returns current time in units of hours since midnight
 //------------------------------------------------------------------------------
-float get_hours_since_midnight(byte the_hr, byte the_min, byte the_sec) {
+float get_hrs_since_midnight(byte the_hr, byte the_min, byte the_sec) {
   
   set_millis_offset(the_sec);
   
@@ -128,7 +131,8 @@ float get_hours_since_midnight(byte the_hr, byte the_min, byte the_sec) {
   return hours_since_midnight;
 }
 
-//--------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 // The function millis() returns the number of milliseconds
 // since the beginning of program execution, while the functions
 // second(), minute(), and hour() return the current second,
@@ -146,16 +150,13 @@ float get_hours_since_midnight(byte the_hr, byte the_min, byte the_sec) {
 // the current time, however, it suits the purposes of this
 // program in that milliseconds will increase for the duration
 // of a second in time, and then reset.
-//--------------------------------------------------------------
-void set_millis_offset(int crnt_sec){
+//------------------------------------------------------------------------------
+void set_millis_offset(int the_sec){
   
   // check if beginning of new second
-  if (prev_sec != crnt_sec){    
+  if (prev_sec != the_sec){    
     MILLIS_OFFSET = millis();
-    //print("\nmillis offset set!!: " + MILLIS_OFFSET + "\n");
-    //print("\n");
   }
   
-    prev_sec = crnt_sec;  
+    prev_sec = the_sec;  
 }
-*/
