@@ -12,6 +12,9 @@
 #include "rgb-color.h"
 #include "color-logic.h"
 
+void  write_serial_time();
+void  write_display_time();
+void  write_flux_to_display();
 void  get_rtc_time(byte* the_time, DS3231 clk);
 float get_hrs_since_midnight(byte the_hr, byte the_min, byte the_sec);
 void  set_millis_offset(int the_sec);
@@ -55,8 +58,8 @@ void setup() {
   Wire.begin();
 
   initialize_color_times(main_color_times, HOURS_BET_COLORS);
-  //initialize_main_colors(main_colors);
   initialize_color_selection(color_selection);
+  initialize_main_colors(main_colors);
 }
 
 
@@ -83,22 +86,14 @@ void loop() {
   rtc_hr  = the_time[2]; 
   rtc_min = the_time[1];
   rtc_sec = the_time[0];
-
-  Serial.print("\nhour:  ");
-  Serial.print(rtc_hr, DEC);
-  Serial.print(" ");
-  Serial.print("\nmin:   ");
-  Serial.print(rtc_min, DEC);
-  Serial.print(" ");
-  Serial.print("\nsec:   ");
-  Serial.print(rtc_sec, DEC);
-  
   hrs_since_midnight = get_hrs_since_midnight(rtc_hr, rtc_min, rtc_sec);
   
   Serial.print("\nhrs since midnight:   ");
   Serial.print(hrs_since_midnight, DEC);
 
-  write_display_time();
+  write_serial_time();
+  //write_display_time();
+  write_flux_to_display();
 
   delay(1000);
 }
@@ -113,8 +108,35 @@ void write_display_time(){
   alpha4.writeDigitAscii(2, 0x30 + rtc_sec / 10);
   alpha4.writeDigitAscii(1, 0x30 + rtc_min % 10);
   alpha4.writeDigitAscii(0, 0x30 + rtc_min / 10);
+
+
+  alpha4.writeDigitAscii(0, 0x65);
   alpha4.writeDisplay();
 
+}
+
+void write_flux_to_display(){
+  alpha4.writeDigitAscii(0, 'F');
+  alpha4.writeDigitAscii(1, 'L');
+  alpha4.writeDigitAscii(2, 'U');
+  alpha4.writeDigitAscii(3, 'X');
+  alpha4.writeDisplay();
+
+
+}
+
+//-------------------------------------------------------------------------------
+// Write time to serial console
+//-------------------------------------------------------------------------------
+void write_serial_time(){
+  Serial.print("\nhour:  ");
+  Serial.print(rtc_hr, DEC);
+  Serial.print(" ");
+  Serial.print("\nmin:   ");
+  Serial.print(rtc_min, DEC);
+  Serial.print(" ");
+  Serial.print("\nsec:   ");
+  Serial.print(rtc_sec, DEC);
 }
 
 //------------------------------------------------------------------------------
