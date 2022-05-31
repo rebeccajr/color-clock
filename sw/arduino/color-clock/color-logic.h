@@ -46,9 +46,12 @@
 // GLOBAL VARIABLES
 //------------------------------------------------------------------------------
 
+#ifndef CYCLE_PARTITIONS
+#define CYCLE_PARTITIONS    6
+#endif
+
 // configuration values
 float CYCLE_TIME_IN_HOURS =   12.0/3600; //<---- change this
-#define   CYCLE_PARTITIONS    6
 float HOURS_BET_COLORS = CYCLE_TIME_IN_HOURS / CYCLE_PARTITIONS;
 
 // arrays used for initialization of the clock
@@ -77,11 +80,7 @@ RgbColor RGB_CYA = RgbColor(MIN_COLOR_VAL, MAX_COLOR_VAL, MAX_COLOR_VAL);
 RgbColor RGB_BLU = RgbColor(MIN_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
 RgbColor RGB_MAG = RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
 
-//------------------------------------------------------------------------------
-// VISUAL OUTPUT VARIABLES
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 // ARRAY INITIALIZATION FUNCTIONS
 //
@@ -99,14 +98,13 @@ RgbColor RGB_MAG = RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
 //------------------------------------------------------------------------------
 void initialize_color_times(float* color_times, float hours_between_colors) {
 
-  for (int i = 0; i < (CYCLE_PARTITIONS + 1); i++) {
+  for (int i = 0; i < (CYCLE_PARTITIONS + 1); i++)
     color_times[i] = i * (hours_between_colors);
-    //print("\ncolor_times index ", i, "----> hour ", color_times[i]);
-  }  
 }
 
+
 //--------------------------------------------------------------
-// initialize array that contains main colors
+// Initialize array that contains main colors. Usese
 //--------------------------------------------------------------
 void initialize_main_colors(RgbColor* colors){
   
@@ -116,9 +114,10 @@ void initialize_main_colors(RgbColor* colors){
   colors[CYCLE_PARTITIONS] = colors[0];
 }
 
+
 //--------------------------------------------------------------
-// initialize array that contains main colors 
-// currently hard-coded
+// Initialize selection of colors. Currently hard-coded, will
+// read from config file or user input eventually
 //--------------------------------------------------------------
 void initialize_color_selection(RgbColor* colors){  
   colors[0] = RGB_RED;
@@ -136,9 +135,6 @@ void initialize_color_selection(RgbColor* colors){
 
 
 /*
-
-
-
 void setup(){
   
     print("hours between colors: ", HOURS_BET_COLORS);

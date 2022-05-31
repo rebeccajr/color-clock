@@ -73,11 +73,6 @@ void loop() {
     clk.setMinute(set_min);
     first_run = false;
   }
-  
-  Serial.print("\n---------------------------");
-  Serial.print("\n---------------------------");
-  Serial.print("\n clock stuff");
-  Serial.print("\n---------------------------");
 
   // get clock info
   byte the_time[3];
@@ -88,9 +83,6 @@ void loop() {
   rtc_sec = the_time[0];
   hrs_since_midnight = get_hrs_since_midnight(rtc_hr, rtc_min, rtc_sec);
   
-  Serial.print("\nhrs since midnight:   ");
-  Serial.print(hrs_since_midnight, DEC);
-
   write_serial_time();
   //write_display_time();
   write_flux_to_display();
@@ -129,6 +121,11 @@ void write_flux_to_display(){
 // Write time to serial console
 //-------------------------------------------------------------------------------
 void write_serial_time(){
+  Serial.print("\n---------------------------");
+  Serial.print("\n---------------------------");
+  Serial.print("\n clock stuff");
+  Serial.print("\n---------------------------");
+
   Serial.print("\nhour:  ");
   Serial.print(rtc_hr, DEC);
   Serial.print(" ");
@@ -137,6 +134,9 @@ void write_serial_time(){
   Serial.print(" ");
   Serial.print("\nsec:   ");
   Serial.print(rtc_sec, DEC);
+
+  Serial.print("\nhrs since midnight:   ");
+  Serial.print(hrs_since_midnight, DEC);
 }
 
 //------------------------------------------------------------------------------
