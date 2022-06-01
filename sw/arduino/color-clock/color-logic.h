@@ -43,6 +43,11 @@
 // 3) specific colors to cycle through
 
 //------------------------------------------------------------------------------
+// STANDARD LIBRARIES
+//------------------------------------------------------------------------------
+#include <algorithm>
+
+//------------------------------------------------------------------------------
 // GLOBAL VARIABLES
 //------------------------------------------------------------------------------
 
@@ -80,6 +85,13 @@ RgbColor RGB_CYA = RgbColor(MIN_COLOR_VAL, MAX_COLOR_VAL, MAX_COLOR_VAL);
 RgbColor RGB_BLU = RgbColor(MIN_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
 RgbColor RGB_MAG = RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
 
+
+//------------------------------------------------------------------------------
+// FUNCTION PROTOTYPES
+//------------------------------------------------------------------------------
+void get_indices_of_colors (int* indices, float* color_times, float the_time);
+RgbColor hsv_to_rgb(HsvColor some_hsvcolor);
+HsvColor rgb_to_hsv(RgbColor some_color);
 
 //------------------------------------------------------------------------------
 // ARRAY INITIALIZATION FUNCTIONS
@@ -183,7 +195,7 @@ void draw(){
 void set_clock_color(RgbColor fill_color){
   fill(fill_color.r, fill_color.g, fill_color.b);
 }
-
+*/
 
 //--------------------------------------------------------------
 // This function is the "main" part of the program that
@@ -194,25 +206,30 @@ void set_clock_color(RgbColor fill_color){
 // times  - array of times that correspond with main colors
 // colors - array of main colors
 //--------------------------------------------------------------
-/*RgbColor map_time_to_color(float* times, RgbColor* colors){
+RgbColor map_time_to_color(
+  float  hrs_since_midnight,
+  float  fractional_offset,
+  float* times,
+  RgbColor* colors){
   
-  float hrs_since_midnight = get_hours_since_midnight();
-  
-  // figure out offset from beginning of cycle
+  /*// figure out offset from beginning of cycle
   float hrs_since_cycle_restart =
-    hrs_since_midnight % CYCLE_TIME_IN_HOURS;
+    hrs_since_midnight / CYCLE_TIME_IN_HOURS;
+
+  hrs_since_cycle_restart = hrs_since_midnight - hrs_since_cycle_restart;
   
   // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
   
-  print("\nhours since cycle restart: ", hrs_since_cycle_restart);
+  //print("\nhours since cycle restart: ", hrs_since_cycle_restart);
   
-  // returns the indices of the colors from the main_colors array
+  // modifies the indices of the colors from the main_colors array
   // in which the current time falls between
-  int[] index = get_indices_of_colors(times, hrs_since_cycle_restart);
+  int index[2];
+  get_indices_of_colors(index, times, hrs_since_cycle_restart);
   
-  print("\n\nindices of boundary colors: " + str(index[0]) + ", " 
-                                           + str(index[1]));
+  //print("\n\nindices of boundary colors: " + str(index[0]) + ", " 
+                                           //+ str(index[1]));
   
   // convert colors from main_colors array to hsv
   // for smoother transitions between colors
@@ -229,11 +246,13 @@ void set_clock_color(RgbColor fill_color){
   // convert hsv to rgb in order to display properly
   RgbColor crnt_rgbcolor_time = hsv_to_rgb(crnt_hsvcolor_time);
   
-  return crnt_rgbcolor_time;
+  return crnt_rgbcolor_time;*/
 
-}*/
+  return RgbColor();
 
+}
 
+/*
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 // TIME CALCULATIONS
@@ -271,7 +290,7 @@ float get_time_as_fractional_offset(float time0,
   //print("\nfractional_offset: " + str(fractional_offset));
   
   return fractional_offset;
-}
+}*/
 
 
 
@@ -344,7 +363,7 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
                                    RgbColor color2, 
                                    float    fraction){
   
-  /*/ difference between color2 and color1
+  // difference between color2 and color1
   int delta;
   
   delta = color2.r - color1.r;
@@ -356,7 +375,7 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
   delta = color2.b - color1.b;
   int new_blue  = (int) (fraction * delta) + color1.b; 
   
-  return new RgbColor(new_red, new_green, new_blue);*/
+  return RgbColor(new_red, new_green, new_blue);
   
 }
 
@@ -413,21 +432,21 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
 // and the algorithm posted here
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 //--------------------------------------------------------------
-/*HsvColor rgb_to_hsv(RgbColor some_color){
+HsvColor rgb_to_hsv(RgbColor some_color){
 
   float red_norm   = some_color.r/255.0;
   float green_norm = some_color.g/255.0;
   float blue_norm  = some_color.b/255.0;
   
   // get max of normalized values
-  float cmax = max(red_norm,
-                   green_norm,
-                   blue_norm);
+  float cmax = std::max(red_norm,
+                        green_norm,
+                        blue_norm);
   
   // get min of normalized values
-  float cmin = min(red_norm,
-                   green_norm,
-                   blue_norm);
+  float cmin = std::min(red_norm,
+                        green_norm,
+                        blue_norm);
                    
   float diff = cmax - cmin;
   
@@ -440,7 +459,7 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
   if (diff == 0)
     hue = 0;
   else if (cmax == red_norm)
-    hue = (60.0 * (green_norm - blue_norm) / diff + 360) % 360;
+    hue = fmod((60.0 * (green_norm - blue_norm) / diff + 360) , 360);
   
   else if (cmax == green_norm)
     hue = 60.0 * (((blue_norm - red_norm)   / diff) + 2);
@@ -448,7 +467,7 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
   else if (cmax == blue_norm)
     hue = 60.0 * (((red_norm - green_norm)  / diff) + 4);
  
-  hue = (hue + 360) % 360;
+  hue = fmod((hue + 360), 360);
  
   // sat calculation
   float sat = -1;
@@ -459,7 +478,7 @@ RgbColor interpolate_bet_rgbcolors(RgbColor color1,
   // value computations
   float value = cmax * 100;
 
-  return new HsvColor(hue, sat, value);
+  return HsvColor(hue, sat, value);
    
 }
 
@@ -476,7 +495,7 @@ RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
   float val = some_hsvcolor.v / 100;
   
   float c = val * sat;
-  float x = c * (1 - abs((hue / 60) % 2 - 1));
+  float x = c * (1 - abs(fmod((hue / 60), 2) - 1));
   float m = val - c;
   
   float r_prime = 0;
@@ -518,8 +537,8 @@ RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
   int g = round((g_prime + m) * 255);
   int b = round((b_prime + m) * 255);
 
-  return new RgbColor(r, g, b);
-}*/
+  return RgbColor(r, g, b);
+}
 //--------------------------------------------------------------
 // END OF COLOR CONVERSIONS SECTION
 //--------------------------------------------------------------
@@ -535,39 +554,6 @@ RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
 //--------------------------------------------------------------
 
 
-
-//--------------------------------------------------------------
-// object that holds an HSV color
-// assumptions:  0 <= hue < 360
-//               0 <= sat < 100
-//               0 <= val < 100
-//--------------------------------------------------------------
-/*class HsvColor {
-  float h;
-  float s; 
-  float v;
-  HsvColor(){}
-
-  HsvColor(float hue, float sat, float value){
-  
-    h = hue;
-    s = sat;
-    v = value;
- 
-  }
-  
-  String to_string(){
-  
-  return "hue: "   + nf(this->h, 3, 3) +
-         "; sat: " + nf(this->s, 3, 3) + 
-         "; val: " + nf(this->v, 3, 3);
-  
-  }
-  
-  void print_me(){
-    print(this->to_string());
-  }
-}*/
 
 //--------------------------------------------------------------
 // END OF COLOR CLASSES SECTION

@@ -54,3 +54,36 @@ public:
   }
 
 };
+
+//--------------------------------------------------------------
+// object that holds an HSV color
+// assumptions:  0 <= hue < 360
+//               0 <= sat < 100
+//               0 <= val < 100
+//--------------------------------------------------------------
+class HsvColor {
+
+public:
+  float h;
+  float s; 
+  float v;
+
+  HsvColor(){}
+
+  HsvColor(float hue, float sat, float value){
+  
+    h = hue;
+    s = sat;
+    v = value;
+ 
+  }
+  
+  String to_string(){
+
+    return   "hue: " + String(this->h, 3) +
+           "; sat: " + String(this->s, 3) + 
+           "; val: " + String(this->v, 3);
+  }
+
+};
+

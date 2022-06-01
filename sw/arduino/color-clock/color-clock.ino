@@ -84,8 +84,8 @@ void loop() {
   hrs_since_midnight = get_hrs_since_midnight(rtc_hr, rtc_min, rtc_sec);
   
   write_serial_time();
-  //write_display_time();
-  write_flux_to_display();
+  write_display_time();
+  //write_flux_to_display();
 
   delay(1000);
 }
@@ -101,8 +101,6 @@ void write_display_time(){
   alpha4.writeDigitAscii(1, 0x30 + rtc_min % 10);
   alpha4.writeDigitAscii(0, 0x30 + rtc_min / 10);
 
-
-  alpha4.writeDigitAscii(0, 0x65);
   alpha4.writeDisplay();
 
 }
