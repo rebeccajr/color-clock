@@ -1,7 +1,7 @@
 //--------------------------------------------------------------
 // DESCRIPTION
-// This file contains classes that represent an RGB and HSV
-// color object.
+// This file contains classes that represent RGB and HSV
+// color objects.
 //
 // RgbColor contains three member variables:
 // r (red)    range: [0, 255] or [0x00, 0xFF]
@@ -50,7 +50,6 @@ public:
   return "red: "   + String(this->r, 3) +
          "; grn: " + String(this->g, 3) + 
          "; blu: " + String(this->b, 3);
-  
   }
 
 };

@@ -440,13 +440,13 @@ HsvColor rgb_to_hsv(RgbColor some_color){
   
   // get max of normalized values
   float cmax = std::max(red_norm,
-                        green_norm,
-                        blue_norm);
+               std::max(green_norm,
+                        blue_norm));
   
   // get min of normalized values
   float cmin = std::min(red_norm,
-                        green_norm,
-                        blue_norm);
+               std::min(green_norm,
+                        blue_norm));
                    
   float diff = cmax - cmin;
   
