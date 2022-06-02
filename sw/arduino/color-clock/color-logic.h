@@ -147,26 +147,6 @@ void initialize_color_selection(RgbColor* colors){
 
 
 /*
-void setup(){
-  
-    print("hours between colors: ", HOURS_BET_COLORS);
-    // housekeeping
-    size(800, 800);       //width, height
-    background(BACKGROUND_COLOR);
-    colorMode(RGB, MAX_VAL, MAX_VAL, MAX_VAL);
-    
-    ellipseMode(RADIUS);
-    frameRate(FRAME_RATE);
-    
-    // array of times and colors
-    // indices of these two arrays correspond to one another
-    main_color_times = initialize_color_times(HOURS_BET_COLORS);
-    main_colors      = initialize_main_colors();
-
-    print("\n------------------------\n");
-    
-}
-
 void draw(){
   ellipse(SHAPE_CENTER_X, SHAPE_CENTER_Y, SHAPE_WIDTH, SHAPE_HEIGHT);
   print("\n\n-----");
@@ -212,10 +192,10 @@ RgbColor map_time_to_color(
   float* times,
   RgbColor* colors){
   
-  /*// figure out offset from beginning of cycle
+  // figure out offset from beginning of cycle
   float hrs_since_cycle_restart =
     hrs_since_midnight / CYCLE_TIME_IN_HOURS;
-
+/*
   hrs_since_cycle_restart = hrs_since_midnight - hrs_since_cycle_restart;
   
   // error handling
@@ -252,7 +232,6 @@ RgbColor map_time_to_color(
 
 }
 
-/*
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 // TIME CALCULATIONS
@@ -290,7 +269,7 @@ float get_time_as_fractional_offset(float time0,
   //print("\nfractional_offset: " + str(fractional_offset));
   
   return fractional_offset;
-}*/
+}
 
 
 
@@ -541,24 +520,5 @@ RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
 }
 //--------------------------------------------------------------
 // END OF COLOR CONVERSIONS SECTION
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-
-
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-// COLOR CLASSES
-//
-// The following section of code includes the classes to hold
-// color objects.
-//--------------------------------------------------------------
-
-
-
-//--------------------------------------------------------------
-// END OF COLOR CLASSES SECTION
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-
 //--------------------------------------------------------------
 //--------------------------------------------------------------
