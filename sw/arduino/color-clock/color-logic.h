@@ -46,6 +46,8 @@
 // STANDARD LIBRARIES
 //------------------------------------------------------------------------------
 #include <algorithm>
+#include "color-classes.h"
+#include "time-calcs.h"
 
 //------------------------------------------------------------------------------
 // GLOBAL VARIABLES
@@ -164,17 +166,6 @@ void draw(){
   print("\n");
   crnt_hsv.print_me();
 }
-
-
-//--------------------------------------------------------------
-// function that fills ellipse with color
-//
-// argument:
-// fill_color - color to fill object with
-//--------------------------------------------------------------
-void set_clock_color(RgbColor fill_color){
-  fill(fill_color.r, fill_color.g, fill_color.b);
-}
 */
 
 //--------------------------------------------------------------
@@ -182,24 +173,13 @@ void set_clock_color(RgbColor fill_color){
 // determines the RgbColor associated with the current time
 // based on the program presets.
 //
-// arguments:
+// Arguments:
 // times  - array of times that correspond with main colors
 // colors - array of main colors
 //--------------------------------------------------------------
 RgbColor map_time_to_color(
-  float  hrs_since_midnight,
-  float  fractional_offset,
-  float* times,
-  RgbColor* colors){
-  
-  // figure out offset from beginning of cycle
-  float hrs_since_cycle_restart =
-    hrs_since_midnight / CYCLE_TIME_IN_HOURS;
-/*
-  hrs_since_cycle_restart = hrs_since_midnight - hrs_since_cycle_restart;
-  
-  // error handling
-  if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
+  float  hrs_since_cycle_restart,
+  float* times, RgbColor* colors){
   
   //print("\nhours since cycle restart: ", hrs_since_cycle_restart);
   
@@ -226,9 +206,8 @@ RgbColor map_time_to_color(
   // convert hsv to rgb in order to display properly
   RgbColor crnt_rgbcolor_time = hsv_to_rgb(crnt_hsvcolor_time);
   
-  return crnt_rgbcolor_time;*/
+  return crnt_rgbcolor_time;
 
-  return RgbColor();
 
 }
 
@@ -241,37 +220,6 @@ RgbColor map_time_to_color(
 // the current color.
 //--------------------------------------------------------------
 
-//--------------------------------------------------------------
-// This function calculates the fraction of where a specific time
-// falls between two other times.
-//
-// assumption:
-// time0, time1 and crnt_time are in same units, and crnt_time
-// falls between time0 and time1
-//--------------------------------------------------------------
-float get_time_as_fractional_offset(float time0, 
-                                    float time1, 
-                                    float crnt_time){
-  
-  // ensure time1 is greater than time0
-  // if not, swap
-  if (time0 > time1) {
-    
-    time0 += time1;
-    time1  = time0 - time1;
-    time0  = time0 - time1;
-    
-  }
-  
-  float fractional_offset    = (crnt_time - time0) / 
-                               (time1 - time0);
-  
-  //print("\nfractional_offset: " + str(fractional_offset));
-  
-  return fractional_offset;
-}
-
-
 
 //--------------------------------------------------------------
 // END OF TIME CALCULATION SECTION
@@ -279,17 +227,18 @@ float get_time_as_fractional_offset(float time0,
 //--------------------------------------------------------------
 
 //--------------------------------------------------------------
-// returns an array with two elements - the indices of the main
+// Returns an array with two elements - the indices of the main
 // color times that time_in_hrs falls between
 //
-// assumption:
-// color times are in order
+// Assumption:
+// Color times are in order.
 //
-// arguments:
-// color_times - array of times in same units as time                                  
+// Arguments:
+// color_times - array of times in same units as time 
 // time        - time for which to determine indices
 //--------------------------------------------------------------
-void get_indices_of_colors (int* indices, float* color_times, float the_time){
+void get_indices_of_colors (int* ret_indices,
+        float* color_times, float the_time){
   
   //print("time: " + time);
   
@@ -298,8 +247,8 @@ void get_indices_of_colors (int* indices, float* color_times, float the_time){
   while (the_time >= color_times[i]){
     
     if (the_time == color_times[i]){
-      indices[0] = i;
-      indices[1] = i;
+      ret_indices[0] = i;
+      ret_indices[1] = i;
       return;
     }
     
@@ -311,12 +260,10 @@ void get_indices_of_colors (int* indices, float* color_times, float the_time){
     }
   }
   
-  indices[0] = i - 1;
-  indices[1] = i;
+  ret_indices[0] = i - 1;
+  ret_indices[1] = i;
   return;
 }
-
-
 
 
 //--------------------------------------------------------------

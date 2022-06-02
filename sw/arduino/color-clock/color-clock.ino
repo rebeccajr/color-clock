@@ -9,8 +9,9 @@
 #include <DS3231.h>
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
-#include "rgb-color.h"
+#include "color-classes.h"
 #include "color-logic.h"
+#include "time-calcs.h"
 
 void  write_serial_time();
 void  write_display_time();
@@ -33,7 +34,6 @@ int MIN_IN_HR  = 60;
 int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
 // variables used to get offset of time in millis
-int MILLIS_OFFSET = 0;
 int prev_sec      = 0;
 
 float hrs_since_midnight = 0;
@@ -81,8 +81,28 @@ void loop() {
   rtc_hr  = the_time[2]; 
   rtc_min = the_time[1];
   rtc_sec = the_time[0];
+
+  //------------------------------------
   hrs_since_midnight = get_hrs_since_midnight(rtc_hr, rtc_min, rtc_sec);
+
+  // figure out offset from beginning of cycle
+  float hrs_since_cycle_restart =
+    hrs_since_midnight / CYCLE_TIME_IN_HOURS;
+
   
+  hrs_since_cycle_restart = hrs_since_midnight - hrs_since_cycle_restart;
+  // error handling
+  if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
+  //------------------------------------
+  
+  //map_time_to_color(hrs_since_cycle_restart
+
+/*
+RgbColor map_time_to_color(
+  float  hrs_since_cycle_restart,
+  float* times, RgbColor* colors){
+*/
+
   write_serial_time();
   write_display_time();
   //write_flux_to_display();
@@ -144,53 +164,4 @@ void get_rtc_time(byte* the_time, DS3231 clk){
   the_time[2] = clk.getHour(h12Flag, pmFlag);
   the_time[1] = clk.getMinute();
   the_time[0] = clk.getSecond();
-}
-
-
-//------------------------------------------------------------------------------
-// Returns current time in units of hours since midnight
-//------------------------------------------------------------------------------
-float get_hrs_since_midnight(byte the_hr, byte the_min, byte the_sec) {
-  
-  set_millis_offset(the_sec);
-  
-  float ms = (millis() - MILLIS_OFFSET) % 1000;
-  
-  float  sec_since_midnight   
-    = (SEC_IN_MIN * (the_hr * MIN_IN_HR + the_min) + 
-       the_sec + ms / 1000);
-
-  float  hours_since_midnight 
-    = (sec_since_midnight/(1.0 * SEC_IN_HR));    
-  return hours_since_midnight;
-}
-
-
-//------------------------------------------------------------------------------
-// The function millis() returns the number of milliseconds
-// since the beginning of program execution, while the functions
-// second(), minute(), and hour() return the current second,
-// minute, and hour of the day, respectively.
-//
-// The functon millis() is not coordinated with the time of day,
-// so the following function, set_millis_offset is used to
-// align the return value of millis() with the time of day.
-//
-// Every time a second passes, the millisecond offset between
-// when the program started and the start of the last second
-// is recalculated.
-// 
-// This function does not determine the precise millisecond of
-// the current time, however, it suits the purposes of this
-// program in that milliseconds will increase for the duration
-// of a second in time, and then reset.
-//------------------------------------------------------------------------------
-void set_millis_offset(int the_sec){
-  
-  // check if beginning of new second
-  if (prev_sec != the_sec){    
-    MILLIS_OFFSET = millis();
-  }
-  
-    prev_sec = the_sec;  
 }
