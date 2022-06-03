@@ -9,9 +9,8 @@
 #include <DS3231.h>
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
-#include "color-classes.h"
-#include "color-logic.h"
-#include "time-calcs.h"
+#include "color-logic.hpp"
+#include "time-calcs.hpp"
 
 void  write_serial_time();
 void  write_display_time();
@@ -28,13 +27,7 @@ DS3231 clk;
 //------------------------------------------------------------------------------
 
 // constants associated with timing
-            
-int SEC_IN_MIN = 60;
-int MIN_IN_HR  = 60;
-int SEC_IN_HR  = SEC_IN_MIN * MIN_IN_HR;
 
-// variables used to get offset of time in millis
-int prev_sec      = 0;
 
 float hrs_since_midnight = 0;
 

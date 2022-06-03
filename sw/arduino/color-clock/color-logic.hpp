@@ -43,11 +43,12 @@
 // 3) specific colors to cycle through
 
 //------------------------------------------------------------------------------
-// STANDARD LIBRARIES
+// INCLUDE LIBRARIES
 //------------------------------------------------------------------------------
 #include <algorithm>
-#include "color-classes.h"
-#include "time-calcs.h"
+#include "color-classes.hpp"
+#include "time-calcs.hpp"
+
 
 //------------------------------------------------------------------------------
 // GLOBAL VARIABLES

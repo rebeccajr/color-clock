@@ -16,7 +16,11 @@
 // s (saturation) range: [0, 100]
 // v (value)      range: [0, 100]
 //--------------------------------------------------------------
-class RgbColor {
+
+#define COLORCLASSES
+#ifndef COLORCLASSES
+
+struct RgbColor {
 
 public:
 
@@ -47,9 +51,9 @@ public:
   // converts RgbColor to string
   String to_string(){
   
-  return "red: "   + String(this->r, 3) +
-         "; grn: " + String(this->g, 3) + 
-         "; blu: " + String(this->b, 3);
+    return "red: "   + String(this->r, 3) +
+           "; grn: " + String(this->g, 3) + 
+           "; blu: " + String(this->b, 3);
   }
 
 };
@@ -60,14 +64,14 @@ public:
 //               0 <= sat < 100
 //               0 <= val < 100
 //--------------------------------------------------------------
-class HsvColor {
+struct HsvColor {
 
 public:
   float h;
   float s; 
   float v;
 
-  HsvColor(){}
+  //HsvColor(){}
 
   HsvColor(float hue, float sat, float value){
   
@@ -79,10 +83,11 @@ public:
   
   String to_string(){
 
-    return   "hue: " + String(this->h, 3) +
+    return "hue: "   + String(this->h, 3) +
            "; sat: " + String(this->s, 3) + 
            "; val: " + String(this->v, 3);
   }
 
 };
 
+#endif
