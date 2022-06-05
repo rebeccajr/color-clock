@@ -8,24 +8,6 @@
 // of the light.
 //------------------------------------------------------------------------------
 //
-// -
-// CLASSES
-//
-// This program introduces two object types: RgbColor and HsvColor.
-// 
-// RgbColor contains three member variables:
-// r (red)    range: [0, 255] or [0x00, 0xFF]
-// g (green)  range: [0, 255] or [0x00, 0xFF]
-// b (blue)   range: [0, 255] or [0x00, 0xFF]
-//
-// RGB colors are used to define the main colors that the clock will cycle
-// through.
-//
-// HsvColor contains three member variables:
-// h (hue)        range: [0, 360]
-// s (saturation) range: [0, 100]
-// v (value)      range: [0, 100]
-// 
 // HsvColor is used for calculations because they provide a smoother transition.
 //------------------------------------------------------------------------------
 
@@ -35,6 +17,7 @@
 // variable cycle time
 // preset color schemes?
 // config file read
+// linked list for color
 // RTOS implementation
 
 // The user defined presets include:
@@ -42,10 +25,15 @@
 // 2) number of colors to cycle through
 // 3) specific colors to cycle through
 
+
+#define COLOR_LOGIC_HPP
+#ifndef COLOR_LOGIC_HPP
+
 //------------------------------------------------------------------------------
 // INCLUDE LIBRARIES
 //------------------------------------------------------------------------------
 #include <algorithm>
+#include <vector>
 #include "color-classes.hpp"
 #include "time-calcs.hpp"
 
@@ -59,34 +47,34 @@
 #endif
 
 // configuration values
-float CYCLE_TIME_IN_HOURS =   12.0/3600; //<---- change this
-float HOURS_BET_COLORS = CYCLE_TIME_IN_HOURS / CYCLE_PARTITIONS;
+extern float CYCLE_TIME_IN_HOURS =   12.0/3600; //<---- change this
+extern float HOURS_BET_COLORS = CYCLE_TIME_IN_HOURS / CYCLE_PARTITIONS;
 
 // arrays used for initialization of the clock
-float    main_color_times[CYCLE_PARTITIONS];
-RgbColor main_colors[CYCLE_PARTITIONS + 1];
-RgbColor color_selection[CYCLE_PARTITIONS];
+extern float    main_color_times[CYCLE_PARTITIONS];
+extern RgbColor main_colors[CYCLE_PARTITIONS + 1];
+extern RgbColor color_selection[CYCLE_PARTITIONS];
 
 // max and min rgb values
-int MAX_VAL       = 60;
-int MIN_VAL       = 0;
-int MAX_COLOR_VAL = 0xAA;
-int MIN_COLOR_VAL = 0x11;
+extern int MAX_VAL      ; 
+extern int MIN_VAL      ; 
+extern int MAX_COLOR_VAL; 
+extern int MIN_COLOR_VAL; 
 
 // RGB constants
-RgbColor ABS_RGB_RED = RgbColor(0xFF0000);
-RgbColor ABS_RGB_YEL = RgbColor(0xFFFF00);
-RgbColor ABS_RGB_GRN = RgbColor(0x00FF00);
-RgbColor ABS_RGB_CYA = RgbColor(0x00FFFF);
-RgbColor ABS_RGB_BLU = RgbColor(0xFF00FF);
-RgbColor ABS_RGB_MAG = RgbColor(0xFF00FF);
+extern RgbColor ABS_RGB_RED;
+extern RgbColor ABS_RGB_YEL;
+extern RgbColor ABS_RGB_GRN;
+extern RgbColor ABS_RGB_CYA;
+extern RgbColor ABS_RGB_BLU;
+extern RgbColor ABS_RGB_MAG;
 
-RgbColor RGB_RED = RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MIN_COLOR_VAL);
-RgbColor RGB_YEL = RgbColor(MAX_COLOR_VAL, MAX_COLOR_VAL, MIN_COLOR_VAL);
-RgbColor RGB_GRN = RgbColor(MIN_COLOR_VAL, MAX_COLOR_VAL, MIN_COLOR_VAL);
-RgbColor RGB_CYA = RgbColor(MIN_COLOR_VAL, MAX_COLOR_VAL, MAX_COLOR_VAL);
-RgbColor RGB_BLU = RgbColor(MIN_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
-RgbColor RGB_MAG = RgbColor(MAX_COLOR_VAL, MIN_COLOR_VAL, MAX_COLOR_VAL);
+extern RgbColor RGB_RED;
+extern RgbColor RGB_YEL;
+extern RgbColor RGB_GRN;
+extern RgbColor RGB_CYA;
+extern RgbColor RGB_BLU;
+extern RgbColor RGB_MAG;
 
 
 //------------------------------------------------------------------------------
@@ -208,8 +196,6 @@ RgbColor map_time_to_color(
   RgbColor crnt_rgbcolor_time = hsv_to_rgb(crnt_hsvcolor_time);
   
   return crnt_rgbcolor_time;
-
-
 }
 
 //--------------------------------------------------------------
@@ -466,7 +452,5 @@ RgbColor hsv_to_rgb(HsvColor some_hsvcolor){
 
   return RgbColor(r, g, b);
 }
-//--------------------------------------------------------------
-// END OF COLOR CONVERSIONS SECTION
-//--------------------------------------------------------------
-//--------------------------------------------------------------
+
+#endif
