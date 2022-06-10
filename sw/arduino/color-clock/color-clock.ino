@@ -27,8 +27,6 @@ DS3231 clk;
 //------------------------------------------------------------------------------
 
 // constants associated with timing
-
-
 float hrs_since_midnight = 0;
 
 byte set_hr  = 13;
