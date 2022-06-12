@@ -1,3 +1,25 @@
+//--------------------------------------------------------------
+// DESCRIPTION
+// This file contains classes that represent RGB and HSV
+// color objects.
+//
+// RgbColor contains three member variables:
+// r (red)    range: [0, 255] or [0x00, 0xFF]
+// g (green)  range: [0, 255] or [0x00, 0xFF]
+// b (blue)   range: [0, 255] or [0x00, 0xFF]
+//
+// RGB colors are used to define the main colors that the clock will cycle
+// through.
+//
+// HsvColor contains three member variables:
+// h (hue)        range: [0, 360]
+// s (saturation) range: [0, 100]
+// v (value)      range: [0, 100]
+//--------------------------------------------------------------
+
+#ifndef COLORCLASSES
+#define COLORCLASSES
+
 #include <algorithm>
 #include <cmath>
 
@@ -53,4 +75,4 @@ public:
   }
 };
 
-
+#endif
