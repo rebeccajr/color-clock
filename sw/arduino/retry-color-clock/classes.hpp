@@ -17,8 +17,8 @@
 // v (value)      range: [0, 100]
 //------------------------------------------------------------------------------
 
-#ifndef COLORCLASSES
-#define COLORCLASSES
+#ifndef COLOR_CLASSES
+#define COLOR_CLASSES
 
 #include <algorithm>
 #include <cmath>
@@ -34,7 +34,7 @@ public:
   int b;      // blue
   
   //------------------------------------
-  // CONSTRUCTORS
+  // constructors
   //------------------------------------
   RgbColor(){}
 
@@ -58,8 +58,8 @@ public:
 
 
 //------------------------------------------------------------------------------
-// object that holds an HSV color
-// assumptions:  0 <= hue < 360
+// Object that holds an HSV color
+// Assumptions:  0 <= hue < 360
 //               0 <= sat < 100
 //               0 <= val < 100
 //------------------------------------------------------------------------------
@@ -82,18 +82,15 @@ public:
   float s; 
   float v;
 
-
   HsvColor(){}
 
   HsvColor(float hue, float sat, float value){
-  
     h = hue;
     s = sat;
     v = value;
   }
 
   RgbColor to_rgb();
-
 };
 
 #endif

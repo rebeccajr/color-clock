@@ -6,9 +6,9 @@
 // to a color. The clock will cycle through a series of colors over a period
 // of time. A viewer can tell the approximate time from the color 
 // of the light.
-//------------------------------------------------------------------------------
 //
-// HsvColor is used for calculations because they provide a smoother transition.
+// HsvColor is used for calculations because this type of color object
+// provides a smoother transition.
 //------------------------------------------------------------------------------
 
 #ifndef COLOR_LOGIC_HPP

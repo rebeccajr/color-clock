@@ -1,5 +1,8 @@
 #include "time-calcs.hpp"
 
+//------------------------------------------------------------------------------
+// set static variables
+//------------------------------------------------------------------------------
 int TimeCalcs::SEC_IN_MIN    = 60;
 int TimeCalcs::MIN_IN_HR     = 60;
 int TimeCalcs::SEC_IN_HR     = SEC_IN_MIN * MIN_IN_HR;
