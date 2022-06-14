@@ -1,14 +1,14 @@
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // COLOR TYPE CONVERSIONS
 //
 // This file includes functions that convert color objects to
 // different types of color objects,
 // e.g. RgbColor to HsvColor and vice versa
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 #include "classes.hpp"
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Convert an Rgb color object to an Hsv color object
 // 
 // This code was heavily inspired by a program posted
@@ -19,7 +19,7 @@
 //
 // and the algorithm posted here
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 HsvColor RgbColor::to_hsv(){
   float red_norm   = this->r/255.0;
   float green_norm = this->g/255.0;
@@ -70,7 +70,7 @@ HsvColor RgbColor::to_hsv(){
 
 
 //--------------------------------------------------------------
-// convert an Hsv color object to an Rgb color object
+// Convert an Hsv color object to an Rgb color object
 // 
 // This code is implementing the algorithm posted here:
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
@@ -126,3 +126,33 @@ RgbColor HsvColor::to_rgb(){
 
   return RgbColor(r, g, b);
 }
+
+//------------------------------------------------------------------------------
+// This function returns a new HsvColor object that falls
+// between two HsvColors based on a fraction that represents
+// the percentage distance from one color to another.
+//
+// assumption:
+// color is in correct range and fraction is between 0 and 1
+//------------------------------------------------------------------------------
+HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1, 
+                                   HsvColor color2, 
+                                   float    fraction){
+                                 
+  float delta;
+  
+  // correct in case delta is negative
+  delta = color2.h - color1.h + 360.0;
+
+  delta = fmod(delta, 360.0);
+  float new_hue = (fraction * delta) + color1.h;
+  
+  delta = color2.s - color1.s;
+  float new_sat = (fraction * delta) + color1.s;
+  
+  delta = color2.v - color1.v;
+  float new_val  = (fraction * delta) + color1.v; 
+  
+  return HsvColor(new_hue, new_sat, new_val);                          
+}
+

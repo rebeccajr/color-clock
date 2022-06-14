@@ -1,4 +1,11 @@
+//------------------------------------------------------------------------------
+// DESCRIPTION
+// This file contains the definitions of time constants and implementation of
+// color logic functions.
+//------------------------------------------------------------------------------
+
 #include "logic.hpp"
+#include "time-calcs.hpp"
 
 // max and min rgb values
 int MAX_VAL       = 60;
@@ -41,9 +48,8 @@ void initialize_color_times(float* color_times, float hours_between_colors) {
     color_times[i] = i * (hours_between_colors);
 }
 
-
 //--------------------------------------------------------------
-// Initialize array that contains main colors. Usese
+// Initialize array that contains main colors.
 //--------------------------------------------------------------
 void initialize_main_colors(RgbColor* colors){
   
@@ -65,4 +71,47 @@ void initialize_color_selection(RgbColor* colors){
   colors[3] = RGB_CYA;
   colors[4] = RGB_BLU;
   colors[5] = RGB_MAG;
+}
+
+
+//--------------------------------------------------------------
+// This function is the "main" part of the program that
+// determines the RgbColor associated with the current time
+// based on the program presets.
+//
+// Arguments:
+// times  - array of times that correspond with main colors
+// colors - array of main colors
+//--------------------------------------------------------------
+RgbColor map_time_to_color(
+  float  hrs_since_cycle_restart,
+  float* times, RgbColor* colors){
+  
+  //print("\nhours since cycle restart: ", hrs_since_cycle_restart);
+  
+  // modifies the indices of the colors from the main_colors array
+  // in which the current time falls between
+  int index[2];
+  get_indices_of_colors(index, times, hrs_since_cycle_restart);
+  
+  //print("\n\nindices of boundary colors: " + str(index[0]) + ", " 
+                                           //+ str(index[1]));
+  
+  // convert colors from main_colors array to hsv
+  // for smoother transitions between colors
+  HsvColor hsvcolor0 = colors[index[0]].to_hsv();
+  HsvColor hsvcolor1 = colors[index[1]].to_hsv();
+  
+  float fraction  =
+    TimeCalcs::get_time_as_fractional_offset(times[index[0]],
+                                                  times[index[1]], 
+                                                  hrs_since_cycle_restart); 
+  
+  HsvColor crnt_hsvcolor_time 
+    = HsvColor::interpolate_bet_hsvcolors(hsvcolor0, hsvcolor1, fraction);                                          
+  
+  // convert hsv to rgb in order to display properly
+  RgbColor crnt_rgbcolor_time = crnt_hsvcolor_time.to_rgb();
+  
+  return crnt_rgbcolor_time;
 }

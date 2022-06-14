@@ -63,8 +63,6 @@ void initialize_color_times(float* color_times, float hours_between_colors);
 void initialize_main_colors(RgbColor* colors);
 void get_indices_of_colors (int* indices, float* color_times, float the_time);
 
-RgbColor hsv_to_rgb(HsvColor some_hsvcolor);
-HsvColor rgb_to_hsv(RgbColor some_color);
 RgbColor map_time_to_color(
   float  hrs_since_cycle_restart,
   float* times, RgbColor* colors);
