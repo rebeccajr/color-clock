@@ -10,12 +10,11 @@
 #include "classes.hpp"
 
 class Debug{
-
 public:
   static void print_color(RgbColor color);
   static void print_color(HsvColor color);
+  static void print_time(byte hr, byte minute, byte sec);
   static void print_new_line();
-
 };
 
 #endif
