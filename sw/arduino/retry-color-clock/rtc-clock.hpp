@@ -14,7 +14,9 @@ public:
   static byte rtc_hr;
   static byte rtc_min;
   static byte rtc_sec;
-  
+  static bool h12Flag;
+  static bool pmFlag;
+
   static void get_rtc_time(byte* the_time, DS3231 clk);
 
 };
