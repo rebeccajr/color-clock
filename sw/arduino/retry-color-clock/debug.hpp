@@ -7,13 +7,16 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
+#include <DS3231.h>
+
 #include "classes.hpp"
 
 class Debug{
+
 public:
   static void print_color(RgbColor color);
   static void print_color(HsvColor color);
-  static void print_time(byte hr, byte minute, byte sec);
+  static void print_time(DS3231 clk);
   static void print_new_line();
 };
 

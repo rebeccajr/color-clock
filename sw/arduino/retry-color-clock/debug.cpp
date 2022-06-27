@@ -16,19 +16,27 @@ void Debug::print_color(HsvColor color){
 
 
 //------------------------------------------------------------------------------
-void print_time(byte hr, byte minute, byte sec){
+void print_time(DS3231 clk){
+
+  bool foo;
+  bool bar;
+
+  byte the_hr  = clk.getHour(foo, bar);
+  byte the_min = clk.getMinute();
+  byte the_sec = clk.getSecond();
+
   Serial.print("\n---------------------------");
   Serial.print("\n Time");
   Serial.print("\n---------------------------");
 
   Serial.print("\nhour:  ");
-  Serial.print(hr, DEC);
+  Serial.print(the_hr, DEC);
   Serial.print(" ");
   Serial.print("\nmin:   ");
-  Serial.print(minute, DEC);
+  Serial.print(the_min, DEC);
   Serial.print(" ");
   Serial.print("\nsec:   ");
-  Serial.print(sec, DEC);
+  Serial.print(the_sec, DEC);
 }
 
 

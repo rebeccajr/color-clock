@@ -3,15 +3,22 @@
 
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
+#include <DS3231.h>
 
 #include "alpha-display.hpp"
 #include "classes.hpp"
 #include "debug.hpp"
 #include "logic.hpp"
 #include "time-calcs.hpp"
-#include "rtc-clock.hpp"
+
+DS3231 the_first_rtc;
+
+byte set_hr    = 13;
+byte set_min   = 54;
+bool first_run = true;
 
 
+//------------------------------------------------------------------------------
 void setup(){
   Serial.begin(9600);
   AlphaDisplay::the_alpha_display.begin(0x70);
@@ -19,7 +26,17 @@ void setup(){
 }
 
 
+//------------------------------------------------------------------------------
 void loop(){
+
+  // initialize clock
+  if (first_run == true) {
+    the_first_rtc.setHour(set_hr);
+    the_first_rtc.setMinute(set_min);
+    first_run = false;
+  }
+
+
   RgbColor color;
   Debug::print_new_line();
   Debug::print_color(color);
