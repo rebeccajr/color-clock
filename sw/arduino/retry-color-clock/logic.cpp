@@ -4,6 +4,7 @@
 // color logic functions.
 //------------------------------------------------------------------------------
 
+#include "debug.hpp"
 #include "logic.hpp"
 #include "time-calcs.hpp"
 
@@ -85,9 +86,10 @@ void initialize_color_selection(RgbColor* colors){
 //--------------------------------------------------------------
 RgbColor map_time_to_color(
   float  hrs_since_cycle_restart,
-  float* times, RgbColor* colors){
-  
-  //print("\nhours since cycle restart: ", hrs_since_cycle_restart);
+  float* times, RgbColor* colors, int array_size){
+
+  Debug::print_labeled_dec("hours since cycle restart",
+    hrs_since_cycle_restart);
   
   // modifies the indices of the colors from the main_colors array
   // in which the current time falls between

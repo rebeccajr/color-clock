@@ -65,6 +65,7 @@ void get_indices_of_colors (int* indices, float* color_times, float the_time);
 
 RgbColor map_time_to_color(
   float  hrs_since_cycle_restart,
-  float* times, RgbColor* colors);
+  float* times, RgbColor* colors,
+  int    array_size);
 
 #endif

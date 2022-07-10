@@ -41,3 +41,10 @@ float TimeCalcs::get_time_as_fractional_offset(
   return fractional_offset;
 }
 
+//------------------------------------------------------------------------------
+float TimeCalcs::get_hrs_since_midnight(
+          float hr, float min, float sec){
+
+  return hr + min/MIN_IN_HR + sec/SEC_IN_HR;
+}
+//------------------------------------------------------------------------------

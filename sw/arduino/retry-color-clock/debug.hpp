@@ -14,8 +14,11 @@
 class Debug{
 
 public:
+  static void print_labeled_dec(char* label, float num);
   static void print_color(RgbColor color);
   static void print_color(HsvColor color);
+  static void print_color_array(RgbColor* colors, int array_size);
+  static void print_color_array(HsvColor* colors, int array_size);
   static void print_time(DS3231 clk);
   static void print_new_line();
 };

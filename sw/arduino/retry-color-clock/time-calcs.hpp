@@ -8,6 +8,10 @@
 // of the light.
 //------------------------------------------------------------------------------
 
+#ifndef TIME_CALCS_HPP
+#define TIME_CALCS_HPP
+
+
 class TimeCalcs {
 
 public:
@@ -28,5 +32,10 @@ public:
   
   static float get_time_as_fractional_offset(
           float time0, float time1, float crnt_time);
+
+  static float get_hrs_since_midnight(
+          float hr, float min, float sec);
   
 };
+
+#endif

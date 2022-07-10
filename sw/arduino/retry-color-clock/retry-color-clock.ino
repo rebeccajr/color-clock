@@ -11,6 +11,8 @@
 #include "logic.hpp"
 #include "time-calcs.hpp"
 
+#define DEBUG 0
+
 DS3231 the_first_rtc;
 
 byte set_hr    = 13;
@@ -25,7 +27,6 @@ void setup(){
   Wire.begin();
 }
 
-
 //------------------------------------------------------------------------------
 void loop(){
 
@@ -35,7 +36,6 @@ void loop(){
     the_first_rtc.setMinute(set_min);
     first_run = false;
   }
-
 
   RgbColor color;
   Debug::print_new_line();
