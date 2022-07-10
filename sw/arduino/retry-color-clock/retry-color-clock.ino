@@ -37,10 +37,6 @@ void loop(){
     first_run = false;
   }
 
-  RgbColor color;
-  Debug::print_new_line();
-  Debug::print_color(color);
-
   Debug::print_time(the_first_rtc);
   AlphaDisplay::write_flux_to_display();
 

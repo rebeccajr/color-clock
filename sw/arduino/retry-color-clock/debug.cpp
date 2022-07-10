@@ -50,7 +50,6 @@ void Debug::print_color_array(HsvColor* colors, int array_size){
 
 //------------------------------------------------------------------------------
 void Debug::print_time(DS3231 clk){
-  Serial.println("print_time");
   bool foo;
   bool bar;
 
@@ -75,18 +74,13 @@ void Debug::print_time(DS3231 clk){
 
 //------------------------------------------------------------------------------
 void Debug::print_new_line(){
-  #ifdef DEBUG
   Serial.print("\n");
-  #endif
 }
 
 
 //------------------------------------------------------------------------------
 void Debug::print_labeled_dec(char* label, float num){
-  #ifdef DEBUG
-  print_new_line();
-  Serial.print(label);
+  Serial.println(label);
   Serial.print(":     ");
-  Serial.print(the_hr, DEC);
-  #endif
+  Serial.print(num, DEC);
 }
