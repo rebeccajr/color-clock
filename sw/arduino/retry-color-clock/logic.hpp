@@ -61,6 +61,7 @@ extern RgbColor RGB_MAG;
 //------------------------------------------------------------------------------
 void initialize_color_times(float* color_times, float hours_between_colors);
 void initialize_main_colors(RgbColor* colors);
+void initialize_color_selection(RgbColor* colors);
 void get_indices_of_colors (int* indices, float* color_times, float the_time);
 
 RgbColor map_time_to_color(

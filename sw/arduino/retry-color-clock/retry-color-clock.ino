@@ -25,6 +25,11 @@ void setup(){
   Serial.begin(9600);
   AlphaDisplay::the_alpha_display.begin(0x70);
   Wire.begin();
+
+  // left off here - don't know why I can't see these
+  // might want to move forward with a color clock object
+  //initialize_color_selection(color_selection);
+  //initialize_main_colors(main_colors);
 }
 
 //------------------------------------------------------------------------------
@@ -36,6 +41,8 @@ void loop(){
     the_first_rtc.setMinute(set_min);
     first_run = false;
   }
+
+  
 
   Debug::print_time(the_first_rtc);
   AlphaDisplay::write_flux_to_display();
