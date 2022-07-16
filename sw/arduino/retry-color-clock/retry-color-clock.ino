@@ -12,11 +12,7 @@
 #include "logic.hpp"
 #include "time-calcs.hpp"
 
-#define DEBUG 0
-
 ColorClock the_first_colorclock;
-
-DS3231 the_first_rtc;
 
 byte set_hr    = 13;
 byte set_min   = 54;
@@ -40,9 +36,6 @@ void loop(){
 
   // initialize clock
   if (first_run == true) {
-    the_first_rtc.setHour(set_hr);
-    the_first_rtc.setMinute(set_min);
-
     the_first_colorclock.the_rtc.setHour(set_hr);
     the_first_colorclock.the_rtc.setMinute(set_min);
     first_run = false;

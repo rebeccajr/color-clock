@@ -19,9 +19,9 @@ void AlphaDisplay::write_display_time(byte hr, byte min, byte sec){
 
 
 void AlphaDisplay::write_flux_to_display(){
-  led_segments.writeDigitAscii(0, 'F');
+  led_segments.writeDigitAscii(0, 'B');
   led_segments.writeDigitAscii(1, 'L');
-  led_segments.writeDigitAscii(2, 'U');
-  led_segments.writeDigitAscii(3, 'X');
+  led_segments.writeDigitAscii(2, 'E');
+  led_segments.writeDigitAscii(3, 'H');
   led_segments.writeDisplay();
 }
