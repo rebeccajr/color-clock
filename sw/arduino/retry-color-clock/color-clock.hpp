@@ -3,6 +3,9 @@
 // This file contains the class for a color clock object.
 //------------------------------------------------------------------------------
 
+#ifndef COLOR_CLOCK
+#define COLOR_CLOCK
+
 //------------------------------------------------------------------------------
 #include <Arduino.h>
 #include <Wire.h>
@@ -24,9 +27,9 @@ class ColorClock{
 public:
   int cycle_partitions;
 
-  // when mapping the time to color, a time will fall between
-  // two indices of the color times. These variables are the
-  // indices that the current time falls between.
+  // The sampled time will fall bewtween two indices of
+  // color_times. These variables are the
+  // indices that the time falls between.
   int lo_color_index;                        
   int hi_color_index;
 
@@ -35,7 +38,18 @@ public:
   RgbColor     color_selection[CYCLE_PARTITIONS];
   float        color_times[CYCLE_PARTITIONS];
 
-  ColorClock(){};
+  // RGB constants
+  static RgbColor ABS_RGB_RED;
+  static RgbColor ABS_RGB_YEL;
+  static RgbColor ABS_RGB_GRN;
+  static RgbColor ABS_RGB_CYA;
+  static RgbColor ABS_RGB_BLU;
+  static RgbColor ABS_RGB_MAG;
+
+  ColorClock();
+
   RgbColor time_to_color();
   void     determine_color_indices();
 };
+
+#endif
