@@ -7,11 +7,14 @@
 
 #include "alpha-display.hpp"
 #include "classes.hpp"
+#include "color-clock.hpp"
 #include "debug.hpp"
 #include "logic.hpp"
 #include "time-calcs.hpp"
 
 #define DEBUG 0
+
+ColorClock the_first_colorclock;
 
 DS3231 the_first_rtc;
 
@@ -23,7 +26,7 @@ bool first_run = true;
 //------------------------------------------------------------------------------
 void setup(){
   Serial.begin(9600);
-  AlphaDisplay::the_alpha_display.begin(0x70);
+  the_first_colorclock.the_alpha_display.led_segments.begin(0x70);
   Wire.begin();
 
   // left off here - don't know why I can't see these
@@ -39,13 +42,14 @@ void loop(){
   if (first_run == true) {
     the_first_rtc.setHour(set_hr);
     the_first_rtc.setMinute(set_min);
+
+    the_first_colorclock.the_rtc.setHour(set_hr);
+    the_first_colorclock.the_rtc.setMinute(set_min);
     first_run = false;
   }
 
-  
-
-  Debug::print_time(the_first_rtc);
-  AlphaDisplay::write_flux_to_display();
+  Debug::print_time(the_first_colorclock.the_rtc);
+  the_first_colorclock.the_alpha_display.write_flux_to_display();
 
   delay(1000);
 }
