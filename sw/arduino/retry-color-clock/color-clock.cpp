@@ -16,3 +16,14 @@ ColorClock::ColorClock(){
   this->color_selection[5] = ABS_RGB_MAG;
   
 }
+
+void ColorClock::update_display_time(){
+  bool foo;
+  bool bar;
+
+  byte the_hr  = the_rtc.getHour(foo, bar);
+  byte the_min = the_rtc.getMinute();
+  byte the_sec = the_rtc.getSecond();
+  
+  the_alpha_display.write_display_time(the_hr, the_min, the_sec);
+}

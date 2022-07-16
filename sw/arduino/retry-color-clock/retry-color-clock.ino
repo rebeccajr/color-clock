@@ -42,7 +42,8 @@ void loop(){
   }
 
   Debug::print_time(the_first_colorclock.the_rtc);
-  the_first_colorclock.the_alpha_display.write_flux_to_display();
+  
+  the_first_colorclock.update_display_time();
 
   delay(1000);
 }
