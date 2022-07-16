@@ -48,6 +48,7 @@ public:
 
   ColorClock();
 
+  void     update_display_time();
   RgbColor time_to_color();
   void     determine_color_indices();
 };
