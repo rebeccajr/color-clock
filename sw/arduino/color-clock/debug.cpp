@@ -5,46 +5,38 @@
 
 //------------------------------------------------------------------------------
 void Debug::print_color(RgbColor color){
-  #ifdef DEBUG
   Serial.println("RgbColor");
   Serial.println("\nred:     ");
-  Serial.println(RgbColor.r, HEX);
+  Serial.println(color.r, HEX);
   Serial.println("\ngreen:   ");
-  Serial.println(RgbColor.g, HEX);
+  Serial.println(color.g, HEX);
   Serial.println("\nblue:    ");
-  Serial.println(RgbColor.b, HEX);
-  #endif
+  Serial.println(color.b, HEX);
 }
 
 
 //------------------------------------------------------------------------------
 void Debug::print_color(HsvColor color){
-  #ifdef DEBUG
   Serial.println("HsvColor");
   Serial.println("\nhue:     ");
-  Serial.println(HsvColor.h, DEC);
+  Serial.println(color.h, DEC);
   Serial.println("\nsat:   ");
-  Serial.println(HsvColor.s, DEC);
+  Serial.println(color.s, DEC);
   Serial.println("\nval:    ");
-  Serial.println(HsvColor.v, DEC);
-  #endif
+  Serial.println(color.v, DEC);
 }
 
 
 //------------------------------------------------------------------------------
 void Debug::print_color_array(RgbColor* colors, int array_size){
-  #ifdef DEBUG
   for (int i = 0; i < array_size; ++i)
     print_color(colors[i]);
-  #endif
 }
 
 //------------------------------------------------------------------------------
 void Debug::print_color_array(HsvColor* colors, int array_size){
-  #ifdef DEBUG
   for (int i = 0; i < array_size; ++i)
     print_color(colors[i]);
-  #endif
 }
 
 

@@ -10,8 +10,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <Adafruit_GFX.h>
-#include "Adafruit_LEDBackpack.h"
+//#include <Adafruit_GFX.h>
+//#include "Adafruit_LEDBackpack.h"
 #include <DS3231.h>
 
 #include "alpha-display.hpp"
@@ -20,12 +20,12 @@
 #include "logic.hpp"
 #include "time-calcs.hpp"
 
-#define CYCLE_PARTITIONS 6
 
 class ColorClock{
 
 public:
-  int cycle_partitions;
+  int   cycle_partitions;
+  float cycle_time_in_hrs;
 
   // The sampled time will fall bewtween two indices of
   // color_times. These variables are the
@@ -35,8 +35,8 @@ public:
 
   AlphaDisplay the_alpha_display;
   DS3231       the_rtc;
-  RgbColor     color_selection[CYCLE_PARTITIONS];
-  float        color_times[CYCLE_PARTITIONS];
+  RgbColor*    color_selection;
+  float*       color_times;
 
   // RGB constants
   static RgbColor ABS_RGB_RED;
@@ -47,6 +47,8 @@ public:
   static RgbColor ABS_RGB_MAG;
 
   ColorClock();
+  ~ColorClock();
+  ColorClock(int partition_count);
 
   void     update_display_time();
   RgbColor time_to_color();

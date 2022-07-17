@@ -1,3 +1,5 @@
+#define CYCLE_PARTITIONS 6
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -21,6 +23,8 @@ bool first_run = true;
 
 //------------------------------------------------------------------------------
 void setup(){
+
+  ColorClock(6);
   Serial.begin(9600);
   the_first_colorclock.the_alpha_display.led_segments.begin(0x70);
   Wire.begin();
