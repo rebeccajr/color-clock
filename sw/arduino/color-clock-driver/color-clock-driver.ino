@@ -23,8 +23,6 @@ bool first_run = true;
 
 //------------------------------------------------------------------------------
 void setup(){
-
-  ColorClock(6);
   Serial.begin(9600);
   the_first_colorclock.the_alpha_display.led_segments.begin(0x70);
   Wire.begin();
@@ -42,6 +40,11 @@ void loop(){
   if (first_run == true) {
     the_first_colorclock.the_rtc.setHour(set_hr);
     the_first_colorclock.the_rtc.setMinute(set_min);
+
+    Debug::print_color_array(
+      the_first_colorclock.color_selection,
+      the_first_colorclock.cycle_partitions);
+
     first_run = false;
   }
 

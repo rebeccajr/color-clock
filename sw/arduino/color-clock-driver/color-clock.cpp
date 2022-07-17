@@ -38,7 +38,7 @@ ColorClock::ColorClock(int partition_count){
 }
 
 ColorClock::ColorClock(){
-  ColorClock(6);
+  //ColorClock(6);
 }
 
 //------------------------------------------------------------------------------
