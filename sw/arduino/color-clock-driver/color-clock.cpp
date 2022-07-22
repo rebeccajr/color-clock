@@ -22,8 +22,6 @@ ColorClock::ColorClock(int partition_count){
   this->color_selection[4] = ABS_RGB_BLU;
   this->color_selection[5] = ABS_RGB_MAG;
 
-  Debug::print_color_array(color_selection, cycle_partitions);
-
   //----------------------------------------------------------------------------
   float interval_length = this->cycle_time_in_hrs / cycle_partitions;
 
@@ -38,7 +36,6 @@ ColorClock::ColorClock(int partition_count){
 }
 
 ColorClock::ColorClock(){
-  //ColorClock(6);
 }
 
 //------------------------------------------------------------------------------

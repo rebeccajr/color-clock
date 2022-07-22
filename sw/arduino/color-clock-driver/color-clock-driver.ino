@@ -27,8 +27,6 @@ void setup(){
   the_first_colorclock.the_alpha_display.led_segments.begin(0x70);
   Wire.begin();
 
-  // left off here - don't know why I can't see these
-  // might want to move forward with a color clock object
   //initialize_color_selection(color_selection);
   //initialize_main_colors(main_colors);
 }
@@ -36,19 +34,21 @@ void setup(){
 //------------------------------------------------------------------------------
 void loop(){
 
+  ColorClock* a_colorclock = new ColorClock(6);
+
   // initialize clock
   if (first_run == true) {
     the_first_colorclock.the_rtc.setHour(set_hr);
     the_first_colorclock.the_rtc.setMinute(set_min);
 
-    Debug::print_color_array(
-      the_first_colorclock.color_selection,
-      the_first_colorclock.cycle_partitions);
 
     first_run = false;
   }
 
-  Debug::print_time(the_first_colorclock.the_rtc);
+  Debug::print_color_array(
+      the_first_colorclock.color_selection,
+      the_first_colorclock.cycle_partitions);
+  //Debug::print_time(the_first_colorclock.the_rtc);
   
   the_first_colorclock.update_display_time();
 

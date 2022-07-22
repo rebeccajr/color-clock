@@ -5,25 +5,24 @@
 
 //------------------------------------------------------------------------------
 void Debug::print_color(RgbColor color){
-  Serial.println("RgbColor");
-  Serial.println("\nred:     ");
-  Serial.println(color.r, HEX);
-  Serial.println("\ngreen:   ");
-  Serial.println(color.g, HEX);
-  Serial.println("\nblue:    ");
-  Serial.println(color.b, HEX);
+  Serial.println("");
+  Serial.print("r: 0x");
+  Serial.print(color.r, HEX);
+  Serial.print("  g: 0x");
+  Serial.print(color.g, HEX);
+  Serial.print("  b: 0x");
+  Serial.print(color.b, HEX);
 }
 
 
 //------------------------------------------------------------------------------
 void Debug::print_color(HsvColor color){
-  Serial.println("HsvColor");
-  Serial.println("\nhue:     ");
-  Serial.println(color.h, DEC);
-  Serial.println("\nsat:   ");
-  Serial.println(color.s, DEC);
-  Serial.println("\nval:    ");
-  Serial.println(color.v, DEC);
+  Serial.print("\nhue:   ");
+  Serial.print(color.h, DEC);
+  Serial.print("\nsat:   ");
+  Serial.print(color.s, DEC);
+  Serial.print("\nval:   ");
+  Serial.print(color.v, DEC);
 }
 
 
