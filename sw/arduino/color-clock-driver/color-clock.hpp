@@ -8,6 +8,7 @@
 
 //------------------------------------------------------------------------------
 #include <Arduino.h>
+#include <vector>
 #include <Wire.h>
 
 #include <DS3231.h>
@@ -22,7 +23,7 @@
 class ColorClock{
 
 public:
-  int   cycle_partitions;
+  int   partition_count;
   float cycle_time_in_hrs;
 
   // The sampled time will fall bewtween two indices of
@@ -33,8 +34,11 @@ public:
 
   AlphaDisplay the_alpha_display;
   DS3231       the_rtc;
-  RgbColor*    color_selection;
-  float*       color_times;
+
+  //RgbColor*    color_selection;
+  //float*       color_times;
+  std::vector<RgbColor>    color_selection;
+  std::vector<float>       color_times;
 
   // RGB constants
   static RgbColor ABS_RGB_RED;
@@ -46,7 +50,7 @@ public:
 
   ColorClock();
   ~ColorClock();
-  ColorClock(int partition_count);
+  ColorClock(int num_of_partitions);
 
   void     update_display_time();
   RgbColor time_to_color();

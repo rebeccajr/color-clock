@@ -5,7 +5,6 @@
 
 //------------------------------------------------------------------------------
 void Debug::print_color(RgbColor color){
-  Serial.println("");
   Serial.print("r: 0x");
   Serial.print(color.r, HEX);
   Serial.print("  g: 0x");
@@ -27,14 +26,14 @@ void Debug::print_color(HsvColor color){
 
 
 //------------------------------------------------------------------------------
-void Debug::print_color_array(RgbColor* colors, int array_size){
-  for (int i = 0; i < array_size; ++i)
+void Debug::print_color_array(std::vector<RgbColor> colors){
+  for (int i = 0; i < colors.size(); ++i)
     print_color(colors[i]);
 }
 
 //------------------------------------------------------------------------------
-void Debug::print_color_array(HsvColor* colors, int array_size){
-  for (int i = 0; i < array_size; ++i)
+void Debug::print_color_array(std::vector<HsvColor> colors){
+  for (int i = 0; i < colors.size(); ++i)
     print_color(colors[i]);
 }
 
@@ -48,6 +47,7 @@ void Debug::print_time(DS3231 clk){
   byte the_min = clk.getMinute();
   byte the_sec = clk.getSecond();
 
+  Serial.println("");
   Serial.println("---------------------------");
   Serial.println(" Time");
   Serial.println("---------------------------");

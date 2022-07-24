@@ -10,26 +10,32 @@ RgbColor ColorClock::ABS_RGB_CYA = RgbColor(0x00FFFF);
 RgbColor ColorClock::ABS_RGB_BLU = RgbColor(0xFF00FF);
 RgbColor ColorClock::ABS_RGB_MAG = RgbColor(0xFF00FF);
 
-ColorClock::ColorClock(int partition_count){
-  this->cycle_partitions = partition_count;
-  color_selection = new RgbColor[cycle_partitions];
-  color_times     = new float [cycle_partitions];
+ColorClock::ColorClock(int num_of_partitions){
+  this->partition_count = num_of_partitions;
 
-  this->color_selection[0] = ABS_RGB_RED;
-  this->color_selection[1] = ABS_RGB_YEL;
-  this->color_selection[2] = ABS_RGB_GRN;
-  this->color_selection[3] = ABS_RGB_CYA;
-  this->color_selection[4] = ABS_RGB_BLU;
-  this->color_selection[5] = ABS_RGB_MAG;
+  //color_selection.resize(partition_count, ABS_RGB_RED);
+  //color_times.resize(partition_count, 0);
 
+  // this is hardcoded right now, eventually will move this out
+  //this->color_selection[0] = ABS_RGB_RED;
+  //this->color_selection[1] = ABS_RGB_YEL;
+  //this->color_selection[2] = ABS_RGB_GRN;
+  //this->color_selection[3] = ABS_RGB_CYA;
+  //this->color_selection[4] = ABS_RGB_BLU;
+  //this->color_selection[5] = ABS_RGB_MAG;
+
+  this->color_selection.push_back(ABS_RGB_RED);
+  this->color_selection.push_back(ABS_RGB_YEL);
+  this->color_selection.push_back(ABS_RGB_GRN);
+  this->color_selection.push_back(ABS_RGB_CYA);
+  this->color_selection.push_back(ABS_RGB_BLU);
+  this->color_selection.push_back(ABS_RGB_MAG);
   //----------------------------------------------------------------------------
-  float interval_length = this->cycle_time_in_hrs / cycle_partitions;
-
-  Serial.println("color_times");
+  float interval_length = this->cycle_time_in_hrs / partition_count;
 
   // populate color_times
-  for (int i = 0; i < cycle_partitions; i++){
-    this->color_times[i] = i * interval_length;
+  for (int i = 0; i < partition_count; i++){
+    ;//this->color_times[i] = i * interval_length;
     //print times
   }
  
@@ -40,8 +46,8 @@ ColorClock::ColorClock(){
 
 //------------------------------------------------------------------------------
 ColorClock::~ColorClock(){
-  delete []color_times;
-  delete []color_selection;
+  color_times.clear();
+  color_selection.clear();
 }
 
 
