@@ -45,6 +45,8 @@ void loop(){
     first_run = false;
   }
 
+  Debug::print_color_array(the_first_colorclock->color_selection);
+
   Debug::print_time(the_first_colorclock->the_rtc);
   
   //the_first_colorclock.update_display_time();

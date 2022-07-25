@@ -35,8 +35,6 @@ public:
   AlphaDisplay the_alpha_display;
   DS3231       the_rtc;
 
-  //RgbColor*    color_selection;
-  //float*       color_times;
   std::vector<RgbColor>    color_selection;
   std::vector<float>       color_times;
 
@@ -47,6 +45,9 @@ public:
   static RgbColor ABS_RGB_CYA;
   static RgbColor ABS_RGB_BLU;
   static RgbColor ABS_RGB_MAG;
+
+  static std::vector<RgbColor> default_color_selection;
+  static std::vector<RgbColor> initialize_default_vector();
 
   ColorClock();
   ~ColorClock();
