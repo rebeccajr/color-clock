@@ -5,46 +5,45 @@
 
 //------------------------------------------------------------------------------
 void Debug::print_color(RgbColor color){
-  #ifdef DEBUG
-  Serial.println("RgbColor");
-  Serial.println("\nred:     ");
-  Serial.println(RgbColor.r, HEX);
-  Serial.println("\ngreen:   ");
-  Serial.println(RgbColor.g, HEX);
-  Serial.println("\nblue:    ");
-  Serial.println(RgbColor.b, HEX);
-  #endif
+  Serial.println("");
+  Serial.print("r: 0x");
+  Serial.print(color.r, HEX);
+  Serial.print("  g: 0x");
+  Serial.print(color.g, HEX);
+  Serial.print("  b: 0x");
+  Serial.print(color.b, HEX);
 }
 
 
 //------------------------------------------------------------------------------
 void Debug::print_color(HsvColor color){
-  #ifdef DEBUG
-  Serial.println("HsvColor");
-  Serial.println("\nhue:     ");
-  Serial.println(HsvColor.h, DEC);
-  Serial.println("\nsat:   ");
-  Serial.println(HsvColor.s, DEC);
-  Serial.println("\nval:    ");
-  Serial.println(HsvColor.v, DEC);
-  #endif
+  Serial.print("\nhue:   ");
+  Serial.print(color.h, DEC);
+  Serial.print("\nsat:   ");
+  Serial.print(color.s, DEC);
+  Serial.print("\nval:   ");
+  Serial.print(color.v, DEC);
 }
 
 
 //------------------------------------------------------------------------------
-void Debug::print_color_array(RgbColor* colors, int array_size){
-  #ifdef DEBUG
-  for (int i = 0; i < array_size; ++i)
+void Debug::print_color_array(std::vector<RgbColor> colors){
+  for (int i = 0; i < colors.size(); ++i)
     print_color(colors[i]);
-  #endif
 }
 
+
 //------------------------------------------------------------------------------
-void Debug::print_color_array(HsvColor* colors, int array_size){
-  #ifdef DEBUG
-  for (int i = 0; i < array_size; ++i)
+void Debug::print_color_array(std::vector<HsvColor> colors){
+  for (int i = 0; i < colors.size(); ++i)
     print_color(colors[i]);
-  #endif
+}
+
+
+//------------------------------------------------------------------------------
+void Debug::print_interval_times(std::vector<float> times){
+  for (int i = 0; i < times.size(); ++i)
+    Serial.println(times[i]);
 }
 
 
@@ -57,6 +56,7 @@ void Debug::print_time(DS3231 clk){
   byte the_min = clk.getMinute();
   byte the_sec = clk.getSecond();
 
+  Serial.println("");
   Serial.println("---------------------------");
   Serial.println(" Time");
   Serial.println("---------------------------");
