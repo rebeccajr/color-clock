@@ -32,6 +32,7 @@ void Debug::print_color_array(std::vector<RgbColor> colors){
     print_color(colors[i]);
 }
 
+
 //------------------------------------------------------------------------------
 void Debug::print_color_array(std::vector<HsvColor> colors){
   for (int i = 0; i < colors.size(); ++i)

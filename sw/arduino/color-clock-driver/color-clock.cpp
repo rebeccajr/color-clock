@@ -32,7 +32,6 @@ ColorClock::ColorClock(int num_of_partitions, float cycle_time){
 
   color_selection = default_color_selection;
 
-  //----------------------------------------------------------------------------
   float interval_length = this->cycle_time_in_hrs / this->partition_count;
 
   // populate color_times
