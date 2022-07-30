@@ -51,7 +51,7 @@ public:
 
   ColorClock();
   ~ColorClock();
-  ColorClock(int num_of_partitions);
+  ColorClock(int num_of_partitions, float cycle_time);
 
   void     update_display_time();
   RgbColor time_to_color();

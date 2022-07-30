@@ -5,6 +5,7 @@
 
 //------------------------------------------------------------------------------
 void Debug::print_color(RgbColor color){
+  Serial.println("");
   Serial.print("r: 0x");
   Serial.print(color.r, HEX);
   Serial.print("  g: 0x");
@@ -35,6 +36,13 @@ void Debug::print_color_array(std::vector<RgbColor> colors){
 void Debug::print_color_array(std::vector<HsvColor> colors){
   for (int i = 0; i < colors.size(); ++i)
     print_color(colors[i]);
+}
+
+
+//------------------------------------------------------------------------------
+void Debug::print_interval_times(std::vector<float> times){
+  for (int i = 0; i < times.size(); ++i)
+    Serial.println(times[i]);
 }
 
 

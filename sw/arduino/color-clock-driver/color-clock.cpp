@@ -23,20 +23,22 @@ std::vector<RgbColor> ColorClock::default_color_selection =
   ColorClock::initialize_default_vector();
 
 
-ColorClock::ColorClock(int num_of_partitions){
-  this->partition_count = num_of_partitions;
+//------------------------------------------------------------------------------
+// args: num_of_partitions - number of partitions in a full color cycle
+//       cycle_time        - length of full cycle
+ColorClock::ColorClock(int num_of_partitions, float cycle_time){
+  this->partition_count   = num_of_partitions;
+  this->cycle_time_in_hrs = cycle_time;
 
   color_selection = default_color_selection;
 
   //----------------------------------------------------------------------------
-  float interval_length = this->cycle_time_in_hrs / partition_count;
+  float interval_length = this->cycle_time_in_hrs / this->partition_count;
 
   // populate color_times
-  for (int i = 0; i < partition_count; i++){
-    ;//this->color_times[i] = i * interval_length;
-    //print times
+  for (int i = 0; i < this->partition_count; i++){
+    this->color_times.push_back(i * interval_length);
   }
- 
 }
 
 ColorClock::ColorClock(){

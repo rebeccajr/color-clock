@@ -21,6 +21,7 @@ public:
   static void print_color(HsvColor color);
   static void print_color_array(std::vector<RgbColor> colors);
   static void print_color_array(std::vector<HsvColor> colors);
+  static void print_interval_times(std::vector<float> times);
   static void print_time(DS3231 clk);
   static void print_new_line();
 };

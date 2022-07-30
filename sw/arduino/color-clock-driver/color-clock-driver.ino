@@ -1,9 +1,13 @@
+//------------------------------------------------------------------------------
+// DESCRIPTION
+// This file contains the driver for the color clock project.
+//------------------------------------------------------------------------------
+
 #define CYCLE_PARTITIONS 6
 
 #include <Arduino.h>
 #include <vector>
 #include <Wire.h>
-
 
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
@@ -24,14 +28,10 @@ bool first_run = true;
 
 //------------------------------------------------------------------------------
 void setup(){
-
-  the_first_colorclock = new ColorClock(6);
+  the_first_colorclock = new ColorClock(6, 24);
   Serial.begin(9600);
   the_first_colorclock->the_alpha_display.led_segments.begin(0x70);
   Wire.begin();
-
-  //initialize_color_selection(color_selection);
-  //initialize_main_colors(main_colors);
 }
 
 //------------------------------------------------------------------------------
@@ -46,10 +46,10 @@ void loop(){
   }
 
   Debug::print_color_array(the_first_colorclock->color_selection);
-
+  Debug::print_interval_times(the_first_colorclock->color_times);
   Debug::print_time(the_first_colorclock->the_rtc);
   
-  //the_first_colorclock.update_display_time();
+  the_first_colorclock->update_display_time();
 
   delay(1000);
 }
