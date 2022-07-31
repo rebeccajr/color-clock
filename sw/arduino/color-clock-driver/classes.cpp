@@ -1,3 +1,8 @@
+#ifndef DEBUG
+#include <Arduino.h>
+#include "debug.hpp"
+#endif
+
 #include "classes.hpp"
 
 //-----------------------------------------------------------------------------
@@ -19,6 +24,7 @@
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 //-----------------------------------------------------------------------------
 HsvColor RgbColor::to_hsv(){
+
   float red_norm   = this->r/255.0;
   float green_norm = this->g/255.0;
   float blue_norm  = this->b/255.0;
@@ -137,10 +143,26 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
                                    HsvColor color2, 
                                    float    fraction){
 
+                                  
+  Serial.println("-----------------------------------");
+  Serial.println("HsvColor::interpolate_bet_hsvcolors");
+  Serial.println("-----------------------------------");
+  Serial.print("color1");
+  Debug::print_color(color1);
+  Debug::print_new_line();
+  Debug::print_new_line();
+  Serial.print("color2");
+  Debug::print_color(color2);
+  Serial.println("");
+  Serial.print("fraction: ");
+  Serial.println(fraction);
+
   // correct in case delta is negative
   float delta = color2.h - color1.h + 360.0;
 
   delta = fmod(delta, 360.0);
+  Serial.print("delta:    ");
+  Serial.println(delta);
   float new_hue = (fraction * delta) + color1.h;
   
   delta = color2.s - color1.s;
@@ -149,6 +171,6 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
   delta = color2.v - color1.v;
   float new_val  = (fraction * delta) + color1.v; 
   
-  return HsvColor(new_hue, new_sat, new_val);                          
+  //return HsvColor(new_hue, new_sat, new_val);                          
+  return HsvColor(new_hue, 100, 100);                          
 }
-

@@ -8,12 +8,7 @@
 #define DEBUG_HPP
 
 #include <vector>
-
-#ifndef DEBUG
-  #include <DS3231.h>
-#endif
-
-#include "classes.hpp"
+#include "../arduino/color-clock-driver/classes.hpp"
 
 class Debug{
 
@@ -24,12 +19,7 @@ public:
   static void print_color_array(std::vector<RgbColor> colors);
   static void print_color_array(std::vector<HsvColor> colors);
   static void print_interval_times(std::vector<float> times);
-  static void print_interval_times_in_sec(std::vector<float> times);
   static void print_new_line();
-#ifndef DEBUG
-  static void print_time(DS3231 clk);
-#endif
-
 };
 
 #endif

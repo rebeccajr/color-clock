@@ -1,4 +1,6 @@
 #include "time-calcs.hpp"
+#include "debug.hpp"
+#include <stdio.h>
 
 //------------------------------------------------------------------------------
 // set static variables
@@ -24,11 +26,29 @@ int TimeCalcs::prev_sec      = 0;
 //------------------------------------------------------------------------------
 float TimeCalcs::get_time_as_fractional_offset(
         float time0, float time1, float crnt_time){
-  
+
+#ifndef DEBUG
+  Serial.print("time0:             ");
+  // Print time in seconds
+  Serial.println(time0 * 3600);
+  Serial.print("time1:             ");
+  Serial.println(time1 * 3600);
+  Serial.print("crnt_time:         ");
+  Serial.println(crnt_time * 3600);
+#endif
+
+  printf("\n________________________________________"); 
+  printf("\nTimeCalcs::get_time_as_fractional_offset"); 
+  printf("\n---"); 
+  printf("\ntime0:     %f", time0);
+  printf("\ntime1:     %f", time1);
+  printf("\ncrnt_time: %f", crnt_time);
+
   // ensure time1 is greater than time0
   // if not, swap
   if (time0 > time1) {
     time0 += time1;
+    printf("\ntime0 > time1");
     time1  = time0 - time1;
     time0  = time0 - time1;
   }
@@ -36,8 +56,13 @@ float TimeCalcs::get_time_as_fractional_offset(
   float fractional_offset = (crnt_time - time0) / 
                             (time1 - time0);
   
-  //print("\nfractional_offset: " + str(fractional_offset));
-  
+  printf("\nfractional_offset: %f", fractional_offset);
+
+#ifndef DEBUG
+  Serial.print("fractional_offset: ");
+  Serial.println(fractional_offset);
+#endif
+
   return fractional_offset;
 }
 

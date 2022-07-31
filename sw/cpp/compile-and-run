@@ -1,0 +1,4 @@
+g++ test-file.cpp                            \
+../arduino/color-clock-driver/classes.cpp    \
+../arduino/color-clock-driver/time-calcs.cpp \
+-DDEBUG -o test

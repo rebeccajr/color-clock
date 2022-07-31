@@ -1,6 +1,10 @@
-#include <Wire.h>
+#ifndef DEBUG
 #include <Arduino.h>
+#include <Wire.h>
+#endif
+
 #include "debug.hpp"
+#include "time-calcs.hpp"
 
 
 //------------------------------------------------------------------------------
@@ -17,11 +21,12 @@ void Debug::print_color(RgbColor color){
 
 //------------------------------------------------------------------------------
 void Debug::print_color(HsvColor color){
-  Serial.print("\nhue:   ");
+  Serial.println("");
+  Serial.print("hue:   ");
   Serial.print(color.h, DEC);
-  Serial.print("\nsat:   ");
+  Serial.print("  sat:   ");
   Serial.print(color.s, DEC);
-  Serial.print("\nval:   ");
+  Serial.print("  val:   ");
   Serial.print(color.v, DEC);
 }
 
@@ -41,8 +46,18 @@ void Debug::print_color_array(std::vector<HsvColor> colors){
 
 
 //------------------------------------------------------------------------------
+void Debug::print_interval_times_in_sec(std::vector<float> times){
+
+  Serial.println("");
+
+  for (int i = 0; i < times.size(); i++)
+    Serial.println(TimeCalcs::SEC_IN_HR * times[i]);
+}
+
+
+//------------------------------------------------------------------------------
 void Debug::print_interval_times(std::vector<float> times){
-  for (int i = 0; i < times.size(); ++i)
+  for (int i = 0; i < times.size(); i++)
     Serial.println(times[i]);
 }
 
@@ -56,19 +71,15 @@ void Debug::print_time(DS3231 clk){
   byte the_min = clk.getMinute();
   byte the_sec = clk.getSecond();
 
-  Serial.println("");
+  Debug::print_new_line();
   Serial.println("---------------------------");
-  Serial.println(" Time");
-  Serial.println("---------------------------");
-
-  Serial.println("hour:  ");
-  Serial.println(the_hr, DEC);
-  Serial.println(" ");
-  Serial.println("min:   ");
-  Serial.println(the_min, DEC);
-  Serial.println(" ");
-  Serial.println("sec:   ");
+  Serial.print("hour: ");
+  Serial.print(the_hr, DEC);
+  Serial.print("  min: ");
+  Serial.print(the_min, DEC);
+  Serial.print("  sec: ");
   Serial.println(the_sec, DEC);
+  Serial.println("---------------------------");
 }
 
 

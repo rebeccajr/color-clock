@@ -51,9 +51,7 @@
 ------------------------------------------------------------------------------*/
 
 // next tasks:
-// port to hardware!!
 // refactor into tasks to be implemented on an RTOS
-// modify to allow for cycle time to be in days
 // preset color schemes?
 // config file read
 

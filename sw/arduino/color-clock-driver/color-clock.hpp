@@ -51,11 +51,12 @@ public:
 
   ColorClock();
   ~ColorClock();
-  ColorClock(int num_of_partitions, float cycle_time);
+  ColorClock(float cycle_time,
+    std::vector<RgbColor> colors = default_color_selection);
 
   void     update_display_time();
   RgbColor time_to_color();
-  void     determine_color_indices();
+  void     determine_color_indices(float time);
 };
 
 #endif
