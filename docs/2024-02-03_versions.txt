@@ -1,0 +1,21 @@
+An Iterative Approach
+
+I have decided on a multi-stage approach to development where each iteration has increased functionality to the previous. This diagram illustrates the top-level electronic design, with each iteration of implemetation.
+
+Notes
+RGB PWM wires represent the red, green, and blue PWM outputs from the Arduino. The output from the Arduino will be stepped up to 12V to power the LEDs on the light display.
+
+I2C serial wires include clock (SCL) and data (SDA) lines.
+
+Time display is only for the artist to use during installation. Time display will be hidden from viewers.
+
+
+Version Summary
+
+V0 | Minimum viable product; one color clock with 24 hr cycle time - does not include user interface for participants
+
+V1 | Includes interface and second color clock for participant interaction
+
+V2 | Includes additional color clock to previous versions with 60 min cycle time
+
+V3 | Includes additional color clock to previous versions with cycle time equivilant to length of event week
