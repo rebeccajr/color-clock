@@ -13,10 +13,11 @@
 
 #include <DS3231.h>
 
-#include "alpha-display.hpp"
+#include "time-display.hpp"
 #include "classes.hpp"
 #include "debug.hpp"
 #include "logic.hpp"
+#include "rtc-clock.hpp"
 #include "time-calcs.hpp"
 
 
@@ -29,11 +30,11 @@ public:
   // The sampled time will fall bewtween two indices of
   // color_times. These variables are the
   // indices that the time falls between.
-  int lo_color_index;                        
+  int lo_color_index;
   int hi_color_index;
 
-  AlphaDisplay the_alpha_display;
-  DS3231       the_rtc;
+  TimeDisplay the_alpha_display;
+  DS3231 the_rtc;
 
   std::vector<RgbColor>    color_selection;
   std::vector<float>       color_times;

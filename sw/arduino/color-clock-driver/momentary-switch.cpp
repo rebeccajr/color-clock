@@ -1,25 +1,26 @@
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-
+//______________________________________________________________________________
+// Implementation for functions of base class
+//______________________________________________________________________________
 #include "momentary-switch.hpp"
 #include <Arduino.h>
 
 //______________________________________________________________________________
 // Registers input after settle time
 //______________________________________________________________________________
-int MomentarySwitch::debounce_input(int reading){
+int MomentarySwitch::debounce_input(){
   unsigned long crnt_ms = millis();
 
-  if (reading != prev_state_)
+  reading_ = digitalRead(input_pin_);
+
+  if (reading_ != prev_state_)
     prev_ms_ = crnt_ms;
 
   unsigned long elapsed_time = crnt_ms - prev_ms_;
 
-  if (elapsed_time > settle_time_in_ms_ && reading != sw_state_)
-      sw_state_ = reading;
+  if (elapsed_time > settle_time_in_ms_ && reading_ != sw_state_)
+      sw_state_ = reading_;
 
-  prev_state_ = reading;
+  prev_state_ = reading_;
 
   return sw_state_;
 }
@@ -28,11 +29,11 @@ int MomentarySwitch::debounce_input(int reading){
 //______________________________________________________________________________
 // Registers input type after debounce
 //______________________________________________________________________________
-MomentarySwitch::InputType MomentarySwitch::get_input_type(int reading)
+MomentarySwitch::InputType MomentarySwitch::get_input_type()
 {
   unsigned long crnt_ms = millis();
   unsigned long hold_time;
-  int input = debounce_input(reading);
+  int input = debounce_input();
 
   switch (sw_state_type_)
   {
@@ -52,13 +53,14 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type(int reading)
 
     //__________________________________________________________________________
     case SwitchState::PRESS:
+
+      //Serial.println("PRESS");
+
       // Set time of switch on
       on_time_ms_ = crnt_ms;
       multi_input_count_++;
       sw_state_type_ = SwitchState::HOLD;
 
-      Serial.println("PRESS");
-      Serial.println("increment");
       break;
 
     //__________________________________________________________________________
@@ -70,7 +72,7 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type(int reading)
 
     //__________________________________________________________________________
     case SwitchState::RELEASE:
-      Serial.println("RELEASE");
+      //Serial.println("RELEASE");
 
       // Set time of switch release
       release_time_ms_ = crnt_ms;
@@ -79,7 +81,7 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type(int reading)
       // Check if over long hold threshold
       if (hold_time > long_hold_time_in_ms_ && multi_input_count_ == 1)
       {
-        Serial.println("long");
+        //Serial.println("long");
         sw_state_type_ = SwitchState::IDLE;
         return InputType::LONG;
       }
@@ -101,17 +103,20 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type(int reading)
          return InputType::NONE;
         }
       }
+
       else
       {
-        Serial.print("multi input:         ");
-        Serial.println(multi_input_count_);
+        //Serial.print("multi input:         ");
+        //Serial.println(multi_input_count_);
 
         sw_state_type_ = SwitchState::IDLE;
 
         return static_cast<InputType>(
           static_cast<int>(InputType::SHORT) + multi_input_count_ - 1);
         }
+
       break;
+
       }
 
     //__________________________________________________________________________

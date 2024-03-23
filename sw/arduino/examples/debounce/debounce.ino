@@ -1,6 +1,8 @@
 //______________________________________________________________________________
 // DESCRIPTION
 // This program tests software debounce.
+//
+// This is currently broken because some files were deleted.
 //______________________________________________________________________________
 
 #include <Arduino.h>
@@ -53,7 +55,6 @@ void loop()
       if (print_flag)
       {
         //Serial.println("______________________________________________");
-        //Serial.println("loop:: val == red.get_on_val()");
         print_flag = 0;
       }
 

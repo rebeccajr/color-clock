@@ -6,7 +6,8 @@
 
 #include <DS3231.h>
 
-class RtcClock{
+class RtcClock
+{
 
 public:
   static DS3231 clk;
@@ -18,5 +19,9 @@ public:
   static bool pmFlag;
 
   static void get_rtc_time(byte* the_time, DS3231 clk);
-
+  static byte get_yr();
+  static byte get_mo();
+  static byte get_day();
+  static byte get_hr();
+  static byte get_min();
 };

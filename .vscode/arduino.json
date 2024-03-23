@@ -1,4 +1,5 @@
 {
     "board": "arduino:samd:mkr1000",
-    "port": "COM3"
+    "port": "COM3",
+    "sketch": "sw\\arduino\\color-clock-driver\\color-clock-driver.ino"
 }

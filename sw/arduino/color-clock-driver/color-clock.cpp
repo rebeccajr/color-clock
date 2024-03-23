@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------------
 #include "color-clock.hpp"
 #include "classes.hpp"
@@ -67,28 +67,28 @@ RgbColor ColorClock::time_to_color()
   float the_min = (float) the_rtc.getMinute();
   float the_sec = (float) the_rtc.getSecond();
 
-  float hrs_since_midnight = 
+  float hrs_since_midnight =
     TimeCalcs::get_hrs_since_midnight(the_hr, the_min, the_sec);
 
-  float hrs_since_cycle_restart = 
+  float hrs_since_cycle_restart =
     fmod(hrs_since_midnight, cycle_time_in_hrs);
 
   // error handling
   if (hrs_since_cycle_restart < 0) hrs_since_cycle_restart = 0;
-  
+
   determine_color_indices(hrs_since_cycle_restart);
 
   float fraction =
     TimeCalcs::get_time_as_fractional_offset(color_times[lo_color_index],
-                                  color_times[hi_color_index], 
-                                  hrs_since_cycle_restart); 
+                                  color_times[hi_color_index],
+                                  hrs_since_cycle_restart);
 
   // convert colors from main_colors array to hsv
   // for smoother transitions between colors
   HsvColor hsvcolor0 = color_selection[lo_color_index].to_hsv();
   HsvColor hsvcolor1 = color_selection[hi_color_index].to_hsv();
 
-  HsvColor crnt_hsvcolor_time = 
+  HsvColor crnt_hsvcolor_time =
     HsvColor::interpolate_bet_hsvcolors(hsvcolor0, hsvcolor1, fraction);
 
   Debug::print_color(crnt_hsvcolor_time);
@@ -111,18 +111,18 @@ void ColorClock::determine_color_indices(float time)
 
   int i = 0;
   while (time >= color_times[i]){
-    
+
     if (time == color_times[i]){
       lo_color_index = i;
       hi_color_index = i;
     }
-    
+
     if (i < color_times.size()- 1)
       i++;
     else
       break;
 
-  lo_color_index = i - 1;  
+  lo_color_index = i - 1;
   hi_color_index = i;
   }
 
@@ -138,6 +138,6 @@ void ColorClock::update_display_time(){
   byte the_hr  = the_rtc.getHour(foo, bar);
   byte the_min = the_rtc.getMinute();
   byte the_sec = the_rtc.getSecond();
-  
-  the_alpha_display.write_display_time(the_hr, the_min, the_sec);
+
+  //the_alpha_display.write_disp_time(the_hr, the_min, the_sec);
 }
