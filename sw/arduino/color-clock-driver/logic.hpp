@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------
 // DESCRIPTION
 // This file contains the logic that maps the time to color for the ColorClock.
-// 
+//
 // The ColorClock is a colored light that maps the current time
 // to a color. The clock will cycle through a series of colors over a period
-// of time. A viewer can tell the approximate time from the color 
+// of time. A viewer can tell the approximate time from the color
 // of the light.
 //
 // HsvColor is used for calculations because this type of color object
@@ -24,7 +24,7 @@
 //------------------------------------------------------------------------------
 
 // configuration values
-#define CYCLE_PARTITIONS 6   
+#define CYCLE_PARTITIONS 6
 
 extern float CYCLE_TIME_IN_HOURS;
 extern float HOURS_BET_COLORS;
@@ -35,18 +35,18 @@ extern RgbColor main_colors[CYCLE_PARTITIONS + 1];
 extern RgbColor color_selection[CYCLE_PARTITIONS];
 
 // max and min rgb values
-extern int MAX_VAL; 
-extern int MIN_VAL; 
-extern int MAX_COLOR_VAL; 
-extern int MIN_COLOR_VAL; 
+extern int MAX_VAL;
+extern int MIN_VAL;
+extern int MAX_COLOR_VAL;
+extern int MIN_COLOR_VAL;
 
 // RGB constants
-extern RgbColor ABS_RGB_RED;
-extern RgbColor ABS_RGB_YEL;
-extern RgbColor ABS_RGB_GRN;
-extern RgbColor ABS_RGB_CYA;
-extern RgbColor ABS_RGB_BLU;
-extern RgbColor ABS_RGB_MAG;
+extern RgbColor RED;
+extern RgbColor YEL;
+extern RgbColor GRN;
+extern RgbColor CYA;
+extern RgbColor BLU;
+extern RgbColor MAG;
 
 extern RgbColor RGB_RED;
 extern RgbColor RGB_YEL;

@@ -23,6 +23,7 @@ class TimeController
       , SET_DATE
       , SET_HR
       , SET_MIN
+      , DONE
     };
 
   private:
@@ -69,6 +70,8 @@ class TimeController
       MomentarySwitch get_inc_btn(){ return inc_btn_;}
       MomentarySwitch get_dec_btn(){ return dec_btn_;}
       MomentarySwitch get_enter_btn(){ return enter_btn_;}
+      TimeDisplay* get_display(){ return display_;}
+      State get_state(){ return state_;}
 };
 
 #endif //TIME_CONTROLLER

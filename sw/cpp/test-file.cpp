@@ -28,12 +28,12 @@
 
 int main()
 {
-  RgbColor ABS_RGB_RED = RgbColor(0xFF0000);
-  RgbColor ABS_RGB_YEL = RgbColor(0xFFFF00);
-  RgbColor ABS_RGB_GRN = RgbColor(0x00FF00);
-  RgbColor ABS_RGB_CYA = RgbColor(0x00FFFF);
-  RgbColor ABS_RGB_BLU = RgbColor(0xFF00FF);
-  RgbColor ABS_RGB_MAG = RgbColor(0xFF00FF);
+  RgbColor RED = RgbColor(0xFF0000);
+  RgbColor YEL = RgbColor(0xFFFF00);
+  RgbColor GRN = RgbColor(0x00FF00);
+  RgbColor CYA = RgbColor(0x00FFFF);
+  RgbColor BLU = RgbColor(0xFF00FF);
+  RgbColor MAG = RgbColor(0xFF00FF);
 
   std::vector<RgbColor> rgb_color_selection;
   std::vector<HsvColor> hsv_color_selection;
@@ -44,13 +44,13 @@ int main()
   Debug::print_color(r);
   Debug::print_color(r.to_hsv());
   Debug::print_color(h.to_rgb());
-  
-  rgb_color_selection.push_back(ABS_RGB_RED);
-  rgb_color_selection.push_back(ABS_RGB_YEL);
-  rgb_color_selection.push_back(ABS_RGB_GRN);
-  rgb_color_selection.push_back(ABS_RGB_CYA);
-  rgb_color_selection.push_back(ABS_RGB_BLU);
-  rgb_color_selection.push_back(ABS_RGB_MAG);
+
+  rgb_color_selection.push_back(RED);
+  rgb_color_selection.push_back(YEL);
+  rgb_color_selection.push_back(GRN);
+  rgb_color_selection.push_back(CYA);
+  rgb_color_selection.push_back(BLU);
+  rgb_color_selection.push_back(MAG);
   printf("\n\n");
   Debug::print_color_array(rgb_color_selection);
   printf("\n\n");

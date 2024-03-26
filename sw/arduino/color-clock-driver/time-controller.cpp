@@ -20,6 +20,7 @@ void TimeController::dec_min() { rtc_->setMinute(rtc_->getMinute() - 1); }
 //______________________________________________________________________________
 void TimeController::set_time()
 {
+  bool state_changed = false;
   int inc_reading   = inc_btn_.get_reading();
   int dec_reading   = dec_btn_.get_reading();
   int enter_reading = enter_btn_.get_reading();
@@ -27,12 +28,21 @@ void TimeController::set_time()
   MomentarySwitch::InputType enter_input_type =
     enter_btn_.get_input_type();
 
-  if (enter_input_type == MomentarySwitch::InputType::DOUBLE)
+  //____________________________________________________________________________
+  // Debug
+  if (state_changed)
   {
-    Serial.print("Current state: ");
+    Serial.print("TimeController::set_time -- Current state: ");
     Serial.println(static_cast<int>(state_));
+    state_changed = false;
+  }
+  //____________________________________________________________________________
+
+  if (enter_input_type == MomentarySwitch::InputType::SHORT)
+  {
     set_next_state();
-    Serial.print("New state:     ");
+    state_changed = true;
+    Serial.print("TimeController::set_time -- New state:     ");
     Serial.println(static_cast<int>(state_));
     return;
   }
@@ -63,7 +73,7 @@ void TimeController::set_time()
     case (State::IDLE):
       // TODO fix this function so it doesn't break when your string is less
       // than 4 characters
-      display_->write_disp_str("    ");
+      display_->write_disp_str("IDLE");
       break;
 
     //__________________________________________________________________________
@@ -137,6 +147,10 @@ void TimeController::set_time()
 
       break;
 
+    case(State::DONE):
+      set_next_state();
+      break;
+
     //__________________________________________________________________________
     default:
       break;
@@ -173,6 +187,10 @@ void TimeController::set_next_state()
       break;
 
     case (State::SET_MIN):
+      state_ = State::DONE;
+      break;
+
+    case (State::DONE):
       state_ = State::IDLE;
       break;
 
