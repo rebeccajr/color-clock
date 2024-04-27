@@ -8,6 +8,8 @@
 
 #include <Arduino.h>
 
+#include "debug.hpp"
+
 
 //______________________________________________________________________________
 class MomentarySwitch{

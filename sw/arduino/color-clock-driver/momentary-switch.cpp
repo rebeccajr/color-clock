@@ -8,8 +8,6 @@
 // Registers input after settle time
 //______________________________________________________________________________
 int MomentarySwitch::debounce_input(){
-  //Serial.print("debounce input pin: ");
-  //Serial.println(input_pin_);
   unsigned long crnt_ms = millis();
 
   reading_ = digitalRead(input_pin_);
@@ -35,8 +33,7 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
 {
   //____________________________________________________________________________
   // DEBUG
-  //Serial.print("get_input_type input pin: ");
-  //Serial.println(input_pin_);
+  //Debug::print_labeled_int("get_input_type input pin: ", input_pin_);
   //____________________________________________________________________________
 
   unsigned long crnt_ms = millis();
@@ -49,10 +46,8 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
     case SwitchState::IDLE:
       //________________________________________________________________________
       // DEBUG
-      //Serial.print("get_input_type input pin: ");
-      //Serial.println(input_pin_);
-
-      //Serial.println("get_input_type State::IDLE");
+      //Debug::print_labeled_int("get_input_type input pin: ",input_pin_);
+      //Debug::print_string_with_new_line("get_input_type State::IDLE");
       //________________________________________________________________________
 
       // Reset values use for input type determination
@@ -70,9 +65,10 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
 
       //________________________________________________________________________
       // DEBUG
-      //Serial.print("pin: ");
-      //Serial.println(input_pin_);
-      //Serial.println("PRESS");
+      //Debug::print_labeled_int("pin: ", input_pin_);
+      //Debug::print_new_line();
+      //Debug::print_string_with_new_line("PRESS");
+      //Debug::print_new_line();
       //________________________________________________________________________
 
       // Set time of switch on
@@ -93,9 +89,9 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
     case SwitchState::RELEASE:
       //________________________________________________________________________
       // DEBUG
-      //Serial.print("pin: ");
-      //Serial.println(input_pin_);
-      //Serial.println("RELEASE");
+      //Debug::print_labeled_int("pin: ", input_pin_);
+      //Debug::print_new_line();
+      //Debug::print_string_with_new_line("RELEASE");
       //________________________________________________________________________
 
       // Set time of switch release
@@ -107,7 +103,8 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
       {
         //______________________________________________________________________
         // DEBUG
-        //Serial.println("MomentarySwitch::get_input_type -- long press");
+        //Debug::print_string_with_new_line(
+        //  "MomentarySwitch::get_input_type -- long press");
         //______________________________________________________________________
         sw_state_type_ = SwitchState::IDLE;
         return InputType::LONG;
@@ -135,8 +132,7 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
       {
         //______________________________________________________________________
         // DEBUG
-        //Serial.print("multi input:         ");
-        //Serial.println(multi_input_count_);
+        //Debug::print_labeled_int("multi input:         ", multi_input_count_);
         //______________________________________________________________________
 
         sw_state_type_ = SwitchState::IDLE;

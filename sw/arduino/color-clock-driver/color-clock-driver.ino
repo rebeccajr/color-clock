@@ -9,59 +9,67 @@
 
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
-#include <DS3231.h>
 
-#include "classes.hpp"
+#include "color-classes.hpp"
 #include "color-clock.hpp"
 #include "debug.hpp"
-#include "logic.hpp"
+#include "flux-clock.hpp"
+#include "momentary-switch.hpp"
 #include "time-calcs.hpp"
 #include "time-display.hpp"
-
 #include "top-level.hpp"
 
-ColorClock* the_first_colorclock;
-DS3231 rtc;
 
-bool first_run = true;
+TopLevel    top_level;
+TimeDisplay display;
 
-std::vector<RgbColor> color_vect;
+ColorClock* cc0;
+ColorClock* cc1;
+ColorClock* cc2;
+FluxClock   the_clock;
 
-int red_pin = A0;
-int grn_pin = A1;
-int blu_pin = A2;
+int red_pin_0 = 6;
+int grn_pin_0 = 7;
+int blu_pin_0 = 8;
 
-int inc_pin   = 0;
-int dec_pin   = 1;
-int enter_pin = 2;
+int red_pin_1 = 0;
+int grn_pin_1 = 1;
+int blu_pin_1 = 2;
+
+int red_pin_2 = 3;
+int grn_pin_2 = 4;
+int blu_pin_2 = 5;
+
+int inc_pin   = 15;
+int dec_pin   = 16;
+int enter_pin = 17;
 
 MomentarySwitch inc_sw;
 MomentarySwitch dec_sw;
 MomentarySwitch enter_sw;
 
-TimeDisplay     display;
-TopLevel top_level;
-
-float cc0_freq = 1.0/120.0;
-float cc1_freq = 1.0/240.0;
-float cc2_freq = 1.0/60.0;
+float cc0_period = 1.0/240.0;  // 15 sec
+float cc1_period = 1.0/120.0;  // 30 sec
+float cc2_period = 1.0/60.0;   // 1 min
 
 //______________________________________________________________________________
 void setup()
 {
+  pinMode(red_pin_0, OUTPUT);
+  pinMode(grn_pin_0, OUTPUT);
+  pinMode(blu_pin_0, OUTPUT);
 
-  //____________________________________________________________________________
-  color_vect.push_back(ColorClock::RED); // 0
-  color_vect.push_back(ColorClock::YEL); // 5
-  color_vect.push_back(ColorClock::GRN); // 10
-  color_vect.push_back(ColorClock::CYA); // 15
-  color_vect.push_back(ColorClock::BLU); // 20
-  color_vect.push_back(ColorClock::MAG); // 25
-  //____________________________________________________________________________
+  pinMode(red_pin_1, OUTPUT);
+  pinMode(grn_pin_1, OUTPUT);
+  pinMode(blu_pin_1, OUTPUT);
 
-  the_first_colorclock = new ColorClock(&rtc, 1.0/120.0, color_vect);
+  pinMode(red_pin_2, OUTPUT);
+  pinMode(grn_pin_2, OUTPUT);
+  pinMode(blu_pin_2, OUTPUT);
 
-  //____________________________________________________________________________
+  pinMode(inc_pin,   INPUT_PULLUP);
+  pinMode(dec_pin,   INPUT_PULLUP);
+  pinMode(enter_pin, INPUT_PULLUP);
 
   inc_sw    = MomentarySwitch(inc_pin);
   dec_sw    = MomentarySwitch(dec_pin);
@@ -75,22 +83,21 @@ void setup()
 
   //____________________________________________________________________________
 
-  pinMode(red_pin, OUTPUT);
-  pinMode(grn_pin, OUTPUT);
-  pinMode(blu_pin, OUTPUT);
+  cc0 = new ColorClock(&the_clock, cc0_period, ColorConstants::rmbcgy_);
+  cc1 = new ColorClock(&the_clock, cc1_period, ColorConstants::rmbcgy_);
+  cc2 = new ColorClock(&the_clock, cc2_period, ColorConstants::rmbcgy_);
 
-  pinMode(inc_pin,   INPUT_PULLUP);
-  pinMode(dec_pin,   INPUT_PULLUP);
-  pinMode(enter_pin, INPUT_PULLUP);
-
-  top_level = TopLevel(&rtc
+  top_level = TopLevel(&the_clock
     , inc_sw
     , dec_sw
     , enter_sw
     , &display
-    , cc0_freq
-    , cc1_freq
-    , cc2_freq);
+  );
+
+  top_level.register_color_clock(cc0, red_pin_0, grn_pin_0, blu_pin_0);
+  top_level.register_color_clock(cc1, red_pin_1, grn_pin_1, blu_pin_1);
+  top_level.register_color_clock(cc2, red_pin_2, grn_pin_2, blu_pin_2);
+
 }
 
 

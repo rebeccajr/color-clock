@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 // DESCRIPTION
 // This file contains the calculations that involve time for ColorClock.
 // 
@@ -6,7 +6,7 @@
 // to a color. The clock will cycle through a series of colors over a period
 // of time. A viewer can tell the approximate time from the color 
 // of the light.
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 
 #ifndef TIME_CALCS_HPP
 #define TIME_CALCS_HPP

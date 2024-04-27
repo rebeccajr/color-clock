@@ -6,12 +6,13 @@
 
 #include "time-controller.hpp"
 
-void TimeController::inc_yr()  { rtc_->setYear(rtc_->getYear()     + 1); }
-void TimeController::dec_yr()  { rtc_->setYear(rtc_->getYear()     - 1); }
-void TimeController::inc_day() { rtc_->setDate (rtc_->getDate()    + 1); }
-void TimeController::dec_day() { rtc_->setDate(rtc_->getDate()     - 1); }
-void TimeController::inc_min() { rtc_->setMinute(rtc_->getMinute() + 1); }
-void TimeController::dec_min() { rtc_->setMinute(rtc_->getMinute() - 1); }
+void TimeController::inc_yr()  { clock_->set_yr(clock_->get_yr()    + 1); }
+void TimeController::inc_day() { clock_->set_day (clock_->get_day() + 1); }
+void TimeController::inc_min() { clock_->set_min(clock_->get_min()  + 1); }
+
+void TimeController::dec_yr()  { clock_->set_yr(clock_->get_yr()    - 1); }
+void TimeController::dec_day() { clock_->set_day(clock_->get_day()  - 1); }
+void TimeController::dec_min() { clock_->set_min(clock_->get_min()  - 1); }
 
 
 
@@ -21,6 +22,7 @@ void TimeController::dec_min() { rtc_->setMinute(rtc_->getMinute() - 1); }
 void TimeController::set_time()
 {
   bool state_changed = false;
+
   int inc_reading   = inc_btn_.get_reading();
   int dec_reading   = dec_btn_.get_reading();
   int enter_reading = enter_btn_.get_reading();
@@ -32,8 +34,8 @@ void TimeController::set_time()
   // Debug
   if (state_changed)
   {
-    Serial.print("TimeController::set_time -- Current state: ");
-    Serial.println(static_cast<int>(state_));
+    //Debug::print_labeled_int("TimeController::set_time -- Current state: "
+    //  , static_cast<int>(state_));
     state_changed = false;
   }
   //____________________________________________________________________________
@@ -42,18 +44,10 @@ void TimeController::set_time()
   {
     set_next_state();
     state_changed = true;
-    Serial.print("TimeController::set_time -- New state:     ");
-    Serial.println(static_cast<int>(state_));
+    //Debug::print_labeled_int("TimeController::set_time -- New state:     "
+    //  , static_cast<int>(state_));
     return;
   }
-
-  //____________________________________________________________________________
-  // These bools are required for some of the set functions.
-  // See the time set functions for more information.
-  bool h12;
-  bool h_pm;
-  bool century_bit;
-  //____________________________________________________________________________
 
   short yr;
   short mo;
@@ -85,7 +79,7 @@ void TimeController::set_time()
       else if (dec_val)
         dec_yr();
 
-      yr = rtc_->getYear();
+      yr = clock_->get_yr();
       display_->write_disp_yr(yr);
 
       break;
@@ -99,7 +93,7 @@ void TimeController::set_time()
       else if (dec_val)
         dec_mo();
 
-      mo = rtc_->getMonth(century_bit);
+      mo = clock_->get_month();
       display_->write_disp_mo(mo);
 
       break;
@@ -113,7 +107,7 @@ void TimeController::set_time()
       else if (dec_val)
         dec_day();
 
-      day = rtc_->getDate();
+      day = clock_->get_day();
       display_->write_disp_day(day);
 
       break;
@@ -127,7 +121,7 @@ void TimeController::set_time()
       else if (dec_val)
         dec_hr();
 
-      hr = rtc_->getHour(h12, h_pm);
+      hr = clock_->get_hr();
       display_->write_disp_hr(hr);
 
       break;
@@ -142,7 +136,7 @@ void TimeController::set_time()
         dec_min();
 
 
-      min = rtc_->getMinute();
+      min = clock_->get_min();
       display_->write_disp_min(min);
 
       break;
@@ -206,12 +200,7 @@ void TimeController::set_next_state()
 //______________________________________________________________________________
 void TimeController::inc_mo()
 {
-  // The century_bit toggles when there is roll-over to a new century, e.g.
-  // from year 2099 to 2100. The century_bit will likely never be relevant for
-  // any use case for this code base. More information about this bit
-  // can be found: https://github.com/NorthernWidget/DS3231/blob/master/Documentation/Time-Retrieval.md#getMinute
-  bool century_bit;
-  rtc_->setMonth(rtc_->getMonth(century_bit)   + 1);
+  clock_->set_month(clock_->get_month()   + 1);
 }
 
 
@@ -220,12 +209,7 @@ void TimeController::inc_mo()
 //______________________________________________________________________________
 void TimeController::dec_mo()
 {
-  // The century_bit toggles when there is roll-over to a new century, e.g.
-  // from year 2099 to 2100. The century_bit will likely never be relevant for
-  // any use case for this code base. More information about this bit
-  // can be found: https://github.com/NorthernWidget/DS3231/blob/master/Documentation/Time-Retrieval.md#getMinute
-  bool century_bit;
-  rtc_->setMonth(rtc_->getMonth(century_bit) - 1);
+  clock_->set_month(clock_->get_month() - 1);
 }
 
 
@@ -234,12 +218,7 @@ void TimeController::dec_mo()
 //______________________________________________________________________________
 void TimeController::inc_hr()
 {
-  // These bools are passed by reference. The values are modified as follows:
-  // parameter h12:  true = 12 hr time; false = 24 hr time
-  // parameter h_pm: true = PM;         false = AM
-  bool h12;
-  bool h_pm;
-  rtc_->setHour(rtc_->getHour(h12, h_pm) + 1);
+  clock_->set_hr(clock_->get_hr() + 1);
 }
 
 //______________________________________________________________________________
@@ -247,10 +226,5 @@ void TimeController::inc_hr()
 //______________________________________________________________________________
 void TimeController::dec_hr()
 {
-  // These bools are passed by reference. The values are modified as follows:
-  // parameter h12:  true = 12 hr time; false = 24 hr time
-  // parameter h_pm: true = PM;         false = AM
-  bool h12;
-  bool h_pm;
-  rtc_->setHour(rtc_->getHour(h12, h_pm) - 1);
+  clock_->set_hr(clock_->get_hr() - 1);
 }

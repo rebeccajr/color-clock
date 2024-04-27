@@ -2,9 +2,9 @@
 #include "debug.hpp"
 #include <stdio.h>
 
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 // set static variables
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 int TimeCalcs::SEC_IN_MIN    = 60;
 int TimeCalcs::MIN_IN_HR     = 60;
 int TimeCalcs::SEC_IN_HR     = SEC_IN_MIN * MIN_IN_HR;
@@ -13,7 +13,7 @@ int TimeCalcs::SEC_IN_HR     = SEC_IN_MIN * MIN_IN_HR;
 int TimeCalcs::MILLIS_OFFSET = 0;
 int TimeCalcs::prev_sec      = 0;
 
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 // This function calculates the fraction of where a specific time
 // falls between two other times.
 //
@@ -23,53 +23,30 @@ int TimeCalcs::prev_sec      = 0;
 //
 // In the application of ColorClock, time0 and time1 are taken
 // from the array of major times.
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 float TimeCalcs::get_time_as_fractional_offset(
         float time0, float time1, float crnt_time){
-
-#ifndef DEBUG
-  Serial.print("time0:             ");
-  // Print time in seconds
-  Serial.println(time0 * 3600);
-  Serial.print("time1:             ");
-  Serial.println(time1 * 3600);
-  Serial.print("crnt_time:         ");
-  Serial.println(crnt_time * 3600);
-#endif
-
-  printf("\n________________________________________"); 
-  printf("\nTimeCalcs::get_time_as_fractional_offset"); 
-  printf("\n---"); 
-  printf("\ntime0:     %f", time0);
-  printf("\ntime1:     %f", time1);
-  printf("\ncrnt_time: %f", crnt_time);
 
   // ensure time1 is greater than time0
   // if not, swap
   if (time0 > time1) {
     time0 += time1;
-    printf("\ntime0 > time1");
     time1  = time0 - time1;
     time0  = time0 - time1;
   }
   
-  float fractional_offset = (crnt_time - time0) / 
-                            (time1 - time0);
-  
-  printf("\nfractional_offset: %f", fractional_offset);
-
-#ifndef DEBUG
-  Serial.print("fractional_offset: ");
-  Serial.println(fractional_offset);
-#endif
+  float fractional_offset = static_cast<float>(
+    (crnt_time - time0) / 
+    (time1 - time0)
+  );
 
   return fractional_offset;
 }
 
-//------------------------------------------------------------------------------
+//______________________________________________________________________________
 float TimeCalcs::get_hrs_since_midnight(
           float hr, float min, float sec){
 
   return hr + min/MIN_IN_HR + sec/SEC_IN_HR;
 }
-//------------------------------------------------------------------------------
+//______________________________________________________________________________

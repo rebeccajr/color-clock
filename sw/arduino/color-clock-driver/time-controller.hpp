@@ -6,8 +6,8 @@
 #ifndef TIME_CONTROLLER
 #define TIME_CONTROLLER
 
-#include <DS3231.h>
-
+#include "debug.hpp"
+#include "flux-clock.hpp"
 #include "time-display.hpp"
 #include "momentary-switch.hpp"
 
@@ -27,7 +27,7 @@ class TimeController
     };
 
   private:
-    DS3231*         rtc_;
+    FluxClock*      clock_;
     TimeDisplay*    display_;
     MomentarySwitch inc_btn_;
     MomentarySwitch dec_btn_;
@@ -52,13 +52,13 @@ class TimeController
 
     TimeController(){}
 
-    TimeController(DS3231* rtc
+    TimeController(FluxClock* clock 
       , MomentarySwitch inc_btn
       , MomentarySwitch dec_btn
       , MomentarySwitch enter_btn
       , TimeDisplay* display
       )
-      : rtc_(rtc)
+      : clock_(clock)
       , inc_btn_(inc_btn)
       , dec_btn_(dec_btn)
       , enter_btn_(enter_btn)
