@@ -198,9 +198,20 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
 // Writes RGB values to output
 // If this is a build to the Arduino, writes the ouput pins
 //______________________________________________________________________________
-void RgbColor::write_rgb_to_out(int red_out, int grn_out, int blu_out)
+void RgbColor::write_rgb_to_out(int red_out
+  , int grn_out
+  , int blu_out
+  , bool flip
+)
 {
 #ifdef ARDUINO_BUILD
+if (flip)
+{
+  r = 255 - r;
+  g = 255 - g;
+  b = 255 - b;
+}
+
   analogWrite(red_out, r);
   analogWrite(grn_out, g);
   analogWrite(blu_out, b);

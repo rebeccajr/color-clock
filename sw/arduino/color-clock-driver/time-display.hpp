@@ -18,7 +18,7 @@ public:
   void write_disp_str(const char*);
   void write_disp_str_num(const char* str, byte num);
   void write_disp_hr_min(byte hr, byte min);
-  void write_disp_time(byte hr, byte min, byte sec);
+  void write_disp_time(byte, byte);
 
   void write_disp_yr(byte yr);
   void write_disp_mo(byte mo);

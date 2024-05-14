@@ -7,12 +7,12 @@
 //______________________________________________________________________________
 // Write the time to the alphanumeric display
 //______________________________________________________________________________
-void TimeDisplay::write_disp_time(byte hr, byte min, byte sec){
+void TimeDisplay::write_disp_time(byte time_large, byte time_small){
 
-  led_segments.writeDigitAscii(3, 0x30 + sec % 10);
-  led_segments.writeDigitAscii(2, 0x30 + sec / 10);
-  led_segments.writeDigitAscii(1, 0x30 + min % 10);
-  led_segments.writeDigitAscii(0, 0x30 + min / 10);
+  led_segments.writeDigitAscii(3, 0x30 + time_small % 10);
+  led_segments.writeDigitAscii(2, 0x30 + time_small / 10);
+  led_segments.writeDigitAscii(1, 0x30 + time_large % 10);
+  led_segments.writeDigitAscii(0, 0x30 + time_large / 10);
 
   led_segments.writeDisplay();
 }

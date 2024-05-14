@@ -64,7 +64,7 @@ public:
 
   HsvColor to_hsv();
 
-  void write_rgb_to_out(int, int, int);
+  void write_rgb_to_out(int, int, int, bool = false);
 }; 
 
 

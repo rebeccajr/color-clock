@@ -10,7 +10,7 @@
 //______________________________________________________________________________
 short FluxClock::get_yr()
 {
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
   return rtc_.getYear();
 #else
   time(&clock_);
@@ -24,7 +24,7 @@ short FluxClock::get_yr()
 //______________________________________________________________________________
 byte FluxClock::get_month()
 {
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
   //__________________________________________________________________________
   // The century_bit toggles when there is roll-over to a new century, e.g.
   // from year 2099 to 2100. The century_bit will likely never be relevant for
@@ -45,7 +45,7 @@ byte FluxClock::get_month()
 //______________________________________________________________________________
 byte FluxClock::get_day()
 {
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
   return rtc_.getDate();
 #else
   time(&clock_);
@@ -61,7 +61,7 @@ byte FluxClock::get_day()
 byte FluxClock::get_hr()
 {
 
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
   //__________________________________________________________________________
   // These bools are passed by reference. The values are modified as follows:
   // parameter h12:  true = 12 hr time; false = 24 hr time
@@ -85,7 +85,7 @@ byte FluxClock::get_hr()
 byte FluxClock::get_min()
 {
 
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
   return rtc_.getMinute();
 #else
   time(&clock_);
@@ -100,7 +100,7 @@ byte FluxClock::get_min()
 //______________________________________________________________________________
 byte FluxClock::get_sec()
 {
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
   return rtc_.getSecond();
 #else
   time(&clock_);
@@ -109,7 +109,7 @@ byte FluxClock::get_sec()
 #endif
 }
 
-#if ARDUINO_BUILD
+#ifdef ARDUINO_BUILD
 //______________________________________________________________________________
 void FluxClock::set_yr(short yr)    {rtc_.setYear(yr);}
 void FluxClock::set_month(byte mo)  {rtc_.setMonth(mo);}
