@@ -5,8 +5,6 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <ctime>
-
 #include "simple-header.hpp"
 
 SimpleClass simple;
@@ -20,11 +18,12 @@ void setup()
 
 void loop()
 {
-  //digitalWrite(out_pin, 1);
-  //delay(250);
-  //digitalWrite(out_pin, 0);
-  //delay(250);
-  Serial.println("print!");
+  Serial.println("blink!");
+  digitalWrite(out_pin, 1);
+  delay(250);
+  digitalWrite(out_pin, 0);
+  delay(250);
+  
   //Serial.println(simple.variable);
-  Serial.println(FLUX);
+  //Serial.println(FLUX);
 }
