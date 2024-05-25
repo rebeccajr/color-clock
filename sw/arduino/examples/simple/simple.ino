@@ -9,19 +9,23 @@
 
 SimpleClass simple;
 
-int out_pin = 5;
+int out_pin0 = 4;
+int out_pin1 = 6;
 
 void setup()
 {
-    pinMode(out_pin, OUTPUT);
+    pinMode(out_pin0, OUTPUT);
+    pinMode(out_pin1, OUTPUT);
 }
 
 void loop()
 {
   Serial.println("blink!");
-  digitalWrite(out_pin, 1);
+  digitalWrite(out_pin0, 1);
+  digitalWrite(out_pin1, 0);
   delay(250);
-  digitalWrite(out_pin, 0);
+  digitalWrite(out_pin0, 0);
+  digitalWrite(out_pin1, 1);
   delay(250);
   
   //Serial.println(simple.variable);

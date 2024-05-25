@@ -6,10 +6,14 @@
 #ifndef MOMENTARY_SWITCH
 #define MOMENTARY_SWITCH
 
-#include <Arduino.h>
 
+#include <Arduino.h>
 #include "debug.hpp"
 
+
+#ifdef USING_AW9523
+#include <Adafruit_AW9523.h
+#endif
 
 //______________________________________________________________________________
 class MomentarySwitch{
@@ -49,6 +53,10 @@ class MomentarySwitch{
     unsigned long time_since_off_;
     int on_value_;
 
+#ifdef USING_AW9523
+    Adafruit_AW9523 aw_;
+#endif
+
   public:
     MomentarySwitch(){}
 
@@ -58,6 +66,9 @@ class MomentarySwitch{
       , int short_hold_time_in_ms     = 50
       , int mult_input_time_gap       = 500
       , int on_value                  = 1
+#ifdef USING_AW9523
+      , Adafruit_AW9523 aw_           = aw
+#endif
      )
       : input_pin_(input_pin)
       , settle_time_in_ms_(settle_time_in_ms)
@@ -65,6 +76,9 @@ class MomentarySwitch{
       , short_hold_time_in_ms_(short_hold_time_in_ms)
       , mult_input_time_gap_(mult_input_time_gap)
       , on_value_(on_value)
+#ifdef USING_AW9523
+      , Adafruit_AW9523 aw_(aw)
+#endif
       {
 
         prev_debounced_input_ = 0;

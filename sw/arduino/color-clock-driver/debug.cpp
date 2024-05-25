@@ -132,9 +132,9 @@ void Debug::print_new_line()
 
 
 //______________________________________________________________________________
-// Prints value with label in decimal. Does not include new line at end.
+// Prints value with label in decimal. Optional new line at end.
 //______________________________________________________________________________
-void Debug::print_labeled_float(char* label, float num)
+void Debug::print_labeled_float(char* label, float num, bool new_line)
 {
   Debug::print_new_line();
 #ifdef ARDUINO_BUILD
@@ -143,13 +143,15 @@ void Debug::print_labeled_float(char* label, float num)
 #else
   printf("%s:  %f", label, num);
 #endif
+  if (new_line)
+    Debug::print_new_line();
 }
 
 
 //______________________________________________________________________________
-// Prints value with label in decimal. Does not include new line at end.
+// Prints value with label in decimal. Optional new line at end.
 //______________________________________________________________________________
-void Debug::print_labeled_int(char* label, int num)
+void Debug::print_labeled_int(char* label, int num, bool new_line)
 {
   Debug::print_new_line();
 #ifdef ARDUINO_BUILD
@@ -158,6 +160,8 @@ void Debug::print_labeled_int(char* label, int num)
 #else
   printf("%s:  %d", label, num);
 #endif
+  if (new_line)
+    Debug::print_new_line();
 }
 
 

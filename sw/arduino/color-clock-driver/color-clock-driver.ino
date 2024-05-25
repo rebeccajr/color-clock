@@ -9,6 +9,8 @@
 
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
+#include <Adafruit_AW9523.h>
+
 
 #include "color-classes.hpp"
 #include "color-clock.hpp"

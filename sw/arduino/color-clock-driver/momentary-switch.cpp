@@ -10,7 +10,12 @@
 int MomentarySwitch::debounce_input(){
   unsigned long crnt_ms = millis();
 
-  reading_ = digitalRead(input_pin_);
+  reading_ =
+#ifdef USING_AW9523
+  aw.
+  
+#endif
+  digitalRead(input_pin_);
 
   if (reading_ != prev_state_)
     prev_ms_ = crnt_ms;

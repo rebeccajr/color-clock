@@ -19,8 +19,8 @@ class Debug{
 
 public:
   static void print_string_with_new_line(char*, bool = true);
-  static void print_labeled_int(char*, int);
-  static void print_labeled_float(char*, float);
+  static void print_labeled_int(char*, int, bool = false);
+  static void print_labeled_float(char*, float, bool = false);
   static void print_color(RgbColor);
   static void print_color(HsvColor);
   static void print_color_array(std::vector<RgbColor>);
