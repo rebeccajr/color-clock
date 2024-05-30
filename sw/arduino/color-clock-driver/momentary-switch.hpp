@@ -12,7 +12,7 @@
 
 
 #ifdef USING_AW9523
-#include <Adafruit_AW9523.h
+#include <Adafruit_AW9523.h>
 #endif
 
 //______________________________________________________________________________

@@ -13,7 +13,6 @@ int MomentarySwitch::debounce_input(){
   reading_ =
 #ifdef USING_AW9523
   aw.
-  
 #endif
   digitalRead(input_pin_);
 

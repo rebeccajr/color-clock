@@ -9,8 +9,10 @@
 
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
-#include <Adafruit_AW9523.h>
 
+#ifdef USING_AW9523
+#include <Adafruit_AW9523.h>
+#endif
 
 #include "color-classes.hpp"
 #include "color-clock.hpp"
@@ -21,6 +23,9 @@
 #include "time-display.hpp"
 #include "top-level.hpp"
 
+#ifdef USING_AW9523
+Adafruit_AW9523 aw;
+#endif
 
 TopLevel    top_level;
 TimeDisplay display;
