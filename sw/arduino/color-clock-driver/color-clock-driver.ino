@@ -40,9 +40,9 @@ int red_pin_2 = 3;
 int grn_pin_2 = 4;
 int blu_pin_2 = 5;
 
-int inc_pin   = 15;
-int dec_pin   = 16;
-int enter_pin = 17;
+int inc_pin   = 1;
+int dec_pin   = 2;
+int enter_pin = 0;
 
 MomentarySwitch inc_sw;
 MomentarySwitch dec_sw;
