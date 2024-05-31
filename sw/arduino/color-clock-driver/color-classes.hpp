@@ -42,9 +42,6 @@ public:
   int g;      // green
   int b;      // blue
   
-  //------------------------------------
-  // constructors
-  //------------------------------------
   RgbColor(){}
 
   // values normalized to 255
@@ -78,17 +75,11 @@ class HsvColor {
 
 public:
 
-  //------------------------------------------------------------
-  // static funtions
-  //------------------------------------------------------------
   static HsvColor interpolate_bet_hsvcolors(
                     HsvColor color1, 
                     HsvColor color2, 
                     float    fraction);
 
-  //------------------------------------------------------------
-  // class members
-  //------------------------------------------------------------
   float h;
   float s; 
   float v;

@@ -5,9 +5,9 @@
 //______________________________________________________________________________
 // set static variables
 //______________________________________________________________________________
-int TimeCalcs::SEC_IN_MIN    = 60;
-int TimeCalcs::MIN_IN_HR     = 60;
-int TimeCalcs::SEC_IN_HR     = SEC_IN_MIN * MIN_IN_HR;
+float TimeCalcs::SEC_IN_MIN    = 60;
+float TimeCalcs::MIN_IN_HR     = 60;
+float TimeCalcs::SEC_IN_HR     = SEC_IN_MIN * MIN_IN_HR;
 
 // variables used to get offset of time in millis
 int TimeCalcs::MILLIS_OFFSET = 0;

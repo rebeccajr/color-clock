@@ -18,9 +18,9 @@ public:
   //----------------------------------------------------------------------------
   // CONSTANTS
   //----------------------------------------------------------------------------
-  static int SEC_IN_MIN;
-  static int MIN_IN_HR;
-  static int SEC_IN_HR;
+  static float SEC_IN_MIN;
+  static float MIN_IN_HR;
+  static float SEC_IN_HR;
   
   // variables used to get offset of time in millis
   static int MILLIS_OFFSET;

@@ -18,8 +18,22 @@ void TopLevel::run()
     short g_pin = it->second[RgbColor::PriColor::GRN];
     short b_pin = it->second[RgbColor::PriColor::BLU];
 
-    out_color.write_rgb_to_out(r_pin, g_pin, b_pin);
-
+    // These LEDs are common anode - boolean here sends the inverted values to
+    // analog pins, e.g. full on = 0 instead of 255
+    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
+    //__________________________________________________________________________
+    // Debug
+    //__________________________________________________________________________
+    static short prev_sec = 0;
+    short crnt_sec = it->first->clock_->get_sec();
+    if (prev_sec != crnt_sec)
+    {
+      Debug::print_time(it->first->clock_->rtc_);
+      Debug::print_color(out_color);
+      prev_sec = crnt_sec;
+    }
+    //__________________________________________________________________________
+ 
   }
 
   switch(state_)
@@ -31,7 +45,7 @@ void TopLevel::run()
       //Debug::print_string_with_new_line("TopLevel::run IDLE");
       //________________________________________________________________________
 
-      time_ctrl_.get_display()->write_disp_str("USER");
+      time_ctrl_.get_display()->write_disp_str("    ");
 
       if (enter_btn_.get_input_type() == MomentarySwitch::InputType::LONG)
         state_ = State::SET_TIME;

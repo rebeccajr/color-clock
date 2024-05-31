@@ -101,6 +101,7 @@ RgbColor ColorClock::time_to_color()
 
   // convert hsv to rgb in order to display properly
 
+  /*
   //____________________________________________________________________________
   // Debug
   //____________________________________________________________________________
@@ -123,6 +124,7 @@ RgbColor ColorClock::time_to_color()
   prev_grn_val = out_color.g;
   prev_blu_val = out_color.b;
   //____________________________________________________________________________
+  */
 
   return crnt_hsvcolor_time.to_rgb();
 }
