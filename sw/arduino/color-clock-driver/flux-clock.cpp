@@ -4,13 +4,13 @@
 //______________________________________________________________________________
 
 #include "flux-clock.hpp"
+#include "flux-macros.hpp"
 
 
-//______________________________________________________________________________
 //______________________________________________________________________________
 short FluxClock::get_yr()
 {
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   return rtc_.getYear();
 #else
   time(&clock_);
@@ -24,12 +24,13 @@ short FluxClock::get_yr()
 //______________________________________________________________________________
 byte FluxClock::get_month()
 {
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   //__________________________________________________________________________
   // The century_bit toggles when there is roll-over to a new century, e.g.
   // from year 2099 to 2100. The century_bit will likely never be relevant for
   // any use case for this code base. More information about this bit
   // can be found: https://github.com/NorthernWidget/DS3231/blob/master/Documentation/Time-Retrieval.md#getMinute
+  //__________________________________________________________________________
   bool century_bit;
   return rtc_.getMonth(century_bit);
 #else
@@ -45,7 +46,7 @@ byte FluxClock::get_month()
 //______________________________________________________________________________
 byte FluxClock::get_day()
 {
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   return rtc_.getDate();
 #else
   time(&clock_);
@@ -61,7 +62,7 @@ byte FluxClock::get_day()
 byte FluxClock::get_hr()
 {
 
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   //__________________________________________________________________________
   // These bools are passed by reference. The values are modified as follows:
   // parameter h12:  true = 12 hr time; false = 24 hr time
@@ -85,7 +86,7 @@ byte FluxClock::get_hr()
 byte FluxClock::get_min()
 {
 
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   return rtc_.getMinute();
 #else
   time(&clock_);
@@ -100,7 +101,7 @@ byte FluxClock::get_min()
 //______________________________________________________________________________
 byte FluxClock::get_sec()
 {
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   return rtc_.getSecond();
 #else
   time(&clock_);
@@ -109,7 +110,36 @@ byte FluxClock::get_sec()
 #endif
 }
 
-#ifdef ARDUINO_BUILD
+
+//______________________________________________________________________________
+// Returns the milli second of the second.
+// Note: The RTC does not return milliseconds as a built in function, so this
+// function incorporates the built-in Arduino function millis.
+//______________________________________________________________________________
+int FluxClock::get_milli(byte crnt_sec)
+{
+#ifdef USING_DS3231 
+
+  static byte prev_sec = 0;
+  static long int prev_millis = 0;
+         long int crnt_millis = millis();
+
+  // Resent millisecond count if its a new second
+  if (crnt_sec != prev_sec)
+  {
+    prev_sec = crnt_sec;
+    prev_millis = crnt_millis;
+  }
+
+  return static_cast<int>(crnt_millis - prev_millis);
+
+#else
+  return 0;
+#endif
+}
+
+
+#ifdef USING_DS3231
 //______________________________________________________________________________
 void FluxClock::set_yr(short yr)    {rtc_.setYear(yr);}
 void FluxClock::set_month(byte mo)  {rtc_.setMonth(mo);}
@@ -118,3 +148,4 @@ void FluxClock::set_hr(byte hr)     {rtc_.setHour(hr);}
 void FluxClock::set_min(byte min)   {rtc_.setMinute(min);}
 void FluxClock::set_sec(byte sec)   {rtc_.setSecond(sec);}
 #endif
+

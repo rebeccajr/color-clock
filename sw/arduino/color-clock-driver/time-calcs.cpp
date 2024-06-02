@@ -8,6 +8,7 @@
 float TimeCalcs::SEC_IN_MIN    = 60;
 float TimeCalcs::MIN_IN_HR     = 60;
 float TimeCalcs::SEC_IN_HR     = SEC_IN_MIN * MIN_IN_HR;
+float TimeCalcs::MILLI_IN_HR   = SEC_IN_HR * 1000;
 
 // variables used to get offset of time in millis
 int TimeCalcs::MILLIS_OFFSET = 0;
@@ -45,8 +46,8 @@ float TimeCalcs::get_time_as_fractional_offset(
 
 //______________________________________________________________________________
 float TimeCalcs::get_hrs_since_midnight(
-          float hr, float min, float sec){
+          float hr, float min, float sec, float milli){
 
-  return hr + min/MIN_IN_HR + sec/SEC_IN_HR;
+  return hr + min/MIN_IN_HR + sec/SEC_IN_HR + milli/MILLI_IN_HR;
 }
 //______________________________________________________________________________

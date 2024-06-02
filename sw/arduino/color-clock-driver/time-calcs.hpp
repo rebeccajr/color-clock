@@ -21,6 +21,7 @@ public:
   static float SEC_IN_MIN;
   static float MIN_IN_HR;
   static float SEC_IN_HR;
+  static float MILLI_IN_HR;
   
   // variables used to get offset of time in millis
   static int MILLIS_OFFSET;
@@ -34,7 +35,7 @@ public:
           float time0, float time1, float crnt_time);
 
   static float get_hrs_since_midnight(
-          float hr, float min, float sec);
+          float hr, float min, float sec, float milli = 0);
   
 };
 

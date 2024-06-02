@@ -5,8 +5,9 @@
 
 #ifndef FLUX_CLOCK
 #define FLUX_CLOCK
+#include "flux-macros.hpp"
 
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
 #include <DS3231.h>
 #else
 #include <ctime>
@@ -18,14 +19,14 @@ using byte = unsigned char;
 class FluxClock
 {
  public:
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   DS3231 rtc_;
 #else
   time_t      clock_;
 #endif
 
   private:
-#ifndef ARDUINO_BUILD
+#ifndef USING_DS3231
   struct tm*  time_;
   int         timezone;
 #endif
@@ -41,7 +42,9 @@ class FluxClock
   byte  get_min();
   byte  get_sec();
 
-#ifdef ARDUINO_BUILD
+  int get_milli(byte crnt_sec);
+
+#ifdef USING_DS3231
   void set_yr(short);
   void set_month(byte);
   void set_day(byte);

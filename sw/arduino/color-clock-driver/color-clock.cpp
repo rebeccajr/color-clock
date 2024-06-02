@@ -59,12 +59,13 @@ void ColorClock::print()
 RgbColor ColorClock::time_to_color()
 {
   // TODO Modify so that cycle time can be longer than one day
-  float the_hr  = (float) clock_->get_hr();
-  float the_min = (float) clock_->get_min();
-  float the_sec = (float) clock_->get_sec();
+  float the_hr    = (float) clock_->get_hr();
+  float the_min   = (float) clock_->get_min();
+  float the_sec   = (float) clock_->get_sec();
+  float the_milli = (float) clock_->get_milli(the_sec);
 
   float hrs_since_midnight =
-    TimeCalcs::get_hrs_since_midnight(the_hr, the_min, the_sec);
+    TimeCalcs::get_hrs_since_midnight(the_hr, the_min, the_sec, the_milli);
 
   float hrs_since_cycle_restart =
     fmod(hrs_since_midnight, cycle_time_in_hrs_);
