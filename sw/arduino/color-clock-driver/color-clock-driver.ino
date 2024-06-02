@@ -27,36 +27,37 @@ ColorClock* cc0;
 ColorClock* cc1;
 ColorClock* cc2;
 ColorClock* cc3;
+
 FluxClock   the_clock;
 
-int red_pin_0 = A0;
-int grn_pin_0 = A3;
-int blu_pin_0 = A4;
+int red_pin_0 = 0;
+int grn_pin_0 = 1;
+int blu_pin_0 = 2;
 
-int red_pin_1 = 0;
-int grn_pin_1 = 1;
-int blu_pin_1 = 2;
+int red_pin_1 = 3;
+int grn_pin_1 = 4;
+int blu_pin_1 = 5;
 
-int red_pin_2 = 3;
-int grn_pin_2 = 4;
-int blu_pin_2 = 5;
+int red_pin_2 = 6;
+int grn_pin_2 = 7;
+int blu_pin_2 = 8;
 
-int red_pin_3 = 6;
-int grn_pin_3 = 7;
-int blu_pin_3 = 8;
+int red_pin_3 = A0;
+int grn_pin_3 = A3;
+int blu_pin_3 = A4;
 
-int inc_pin   = A1;
-int dec_pin   = A2;
-int enter_pin = A6;
+int inc_pin   = 10;
+int dec_pin   = 13;
+int enter_pin = 14;
 
 MomentarySwitch inc_sw;
 MomentarySwitch dec_sw;
 MomentarySwitch enter_sw;
 
-float cc0_period =  6.0 / TimeCalcs::SEC_IN_HR;
-float cc1_period = 12.0 / TimeCalcs::SEC_IN_HR;
-float cc2_period = 30.0 / TimeCalcs::SEC_IN_HR;
-float cc3_period = 60.0 / TimeCalcs::SEC_IN_HR;
+float cc0_period =  6.0 / 3600.0;
+float cc1_period = 12.0 / 3600.0;
+float cc2_period = 30.0 / 3600.0;
+float cc3_period = 60.0 / 3600.0;
 
 //______________________________________________________________________________
 void setup()
