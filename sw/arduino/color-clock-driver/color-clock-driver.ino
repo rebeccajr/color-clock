@@ -19,6 +19,20 @@
 #include "time-display.hpp"
 #include "top-level.hpp"
 
+#define SEC_IN_HR 3600
+
+#define CC0_IN_SEC 
+#define CC1_IN_SEC
+#define CC2_IN_SEC 60
+#define CC3_IN_SEC 120
+
+//#define CC0_IN_HR CC0_IN_SEC / SEC_IN_HR
+//#define CC1_IN_HR CC1_IN_SEC / SEC_IN_HR
+#define CC0_IN_HR 1
+#define CC1_IN_HR 24
+#define CC2_IN_HR CC2_IN_SEC / SEC_IN_HR
+#define CC3_IN_HR CC3_IN_SEC / SEC_IN_HR
+
 
 TopLevel    top_level;
 TimeDisplay display;
@@ -54,10 +68,10 @@ MomentarySwitch inc_sw;
 MomentarySwitch dec_sw;
 MomentarySwitch enter_sw;
 
-float cc0_period =  6.0 / 3600.0;
-float cc1_period = 12.0 / 3600.0;
-float cc2_period = 30.0 / 3600.0;
-float cc3_period = 60.0 / 3600.0;
+float cc0_period = CC0_IN_HR;
+float cc1_period = CC1_IN_HR;
+float cc2_period = CC2_IN_HR;
+float cc3_period = CC3_IN_HR;
 
 //______________________________________________________________________________
 void setup()
