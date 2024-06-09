@@ -9,11 +9,13 @@
 
 #include <vector>
 
-#ifdef ARDUINO_BUILD
-  #include <DS3231.h>
+#include "color-classes.hpp"
+#include "flux-macros.hpp"
+
+#ifdef USING_DS3231
+#include <DS3231.h>
 #endif
 
-#include "color-classes.hpp"
 
 class Debug{
 
@@ -28,7 +30,7 @@ public:
   static void print_interval_times(std::vector<float>);
   static void print_interval_times_in_sec(std::vector<float>);
   static void print_new_line();
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
   static void print_time(DS3231);
 #endif
 

@@ -19,17 +19,17 @@
 #include "time-display.hpp"
 #include "top-level.hpp"
 
-#define SEC_IN_HR 3600
+#define SEC_IN_HR 3600.0
 
 #define CC0_IN_SEC 
 #define CC1_IN_SEC
-#define CC2_IN_SEC 60
-#define CC3_IN_SEC 120
+#define CC2_IN_SEC 60.0
+#define CC3_IN_SEC 120.0
 
 //#define CC0_IN_HR CC0_IN_SEC / SEC_IN_HR
 //#define CC1_IN_HR CC1_IN_SEC / SEC_IN_HR
-#define CC0_IN_HR 1
-#define CC1_IN_HR 24
+#define CC0_IN_HR 1.0
+#define CC1_IN_HR 24.0
 #define CC2_IN_HR CC2_IN_SEC / SEC_IN_HR
 #define CC3_IN_HR CC3_IN_SEC / SEC_IN_HR
 

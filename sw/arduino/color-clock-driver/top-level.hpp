@@ -10,6 +10,7 @@
 
 #include "color-classes.hpp"
 #include "color-clock.hpp"
+#include "flux-macros.hpp"
 #include "time-controller.hpp"
 #include "time-display.hpp"
 #include "momentary-switch.hpp"
@@ -56,7 +57,12 @@ class TopLevel
       , enter_btn_(enter_btn)
       , time_ctrl_(TimeController(the_clock, inc_btn, dec_btn, enter_btn, time_disp))
       , state_(State::IDLE)
-      {}
+      {
+        clock_->set_yr(2024);
+        clock_->set_month(6);
+        clock_->set_hr(18);
+        clock_->set_min(30);
+      }
 
     void run();
 

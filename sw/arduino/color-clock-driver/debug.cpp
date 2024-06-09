@@ -95,7 +95,7 @@ void Debug::print_interval_times(std::vector<float> times)
 //______________________________________________________________________________
 // TODO rewrite for non-Arduino build
 //______________________________________________________________________________
-#ifdef ARDUINO_BUILD
+#ifdef USING_DS3231
 void Debug::print_time(DS3231 clk)
 {
   bool foo;

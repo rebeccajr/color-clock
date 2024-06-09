@@ -24,6 +24,8 @@
 #include <cmath>
 #include <map>
 
+#include "flux-macros.hpp"
+
 class HsvColor;
 
 class RgbColor {
