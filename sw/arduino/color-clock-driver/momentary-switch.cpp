@@ -152,3 +152,95 @@ MomentarySwitch::InputType MomentarySwitch::get_input_type()
 
   return InputType::NONE;
 }
+
+//______________________________________________________________________________
+bool MomentarySwitch::is_short_press()
+{
+  //____________________________________________________________________________
+  // DEBUG
+  //Debug::print_labeled_int("is_short_press pin: ", input_pin_);
+  //____________________________________________________________________________
+
+  unsigned long crnt_ms = millis();
+  unsigned long hold_time;
+  int input = debounce_input();
+
+  switch (sw_state_type_)
+  {
+    //__________________________________________________________________________
+    case SwitchState::IDLE:
+      //________________________________________________________________________
+      // DEBUG
+      //Debug::print_labeled_int("get_input_type input pin: ",input_pin_);
+      //Debug::print_string_with_new_line("get_input_type State::IDLE");
+      //________________________________________________________________________
+
+      // Reset values use for input type determination
+      on_time_ms_ = 0;
+      release_time_ms_ = 0;
+
+      if (input == on_value_)
+        sw_state_type_ = SwitchState::PRESS;
+
+      break;
+
+    //__________________________________________________________________________
+    case SwitchState::PRESS:
+
+      //________________________________________________________________________
+      // DEBUG
+      //Debug::print_labeled_int("pin: ", input_pin_);
+      //Debug::print_new_line();
+      //Debug::print_string_with_new_line("PRESS");
+      //Debug::print_new_line();
+      //________________________________________________________________________
+
+      // Set time of switch on
+      on_time_ms_ = crnt_ms;
+      multi_input_count_++;
+      sw_state_type_ = SwitchState::HOLD;
+
+      break;
+
+    //__________________________________________________________________________
+    case SwitchState::HOLD:
+      // Check if switch was released
+      if (input != on_value_)
+        sw_state_type_ = SwitchState::RELEASE;
+      break;
+
+    //__________________________________________________________________________
+    case SwitchState::RELEASE:
+      //________________________________________________________________________
+      // DEBUG
+      //Debug::print_labeled_int("pin: ", input_pin_);
+      //Debug::print_new_line();
+      //Debug::print_string_with_new_line("RELEASE");
+      //________________________________________________________________________
+
+      // Set time of switch release
+      release_time_ms_ = crnt_ms;
+      hold_time = release_time_ms_ - on_time_ms_;
+
+      // Check if over long hold threshold
+      if (hold_time > short_hold_time_in_ms_)
+      {
+        //______________________________________________________________________
+        // DEBUG
+        //Debug::print_string_with_new_line(
+        //  "MomentarySwitch::is_short_press -- hold_time > short_hold_time_in_ms");
+        //______________________________________________________________________
+        sw_state_type_ = SwitchState::IDLE;
+        return true;
+      }
+
+      break;
+
+    //__________________________________________________________________________
+    default:
+      break;
+    }
+
+  return false;
+}
+

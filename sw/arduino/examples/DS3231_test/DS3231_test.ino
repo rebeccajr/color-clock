@@ -17,7 +17,7 @@ DS3231 clock0;
 bool century = false;
 bool h12Flag;
 bool pmFlag;
-byte alarmDay, alarmHour, alarmMinute, alarmSecond, alarmBits;
+uint8_t alarmDay, alarmHour, alarmMinute, alarmSecond, alarmBits;
 bool alarmDy, alarmH12Flag, alarmPmFlag;
 
 void setup() {

@@ -6,6 +6,7 @@
 #ifndef FLUX_CLOCK
 #define FLUX_CLOCK
 #include "flux-macros.hpp"
+#include <stdint.h>
 
 #ifdef USING_DS3231
 #include <DS3231.h>
@@ -13,16 +14,15 @@
 #include <ctime>
 #endif
 
-using byte = unsigned char;
 
-
+//______________________________________________________________________________
 class FluxClock
 {
  public:
 #ifdef USING_DS3231
   DS3231 rtc_;
 #else
-  time_t      clock_;
+  time_t clock_;
 #endif
 
   private:
@@ -36,21 +36,21 @@ class FluxClock
   ~FluxClock(){}
 
   short get_yr();
-  byte  get_month();
-  byte  get_day();
-  byte  get_hr();
-  byte  get_min();
-  byte  get_sec();
+  uint8_t  get_month();
+  uint8_t  get_day();
+  uint8_t  get_hr();
+  uint8_t  get_min();
+  uint8_t  get_sec();
 
-  int get_milli(byte crnt_sec);
+  int get_milli(uint8_t crnt_sec);
 
 #ifdef USING_DS3231
   void set_yr(short);
-  void set_month(byte);
-  void set_day(byte);
-  void set_hr(byte);
-  void set_min(byte);
-  void set_sec(byte);
+  void set_month(uint8_t);
+  void set_day(uint8_t);
+  void set_hr(uint8_t);
+  void set_min(uint8_t);
+  void set_sec(uint8_t);
 #endif
 
 };

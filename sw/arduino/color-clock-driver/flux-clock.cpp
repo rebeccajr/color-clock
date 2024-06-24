@@ -22,7 +22,7 @@ short FluxClock::get_yr()
 
 //______________________________________________________________________________
 //______________________________________________________________________________
-byte FluxClock::get_month()
+uint8_t FluxClock::get_month()
 {
 #ifdef USING_DS3231
   //__________________________________________________________________________
@@ -44,7 +44,7 @@ byte FluxClock::get_month()
 //______________________________________________________________________________
 // Returns the day of the month.
 //______________________________________________________________________________
-byte FluxClock::get_day()
+uint8_t FluxClock::get_day()
 {
 #ifdef USING_DS3231
   return rtc_.getDate();
@@ -59,7 +59,7 @@ byte FluxClock::get_day()
 //______________________________________________________________________________
 // Returns the hour of the day.
 //______________________________________________________________________________
-byte FluxClock::get_hr()
+uint8_t FluxClock::get_hr()
 {
 
 #ifdef USING_DS3231
@@ -83,7 +83,7 @@ byte FluxClock::get_hr()
 //______________________________________________________________________________
 // Returns the minute of the hour.
 //______________________________________________________________________________
-byte FluxClock::get_min()
+uint8_t FluxClock::get_min()
 {
 
 #ifdef USING_DS3231
@@ -99,7 +99,7 @@ byte FluxClock::get_min()
 //______________________________________________________________________________
 // Returns the second of the minute.
 //______________________________________________________________________________
-byte FluxClock::get_sec()
+uint8_t FluxClock::get_sec()
 {
 #ifdef USING_DS3231
   return rtc_.getSecond();
@@ -116,11 +116,11 @@ byte FluxClock::get_sec()
 // Note: The RTC does not return milliseconds as a built in function, so this
 // function incorporates the built-in Arduino function millis.
 //______________________________________________________________________________
-int FluxClock::get_milli(byte crnt_sec)
+int FluxClock::get_milli(uint8_t crnt_sec)
 {
 #ifdef USING_DS3231 
 
-  static byte prev_sec = 0;
+  static uint8_t prev_sec = 0;
   static long int prev_millis = 0;
          long int crnt_millis = millis();
 
@@ -142,10 +142,10 @@ int FluxClock::get_milli(byte crnt_sec)
 #ifdef USING_DS3231
 //______________________________________________________________________________
 void FluxClock::set_yr(short yr)    {rtc_.setYear(yr);}
-void FluxClock::set_month(byte mo)  {rtc_.setMonth(mo);}
-void FluxClock::set_day(byte day)   {rtc_.setDate(day);}
-void FluxClock::set_hr(byte hr)     {rtc_.setHour(hr);}
-void FluxClock::set_min(byte min)   {rtc_.setMinute(min);}
-void FluxClock::set_sec(byte sec)   {rtc_.setSecond(sec);}
+void FluxClock::set_month(uint8_t mo)  {rtc_.setMonth(mo);}
+void FluxClock::set_day(uint8_t day)   {rtc_.setDate(day);}
+void FluxClock::set_hr(uint8_t hr)     {rtc_.setHour(hr);}
+void FluxClock::set_min(uint8_t min)   {rtc_.setMinute(min);}
+void FluxClock::set_sec(uint8_t sec)   {rtc_.setSecond(sec);}
 #endif
 

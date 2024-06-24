@@ -5,20 +5,25 @@
 #ifndef COLOR_CLOCK
 #define COLOR_CLOCK
 
+#ifdef ARDUINO_BUILD
 #include <Arduino.h>
-#include <vector>
 #include <Wire.h>
+#endif
+#include <vector>
 
 #include "flux-clock.hpp"
-#include "color-classes.hpp"
+#include "hsv-color.hpp"
+#include "rgb-color.hpp"
 #include "color-const.hpp"
 #include "time-calcs.hpp"
 #include "time-display.hpp"
 
 
+
 //______________________________________________________________________________
 class ColorClock
 {
+  using Rgb = RgbColor::PriColor;
 
 public:
   double cycle_time_in_hrs_;
@@ -32,14 +37,15 @@ public:
   TimeDisplay time_display_;
   FluxClock* clock_;
 
-  std::vector<RgbColor>    color_selection_;
+  std::vector<RgbColor>    init_color_selection_;
+  std::vector<RgbColor>    crnt_color_selection_;
   std::vector<float>       color_times_;
 
   ColorClock(){};
   ~ColorClock()
   {
     color_times_.clear();
-    color_selection_.clear();
+    crnt_color_selection_.clear();
   }
 
   ColorClock(FluxClock* the_clock
@@ -47,10 +53,17 @@ public:
   , std::vector<RgbColor> colors = ColorConstants::roygbiv_
   );
 
+  void reset_color_selection()
+  {
+    crnt_color_selection_ = init_color_selection_;
+  }
+
   RgbColor time_to_color();
   void set_cycle_time(double);
   void determine_color_indices(float);
+  void mod_color_selection(Rgb, RgbColor::IncDec);
   void print();
+  void print_color_selections();
 };
 
 #endif

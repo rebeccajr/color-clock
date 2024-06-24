@@ -20,50 +20,14 @@
 #ifndef COLOR_CLASSES
 #define COLOR_CLASSES
 
+#define MAX_RGB_VAL 0xFF
+#define MIN_RGB_VAL 0
+
 #include <algorithm>
 #include <cmath>
 #include <map>
 
-class HsvColor;
-
-class RgbColor {
-
-public:
-
-  enum class PriColor
-  { RED
-    , GRN
-    , BLU
-  };
-
-  static std::map <PriColor, short> create_rgb_pin_map(short, short, short);
-
-  int r;      // red
-  int g;      // green
-  int b;      // blue
-  
-  RgbColor(){}
-
-  // values normalized to 255
-  RgbColor(int red, int green, int blue){
-  
-    r = red;
-    g = green;
-    b = blue;
-    
-  }
-
-  RgbColor(int rgb_hex){
-    this->r = (rgb_hex & 0xFF0000) >> 16;
-    this->g = (rgb_hex & 0x00FF00) >> 8;
-    this->b = (rgb_hex & 0x0000FF);
-  }
-
-  HsvColor to_hsv();
-
-  void write_rgb_to_out(int, int, int, bool = false);
-}; 
-
+#include "rgb-color.hpp"
 
 //______________________________________________________________________________
 // Object that holds an HSV color

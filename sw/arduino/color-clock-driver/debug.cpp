@@ -2,33 +2,44 @@
 // Implementation of Debug functions.
 //______________________________________________________________________________
 //#define ARDUINO_BUILD // just here so IDE doesn't complain
+#include "debug.hpp"
+
 #ifdef ARDUINO_BUILD 
 # include <Arduino.h>
 # include <Wire.h>
 #endif
 
 #include <stdio.h>
+#include <stdint.h>
 
-#include "debug.hpp"
-#include "time-calcs.hpp"
+#ifdef USING_TIME_CALCS
+# include "time-calcs.hpp"
+#endif
 
 
+#ifdef USING_RGB_COLOR
 //______________________________________________________________________________
 void Debug::print_color(RgbColor color)
 {
 #ifdef ARDUINO_BUILD
   Serial.print("r: 0x");
-  Serial.print(color.r, HEX);
+  Serial.print(color.rgb_[RgbColor::PriColor::RED], HEX);
   Serial.print("  g: 0x");
-  Serial.print(color.g, HEX);
+  Serial.print(color.rgb_[RgbColor::PriColor::GRN], HEX);
   Serial.print("  b: 0x");
-  Serial.println(color.b, HEX);
+  Serial.println(color.rgb_[RgbColor::PriColor::BLU], HEX);
 #else
-  printf("r: 0x%02X  g: 0x%02X  b: 0x%02X", color.r, color.g, color.b);
+  printf("r: 0x%02X  g: 0x%02X  b: 0x%02X"
+    , color.rgb_[RgbColor::PriColor::RED]
+    , color.rgb_[RgbColor::PriColor::GRN]
+    , color.rgb_[RgbColor::PriColor::BLU]
+  );
 #endif
 }
+#endif
 
 
+#ifdef USING_HSV_COLOR
 //______________________________________________________________________________
 void Debug::print_color(HsvColor color)
 {
@@ -44,8 +55,10 @@ void Debug::print_color(HsvColor color)
   printf("hue: 0x%3.4f  sat: 0x%3.4f  val: 0x%3.4f", color.h, color.s, color.v);
 #endif
 }
+#endif
 
 
+#ifdef USING_RGB_COLOR
 //______________________________________________________________________________
 // Prints each aspect of color in array.
 // TODO make template
@@ -53,16 +66,25 @@ void Debug::print_color(HsvColor color)
 void Debug::print_color_array(std::vector<RgbColor> colors)
 {
   for (int i = 0; i < colors.size(); ++i)
+  {
+    print_new_line();
     print_color(colors[i]);
+  }
 }
+#endif
 
 
+#ifdef USING_HSV_COLOR
 //______________________________________________________________________________
 void Debug::print_color_array(std::vector<HsvColor> colors)
 {
   for (int i = 0; i < colors.size(); ++i)
+  {
+    print_new_line();
     print_color(colors[i]);
+  }
 }
+#endif
 
 
 //______________________________________________________________________________
@@ -72,7 +94,7 @@ void Debug::print_interval_times_in_sec(std::vector<float> times)
   print_new_line(); 
 
   for (int i = 0; i < times.size(); i++)
-#ifdef  ARDUINO_BUILD
+#if defined(ARDUINO_BUILD) && defined(USING_TIME_CALCS)
     Serial.println(TimeCalcs::SEC_IN_HR * times[i] * 1000);
 #else
     printf("%f\n", times[i]);
@@ -95,15 +117,24 @@ void Debug::print_interval_times(std::vector<float> times)
 //______________________________________________________________________________
 // TODO rewrite for non-Arduino build
 //______________________________________________________________________________
-#ifdef ARDUINO_BUILD
-void Debug::print_time(DS3231 clk)
+void Debug::print_time(
+#ifdef USING_DS3231
+  DS3231 clk
+#endif
+  )
 {
   bool foo;
   bool bar;
 
-  byte the_hr  = clk.getHour(foo, bar);
-  byte the_min = clk.getMinute();
-  byte the_sec = clk.getSecond();
+  uint8_t the_hr;
+  uint8_t the_min;
+  uint8_t the_sec;
+
+#ifdef USING_DS3231
+  the_hr  = clk.getHour(foo, bar);
+  the_min = clk.getMinute();
+  the_sec = clk.getSecond();
+#endif
 
   print_new_line();
 #ifdef ARDUINO_BUILD
@@ -117,7 +148,6 @@ void Debug::print_time(DS3231 clk)
   Serial.println("---------------------------");
 #endif
 }
-#endif
 
 
 //______________________________________________________________________________
@@ -173,4 +203,26 @@ void Debug::print_string_with_new_line(char* str, bool print_new_line)
 #endif
   if(print_new_line)
     Debug::print_new_line();
+}
+
+
+//______________________________________________________________________________
+// Prints a string to the console every second.
+// Currently only valid for Arduino builds.
+//______________________________________________________________________________
+void Debug::print_proof_of_life(char* str)
+{
+#ifdef ARDUINO_BUILD
+static unsigned long prev_milli = 0;
+unsigned long crnt_milli = millis();
+
+if(crnt_milli - prev_milli > 1000)
+{
+  print_new_line();
+  print_string_with_new_line("Proof of life");
+  prev_milli = crnt_milli;
+}
+
+#endif
+
 }

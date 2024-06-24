@@ -12,25 +12,25 @@ Test of set-time routines for a DS3231 RTC
 
 DS3231 clock0;
 
-byte year;
-byte month;
-byte date;
-byte dOW;
-byte hour;
-byte minute;
-byte second;
+uint8_t year;
+uint8_t month;
+uint8_t date;
+uint8_t dOW;
+uint8_t hour;
+uint8_t minute;
+uint8_t second;
 
-void getDateStuff(byte& year, byte& month, byte& date, byte& dOW,
-                  byte& hour, byte& minute, byte& second) {
+void getDateStuff(uint8_t& year, uint8_t& month, uint8_t& date, uint8_t& dOW,
+                  uint8_t& hour, uint8_t& minute, uint8_t& second) {
     // Call this if you notice something coming in on
     // the serial port. The stuff coming in should be in
     // the order YYMMDDwHHMMSS, with an 'x' at the end.
     boolean gotString = false;
     char inChar;
-    byte temp1, temp2;
+    uint8_t temp1, temp2;
     char inString[20];
     
-    byte j=0;
+    uint8_t j=0;
     while (!gotString) {
         if (Serial.available()) {
             inChar = Serial.read();
@@ -43,30 +43,30 @@ void getDateStuff(byte& year, byte& month, byte& date, byte& dOW,
     }
     Serial.println(inString);
     // Read year first
-    temp1 = (byte)inString[0] -48;
-    temp2 = (byte)inString[1] -48;
+    temp1 = (uint8_t)inString[0] -48;
+    temp2 = (uint8_t)inString[1] -48;
     year = temp1*10 + temp2;
     // now month
-    temp1 = (byte)inString[2] -48;
-    temp2 = (byte)inString[3] -48;
+    temp1 = (uint8_t)inString[2] -48;
+    temp2 = (uint8_t)inString[3] -48;
     month = temp1*10 + temp2;
     // now date
-    temp1 = (byte)inString[4] -48;
-    temp2 = (byte)inString[5] -48;
+    temp1 = (uint8_t)inString[4] -48;
+    temp2 = (uint8_t)inString[5] -48;
     date = temp1*10 + temp2;
     // now Day of Week
-    dOW = (byte)inString[6] - 48;
+    dOW = (uint8_t)inString[6] - 48;
     // now hour
-    temp1 = (byte)inString[7] -48;
-    temp2 = (byte)inString[8] -48;
+    temp1 = (uint8_t)inString[7] -48;
+    temp2 = (uint8_t)inString[8] -48;
     hour = temp1*10 + temp2;
     // now minute
-    temp1 = (byte)inString[9] -48;
-    temp2 = (byte)inString[10] -48;
+    temp1 = (uint8_t)inString[9] -48;
+    temp2 = (uint8_t)inString[10] -48;
     minute = temp1*10 + temp2;
     // now second
-    temp1 = (byte)inString[11] -48;
-    temp2 = (byte)inString[12] -48;
+    temp1 = (uint8_t)inString[11] -48;
+    temp2 = (uint8_t)inString[12] -48;
     second = temp1*10 + temp2;
 }
 
@@ -81,8 +81,8 @@ void setup() {
     
 }
 
-byte set_hr  = 13;
-byte set_min = 54;
+uint8_t set_hr  = 13;
+uint8_t set_min = 54;
 
 bool h12Flag;
 bool pmFlag;

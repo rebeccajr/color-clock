@@ -8,7 +8,8 @@
 
 #include<Wire.h>
 
-#include "color-classes.hpp"
+#include "hsv-color.hpp"
+#include "rgb-color.hpp"
 #include "color-clock.hpp"
 #include "time-controller.hpp"
 #include "time-display.hpp"

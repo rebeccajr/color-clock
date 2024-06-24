@@ -14,7 +14,7 @@ FluxClock   clocky;
 int threshold = 1000;
 int long_threshold = 5000;
 
-using byte = unsigned char;
+
 
 void setup()
 {
@@ -38,8 +38,8 @@ void loop()
   static long prev_sec = 0;
          long crnt_sec = millis();
 
-  byte clk_sec = clocky.get_sec();
-  byte clk_min = clocky.get_min();
+  uint8_t clk_sec = clocky.get_sec();
+  uint8_t clk_min = clocky.get_min();
 
   static int i = 0;
 

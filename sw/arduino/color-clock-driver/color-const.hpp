@@ -6,7 +6,8 @@
 
 #include <vector>
 
-#include "color-classes.hpp"
+#include "hsv-color.hpp"
+#include "rgb-color.hpp"
 
 class ColorConstants
 {

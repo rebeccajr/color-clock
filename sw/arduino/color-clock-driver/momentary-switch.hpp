@@ -1,6 +1,4 @@
-
 //______________________________________________________________________________
-// DESCRIPTION
 // This class contains logic necessary for momentary switch input.
 //______________________________________________________________________________
 #ifndef MOMENTARY_SWITCH
@@ -33,29 +31,36 @@ class MomentarySwitch{
 
   private:
     int input_pin_;
+    int on_value_;
     int reading_;
+
     int settle_time_in_ms_;
     int long_hold_time_in_ms_;
     int short_hold_time_in_ms_;
     int mult_input_time_gap_;
+
+    // TODO rename for better description
     int sw_state_;
     int prev_state_;
+
     SwitchState sw_state_type_;
+
     int prev_debounced_input_;
     int multi_input_count_;
+
     unsigned long prev_ms_;
     unsigned long on_time_ms_;
     unsigned long release_time_ms_;
     unsigned long time_since_off_;
-    int on_value_;
+
 
   public:
     MomentarySwitch(){}
 
     MomentarySwitch(int input_pin
       , int settle_time_in_ms         = 50
-      , int long_hold_time_in_ms      = 1000
       , int short_hold_time_in_ms     = 50
+      , int long_hold_time_in_ms      = 1000
       , int mult_input_time_gap       = 500
       , int on_value                  = 1
      )
@@ -84,6 +89,7 @@ class MomentarySwitch{
     int get_reading(){  return reading_;}
 
     InputType get_input_type();
+    bool is_short_press();
 };
 
 #endif //MOMENTARY_SWITCH

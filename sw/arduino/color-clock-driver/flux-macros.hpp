@@ -2,8 +2,9 @@
 // This file contains the macros used in the ColorClock project
 //______________________________________________________________________________
 
-#ifndef ARDUINO_BUILD
 #define ARDUINO_BUILD
-#endif
 
 #define USING_DS3231
+#define USING_RGB_COLOR
+#define USING_HSV_COLOR
+#define USING_TIME_CALCS

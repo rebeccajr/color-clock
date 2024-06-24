@@ -1,0 +1,2 @@
+#define USING_RGB_COLOR
+#define ARDUINO_BUILD

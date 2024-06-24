@@ -10,7 +10,8 @@
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
 
-#include "color-classes.hpp"
+#include "hsv-color.hpp"
+#include "rgb-color.hpp"
 #include "color-clock.hpp"
 #include "debug.hpp"
 #include "flux-clock.hpp"

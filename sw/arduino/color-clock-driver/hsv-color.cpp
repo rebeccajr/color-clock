@@ -4,21 +4,16 @@
 
 //#define ARDUINO_BUILD //just here so VS code doesn't complain
 #include <map>
-
-#include "color-classes.hpp"
-#include "debug.hpp"
+#include <vector>
 
 #ifdef ARDUINO_BUILD
 #include <Arduino.h>
 #endif
 
+#include "hsv-color.hpp"
+#include "rgb-color.hpp"
+#include "debug.hpp"
 
-//______________________________________________________________________________
-// COLOR TYPE CONVERSIONS
-//______________________________________________________________________________
-// This section includes functions that convert color objects to different
-// types of color objects, e.g. RgbColor to HsvColor and vice versa
-//______________________________________________________________________________
 
 //______________________________________________________________________________
 // Convert an Rgb color object to an Hsv color object
@@ -31,62 +26,7 @@
 // and the algorithm posted here
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 //______________________________________________________________________________
-HsvColor RgbColor::to_hsv(){
 
-  float red_norm   = this->r/255.0;
-  float green_norm = this->g/255.0;
-  float blue_norm  = this->b/255.0;
-
-  // get max of normalized values
-  float cmax = std::max(red_norm,
-               std::max(green_norm,
-                        blue_norm));
-
-  // get min of normalized values
-  float cmin = std::min(red_norm,
-               std::min(green_norm,
-                        blue_norm));
-
-  float diff = cmax - cmin;
-
-  // hue calculation
-  float hue = -1;
-
-  // if r, g, and b are equal, then the color is grey
-  // i.e. the hue doesn't matter
-  // this if condition lets us avoid a div by 0 error
-  if (diff == 0)
-    hue = 0;
-  else if (cmax == red_norm)
-    hue = fmod((60.0 * (green_norm - blue_norm) / diff + 360) , 360);
-
-  else if (cmax == green_norm)
-    hue = 60.0 * (((blue_norm - red_norm)   / diff) + 2);
-
-  else if (cmax == blue_norm)
-    hue = 60.0 * (((red_norm - green_norm)  / diff) + 4);
-
-  hue = fmod((hue + 360), 360);
-
-  // sat calculation
-  float sat = -1;
-
-  if (cmax == 0) sat = 0;
-  else           sat = (diff / cmax) * 100;
-
-  // value computations
-  float value = cmax * 100;
-
-  return HsvColor(hue, sat, value);
-}
-
-
-//--------------------------------------------------------------
-// Convert an Hsv color object to an Rgb color object.
-//
-// This code is implementing the algorithm posted here:
-// https://www.rapidtables.com/convert/color/hsv-to-rgb.html
-//--------------------------------------------------------------
 RgbColor HsvColor::to_rgb(){
 
   float hue = this->h;
@@ -139,7 +79,26 @@ RgbColor HsvColor::to_rgb(){
   return RgbColor(r, g, b);
 }
 
+
+
+
 //______________________________________________________________________________
+// COLOR TYPE CONVERSIONS
+//______________________________________________________________________________
+// This section includes functions that convert color objects to different
+// types of color objects, e.g. RgbColor to HsvColor and vice versa
+//______________________________________________________________________________
+
+
+
+
+//--------------------------------------------------------------
+// Convert an Hsv color object to an Rgb color object.
+//
+// This code is implementing the algorithm posted here:
+// https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+//--------------------------------------------------------------
+///______________________________________________________________________________
 // This function returns a new HsvColor object that falls
 // between two HsvColors based on a fraction that represents
 // the percentage distance from one color to another.
@@ -148,8 +107,8 @@ RgbColor HsvColor::to_rgb(){
 // color is in correct range and fraction is between 0 and 1
 //______________________________________________________________________________
 HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
-  HsvColor color2,
-  float    fraction
+   HsvColor color2,
+   float    fraction
 )
 {
   // This variable determines which direction in the circle to interpolate over
@@ -191,46 +150,4 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
   // Max out saturation and value for now
   //return HsvColor(new_hue, new_sat, new_val);
   return HsvColor(new_hue, 100, 100);
-}
-
-
-//______________________________________________________________________________
-// Writes RGB values to output
-// If this is a build to the Arduino, writes the ouput pins
-//______________________________________________________________________________
-void RgbColor::write_rgb_to_out(int red_out
-  , int grn_out
-  , int blu_out
-  , bool flip
-)
-{
-#ifdef ARDUINO_BUILD
-if (flip)
-{
-  r = 255 - r;
-  g = 255 - g;
-  b = 255 - b;
-}
-
-  analogWrite(red_out, r);
-  analogWrite(grn_out, g);
-  analogWrite(blu_out, b);
-#endif
-}
-
-
-//______________________________________________________________________________
-// Create map of pin assignments to 
-//______________________________________________________________________________
-std::map <RgbColor::PriColor, short> RgbColor::create_rgb_pin_map(short r_pin
-  , short g_pin
-  , short b_pin
-)
-{
-  std::map <RgbColor::PriColor, short> mappy;
-  mappy.insert({PriColor::RED, r_pin});
-  mappy.insert({PriColor::GRN, g_pin});
-  mappy.insert({PriColor::BLU, b_pin});
-
-  return mappy;
 }

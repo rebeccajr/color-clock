@@ -1,10 +1,12 @@
 //______________________________________________________________________________
 // Implementation of ColorClock functions
 //______________________________________________________________________________
-#include "color-classes.hpp"
+#include "hsv-color.hpp"
+#include "rgb-color.hpp"
 #include "color-clock.hpp"
 
 #include "debug.hpp"
+
 
 ColorClock::ColorClock(FluxClock* the_clock 
   , double cycle_time_in_hrs
@@ -12,10 +14,20 @@ ColorClock::ColorClock(FluxClock* the_clock
   )
   : clock_(the_clock)
   {
-    // color_times_ contains the times associated w/ color_selection_ elements
+    //__________________________________________________________________________
+    // color_times_ contains the times associated w/
+    // *_color_selection_ elements
     // There is a 1:1 mapping between these two vectors
-    color_selection_ = colors;
-    color_selection_.push_back(*color_selection_.begin());
+    //__________________________________________________________________________
+    init_color_selection_ = colors;
+    //__________________________________________________________________________
+
+    // Add first element of vector to end for interpolation between last
+    // color and first
+    init_color_selection_.push_back(*init_color_selection_.begin());
+
+    crnt_color_selection_ = init_color_selection_;
+
     set_cycle_time(cycle_time_in_hrs);
   }
 
@@ -29,7 +41,7 @@ void ColorClock::set_cycle_time(double cycle_time_in_hrs)
 
     color_times_.clear();
 
-    int   partition_count = color_selection_.size() - 1;
+    int   partition_count = init_color_selection_.size() - 1;
     float interval_length = cycle_time_in_hrs_ / partition_count;
 
     for (int i = 0; i <= partition_count; i++)
@@ -39,18 +51,34 @@ void ColorClock::set_cycle_time(double cycle_time_in_hrs)
 //______________________________________________________________________________
 void ColorClock::print()
 {
-  Debug::print_string_with_new_line("_________________");
-  Debug::print_string_with_new_line(" Color Selection");
-  Debug::print_string_with_new_line("_________________");
-  Debug::print_color_array(color_selection_);
   Debug::print_new_line();
-  Debug::print_string_with_new_line("_________________");
-  Debug::print_string_with_new_line(" Interval Times");
-  Debug::print_string_with_new_line("_________________");
-  Debug::print_labeled_int("size of color times: ", color_times_.size());
+  Debug::print_string_with_new_line((char*)("_________________"));
+  Debug::print_string_with_new_line((char*)(" Color Selection" ));
+  Debug::print_string_with_new_line((char*)("_________________"));
+  Debug::print_color_array(crnt_color_selection_);
+  Debug::print_new_line();
+  Debug::print_string_with_new_line((char*)("_________________"));
+  Debug::print_string_with_new_line((char*)(" Interval Times"  ));
+  Debug::print_string_with_new_line((char*)("_________________"));
+  Debug::print_labeled_int((char*)("size of color times"), color_times_.size());
   Debug::print_interval_times_in_sec(color_times_);
 }
-//______________________________________________________________________________
+
+void ColorClock::print_color_selections()
+{
+  Debug::print_new_line();
+  Debug::print_string_with_new_line((char*)("_________________________"));
+  Debug::print_string_with_new_line((char*)(" Initial Color Selection " ));
+  Debug::print_string_with_new_line((char*)("_________________________"));
+  Debug::print_color_array(this->init_color_selection_);
+
+  Debug::print_new_line();
+  Debug::print_new_line();
+  Debug::print_string_with_new_line((char*)("_________________________"));
+  Debug::print_string_with_new_line((char*)(" Current Color Selection " ));
+  Debug::print_string_with_new_line((char*)("_________________________"));
+  Debug::print_color_array(this->crnt_color_selection_);
+}
 
 
 //______________________________________________________________________________
@@ -85,8 +113,8 @@ RgbColor ColorClock::time_to_color()
  
   // convert colors from main_colors array to hsv
   // for smoother transitions between colors
-  HsvColor hsvcolor0 = color_selection_[lo_color_index_].to_hsv();
-  HsvColor hsvcolor1 = color_selection_[hi_color_index_].to_hsv();
+  HsvColor hsvcolor0 = crnt_color_selection_[lo_color_index_].to_hsv();
+  HsvColor hsvcolor1 = crnt_color_selection_[hi_color_index_].to_hsv();
 
   HsvColor crnt_hsvcolor_time =
     HsvColor::interpolate_bet_hsvcolors(hsvcolor0, hsvcolor1, fraction);
@@ -158,4 +186,20 @@ void ColorClock::determine_color_indices(float time)
   hi_color_index_ = i;
   }
 
+}
+
+//______________________________________________________________________________
+// Modifies the elements of crnt_color_selection_.
+//
+// Input parameters:
+// r_g_or_b:  red, green, or blue enum value
+// direction: either increase or decrease
+//______________________________________________________________________________
+void ColorClock::mod_color_selection(Rgb r_g_or_b
+  , RgbColor::IncDec direction
+)
+{
+  for(uint8_t i = 0; i < crnt_color_selection_.size(); i++)
+    if(init_color_selection_[i].rgb_[r_g_or_b] > 0)
+      crnt_color_selection_[i].mod_color(r_g_or_b, direction);
 }
