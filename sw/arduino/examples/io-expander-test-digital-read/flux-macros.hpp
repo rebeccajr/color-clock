@@ -1,0 +1,2 @@
+#define ARDUINO_BUILD
+#define USING_AW9523

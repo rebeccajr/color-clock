@@ -59,9 +59,11 @@ public:
   }
 
   RgbColor time_to_color();
+
   void set_cycle_time(double);
   void determine_color_indices(float);
   void mod_color_selection(Rgb, RgbColor::IncDec);
+
   void print();
   void print_color_selections();
 };

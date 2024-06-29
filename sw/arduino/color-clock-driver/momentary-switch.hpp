@@ -5,6 +5,11 @@
 #define MOMENTARY_SWITCH
 
 #include <Arduino.h>
+#include "flux-macros.hpp"
+
+#ifdef USING_AW9523
+# include <Adafruit_AW9523.h>
+#endif
 
 #include "debug.hpp"
 
@@ -31,6 +36,12 @@ class MomentarySwitch{
 
   private:
     int input_pin_;
+
+#ifdef USING_AW9523
+    Adafruit_AW9523* aw_;
+#endif
+
+
     int on_value_;
     int reading_;
 
@@ -58,6 +69,9 @@ class MomentarySwitch{
     MomentarySwitch(){}
 
     MomentarySwitch(int input_pin
+#ifdef USING_AW9523
+      , Adafruit_AW9523* aw
+#endif
       , int settle_time_in_ms         = 50
       , int short_hold_time_in_ms     = 50
       , int long_hold_time_in_ms      = 1000
@@ -65,6 +79,9 @@ class MomentarySwitch{
       , int on_value                  = 1
      )
       : input_pin_(input_pin)
+#ifdef USING_AW9523
+      , aw_(aw)
+#endif
       , settle_time_in_ms_(settle_time_in_ms)
       , long_hold_time_in_ms_(long_hold_time_in_ms)
       , short_hold_time_in_ms_(short_hold_time_in_ms)
