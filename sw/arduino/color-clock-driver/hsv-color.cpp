@@ -30,11 +30,14 @@
 RgbColor HsvColor::to_rgb(){
 
   float hue = this->h;
-  float sat = this->s / 100;
-  float val = this->v / 100;
+  float sat = this->s / 100.0;
+  float val = this->v / 100.0;
 
   float c = val * sat;
-  float x = c * (1 - abs(fmod((hue / 60), 2) - 1));
+  float fm = fmod(hue /60.0, 2.0);
+  float ab = fabs(fm - 1.0);
+  float x = c * (1.0 - ab);
+
   float m = val - c;
 
   float r_prime = 0;
@@ -114,7 +117,7 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
   // This variable determines which direction in the circle to interpolate over
   bool clockwise = false;
 
-  float delta = abs(color2.h - color1.h);
+  float delta = fabs(color2.h - color1.h);
 
   // Determine direction of interpolation over HSV circle
   clockwise = color1.h > color2.h;
@@ -124,30 +127,40 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
     delta = 360 - delta;
   }
 
-  fraction = delta * fraction;
+  delta = delta * fraction;
   
   float new_hue = 0;
 
   if (clockwise)
-    new_hue = color1.h - fraction;
+    new_hue = color1.h - delta;
   else
-    new_hue = color1.h + fraction;
+    new_hue = color1.h + delta;
 
   new_hue = fmod(360.0 + new_hue, 360.0);
 
   //____________________________________________________________________________
   // Reusing delta variable
   //____________________________________________________________________________
-  delta = color2.s - color1.s;
-  float new_sat = (fraction * delta) + color1.s;
+  delta = fabs(color2.s - color1.s);
+  delta = fraction * delta;
 
-  delta = color2.v - color1.v;
-  float new_val  = (fraction * delta) + color1.v;
+  if (color2.s < color1.s)
+    delta = -delta;
+
+  float new_sat = delta + color1.s;
+
+
+  delta = fabs(color2.v - color1.v);
+  delta = fraction * delta;
+
+  if (color2.v < color1.v)
+    delta = -delta;
+
+  float new_val = delta + color1.v;
 
   //____________________________________________________________________________
   // TODO incorporate max sat and val
   //____________________________________________________________________________
   // Max out saturation and value for now
-  //return HsvColor(new_hue, new_sat, new_val);
-  return HsvColor(new_hue, 100, 100);
+  return HsvColor(new_hue, new_sat, new_val);
 }

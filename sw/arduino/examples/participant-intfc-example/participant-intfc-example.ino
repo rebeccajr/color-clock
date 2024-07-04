@@ -48,9 +48,8 @@ ParticipantCtrl participant_intfc;
 ColorClock cc;
 FluxClock clocky;
 
-float cc0_period =  6.0 / 3600.0;
+float cc0_period =  60.0 / 3600.0;
 
-RgbColor color;
 
 void setup()
 {
@@ -100,16 +99,12 @@ void setup()
     , &blu_dec_btn
     
   );
-
-  RgbColor color = RgbColor(red_led_val
-    , grn_led_val
-    , blu_led_val
-  );
-
 }
 
 void loop()
 {
+  RgbColor color = cc.crnt_color_selection_[0];
+
   participant_intfc.run();
   color.write_rgb_to_out(red_led_pin
     , grn_led_pin

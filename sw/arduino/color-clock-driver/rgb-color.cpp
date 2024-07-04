@@ -175,7 +175,10 @@ void RgbColor::mod_color(Rgb color, IncDec direction)
       if (direction == IncDec::DECREMENT)
         it->second += mod_amt_;
       else
+      {
         it->second -= mod_amt_;
+        int flux = 0;
+      }
     }
   }
 

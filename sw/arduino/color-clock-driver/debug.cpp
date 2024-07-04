@@ -95,7 +95,7 @@ void Debug::print_interval_times_in_sec(std::vector<float> times)
 
   for (int i = 0; i < times.size(); i++)
 #if defined(ARDUINO_BUILD) && defined(USING_TIME_CALCS)
-    Serial.println(TimeCalcs::SEC_IN_HR * times[i] * 1000);
+    Serial.println(TimeCalcs::SEC_IN_HR * times[i]);
 #else
     printf("%f\n", times[i]);
 #endif

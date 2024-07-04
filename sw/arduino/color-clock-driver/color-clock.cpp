@@ -7,6 +7,11 @@
 
 #include "debug.hpp"
 
+#define DEFAULT_CYCLE_TIME_DIVISOR    10.0
+#define DEFAULT_MIN_CYCLE_TIME_IN_SEC  6.0
+#define DEFAULT_MIN_CYCLE_TIME_IN_HR   1.0
+#define DEFAULT_24_CYCLE_TIME_IN_HR    1.0
+
 
 ColorClock::ColorClock(FluxClock* the_clock 
   , double cycle_time_in_hrs
@@ -28,8 +33,38 @@ ColorClock::ColorClock(FluxClock* the_clock
 
     crnt_color_selection_ = init_color_selection_;
 
+    min_cycle_time_ = cycle_time_in_hrs / DEFAULT_CYCLE_TIME_DIVISOR;
+    max_cycle_time_ = cycle_time_in_hrs;
+
     set_cycle_time(cycle_time_in_hrs);
+    mod_cycle_amt_ = cycle_time_in_hrs_ / DEFAULT_CYCLE_TIME_DIVISOR;
   }
+
+
+//______________________________________________________________________________
+// Set max and min cycle time.
+//
+// Input parameters:
+// min_cycle - minimum cycle time
+// max_cycle - maximum cycle time
+//______________________________________________________________________________
+void ColorClock::set_min_max_cycle_time(float min_cycle, float max_cycle)
+{
+  min_cycle_time_ = min_cycle;
+  max_cycle_time_ = max_cycle;
+}
+
+
+//______________________________________________________________________________
+// Set cycle time modifier.
+//
+// Input parameters:
+// mod_cycle_amt - cycle time modifier
+//______________________________________________________________________________
+void ColorClock::set_mod_cycle_amt(float mod_cycle_amt)
+{
+  mod_cycle_amt_ = mod_cycle_amt;
+}
 
 
 //______________________________________________________________________________
@@ -38,6 +73,13 @@ ColorClock::ColorClock(FluxClock* the_clock
 void ColorClock::set_cycle_time(double cycle_time_in_hrs)
 {
     cycle_time_in_hrs_ = cycle_time_in_hrs;
+
+    // Error handling
+    if (cycle_time_in_hrs < min_cycle_time_)
+      cycle_time_in_hrs_ = min_cycle_time_;
+
+    if (cycle_time_in_hrs > max_cycle_time_)
+      cycle_time_in_hrs_ = max_cycle_time_;
 
     color_times_.clear();
 
@@ -49,35 +91,50 @@ void ColorClock::set_cycle_time(double cycle_time_in_hrs)
 }
 
 //______________________________________________________________________________
+// Prints information about this object.
+//______________________________________________________________________________
 void ColorClock::print()
 {
-  Debug::print_new_line();
-  Debug::print_string_with_new_line((char*)("_________________"));
-  Debug::print_string_with_new_line((char*)(" Color Selection" ));
-  Debug::print_string_with_new_line((char*)("_________________"));
-  Debug::print_color_array(crnt_color_selection_);
+  print_color_selections();
   Debug::print_new_line();
   Debug::print_string_with_new_line((char*)("_________________"));
   Debug::print_string_with_new_line((char*)(" Interval Times"  ));
   Debug::print_string_with_new_line((char*)("_________________"));
-  Debug::print_labeled_int((char*)("size of color times"), color_times_.size());
+  Debug::print_labeled_float((char*)("cycle time:          ")
+    , cycle_time_in_hrs_);
+  Debug::print_labeled_float((char*)("min cycle time:      ")
+    , min_cycle_time_);
+  Debug::print_labeled_float((char*)("max cycle time:      ")
+    , max_cycle_time_);
+  Debug::print_labeled_float((char*)("cycle time modifier: ")
+    , mod_cycle_amt_);
+  Debug::print_new_line();
+  Debug::print_labeled_int((char*)("size of color times: ")
+    , color_times_.size());
+  Debug::print_new_line();
   Debug::print_interval_times_in_sec(color_times_);
+  Debug::print_new_line();
 }
 
+
+//______________________________________________________________________________
+// Prints initial and current color selection arrays.
+//______________________________________________________________________________
 void ColorClock::print_color_selections()
 {
   Debug::print_new_line();
   Debug::print_string_with_new_line((char*)("_________________________"));
   Debug::print_string_with_new_line((char*)(" Initial Color Selection " ));
   Debug::print_string_with_new_line((char*)("_________________________"));
-  Debug::print_color_array(this->init_color_selection_);
+  Debug::print_color_array(init_color_selection_);
 
   Debug::print_new_line();
   Debug::print_new_line();
   Debug::print_string_with_new_line((char*)("_________________________"));
   Debug::print_string_with_new_line((char*)(" Current Color Selection " ));
   Debug::print_string_with_new_line((char*)("_________________________"));
-  Debug::print_color_array(this->crnt_color_selection_);
+  Debug::print_color_array(crnt_color_selection_);
+  Debug::print_new_line();
 }
 
 
@@ -91,6 +148,7 @@ RgbColor ColorClock::time_to_color()
   float the_min   = (float) clock_->get_min();
   float the_sec   = (float) clock_->get_sec();
   float the_milli = (float) clock_->get_milli(the_sec);
+  //float the_milli = 0;
 
   float hrs_since_midnight =
     TimeCalcs::get_hrs_since_midnight(the_hr, the_min, the_sec, the_milli);
@@ -103,9 +161,12 @@ RgbColor ColorClock::time_to_color()
 
   determine_color_indices(hrs_since_cycle_restart);
 
+  float lo_color_time  = color_times_[lo_color_index_];
+  float hi_color_time  = color_times_[hi_color_index_];
+
   float fraction =
-    TimeCalcs::get_time_as_fractional_offset(color_times_[lo_color_index_]
-      , color_times_[hi_color_index_]
+    TimeCalcs::get_time_as_fractional_offset(lo_color_time
+      , hi_color_time
       , hrs_since_cycle_restart);
 
   static float prev_fraction = 0;
@@ -200,6 +261,40 @@ void ColorClock::mod_color_selection(Rgb r_g_or_b
 )
 {
   for(uint8_t i = 0; i < crnt_color_selection_.size(); i++)
+  {
     if(init_color_selection_[i].rgb_[r_g_or_b] > 0)
+    {
       crnt_color_selection_[i].mod_color(r_g_or_b, direction);
+
+      /*
+      Debug::print_new_line();
+      Debug::print_string_with_new_line((char*)"__________________________");
+      Debug::print_labeled_int((char*)"i: ", i);
+      Debug::print_new_line();
+      Debug::print_string_with_new_line((char*)"Initial color");
+      Debug::print_color(init_color_selection_[i]);
+      Debug::print_new_line();
+      Debug::print_string_with_new_line((char*)"Current color");
+      Debug::print_color(crnt_color_selection_[i]);
+      */
+    }
+  }
+
+}
+
+
+//______________________________________________________________________________
+// Increases or decreases the cycle time by a constant amount.
+//
+// Input parameters:
+// direction: either increase or decrease
+//______________________________________________________________________________
+void ColorClock::mod_cycle_time(RgbColor::IncDec direction)
+{
+  if (direction == RgbColor::IncDec::DECREMENT)
+    set_cycle_time(cycle_time_in_hrs_ - mod_cycle_amt_);
+  else if (direction == RgbColor::IncDec::INC)
+    set_cycle_time(cycle_time_in_hrs_ + mod_cycle_amt_);
+
+  Debug::print_interval_times_in_sec(color_times_);
 }

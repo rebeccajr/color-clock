@@ -10,6 +10,8 @@
 //______________________________________________________________________________
 void TopLevel::run()
 {
+  participant_intfc_.run();
+
   std::map<ColorClock*, pin_map>::iterator it;
   for (it = cc_out_pin_map_.begin(); it != cc_out_pin_map_.end(); it++)
   {
@@ -28,8 +30,8 @@ void TopLevel::run()
     short crnt_sec = it->first->clock_->get_sec();
     if (prev_sec != crnt_sec)
     {
-      Debug::print_time(it->first->clock_->rtc_);
-      Debug::print_color(out_color);
+      //Debug::print_time(it->first->clock_->rtc_);
+      //Debug::print_color(out_color);
       prev_sec = crnt_sec;
     }
     //__________________________________________________________________________
@@ -45,7 +47,7 @@ void TopLevel::run()
       //Debug::print_string_with_new_line("TopLevel::run IDLE");
       //________________________________________________________________________
 
-      time_ctrl_.get_display()->write_disp_str("    ");
+      time_ctrl_.get_display()->write_disp_str("FLUX");
 
       if (enter_btn_.get_input_type() == MomentarySwitch::InputType::LONG)
         state_ = State::SET_TIME;
@@ -84,5 +86,22 @@ void TopLevel::register_color_clock(ColorClock* color_clock
   cc_out_pin_map_.insert({
     color_clock, RgbColor::create_rgb_pin_map(r_pin, g_pin, b_pin)
   });
+}
 
+
+//______________________________________________________________________________
+// Register participant controlled clock
+//______________________________________________________________________________
+void TopLevel::set_participant_ctrl(ColorClock* cc)
+{
+  participant_intfc_ = ParticipantCtrl(cc
+    , &frq_inc_btn_
+    , &red_inc_btn_
+    , &grn_inc_btn_
+    , &blu_inc_btn_
+    , &frq_dec_btn_
+    , &red_dec_btn_
+    , &grn_dec_btn_
+    , &blu_dec_btn_
+  );
 }

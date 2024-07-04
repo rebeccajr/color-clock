@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-using Rgb = RgbColor::PriColor;
+using Rgb = PriColor;
 
 //______________________________________________________________________________
 // Convert an Rgb color object to an Hsv color object

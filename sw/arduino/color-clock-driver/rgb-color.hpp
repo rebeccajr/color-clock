@@ -13,7 +13,7 @@
 
 #define MAX_RGB_VAL 0xFF
 #define MIN_RGB_VAL 0
-#define DEFAULT_MOD_AMT 0x20
+#define DEFAULT_MOD_AMT 0x40
 
 #ifdef USING_HSV_COLOR
 class HsvColor;
@@ -22,6 +22,7 @@ class HsvColor;
 class RgbColor
 {
 public:
+
   enum class PriColor
   { RED
     , GRN

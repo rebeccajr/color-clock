@@ -11,14 +11,20 @@
 #endif
 #include <vector>
 
-#include "flux-clock.hpp"
+#include "flux-macros.hpp"
+
+#ifdef UNIT_TEST
+# include "mock-flux-clock.hpp"
+#else
+# include "flux-clock.hpp"
+#endif
+
 #include "hsv-color.hpp"
 #include "rgb-color.hpp"
 #include "color-const.hpp"
 #include "time-calcs.hpp"
-#include "time-display.hpp"
 
-
+class FluxClock;
 
 //______________________________________________________________________________
 class ColorClock
@@ -34,8 +40,11 @@ public:
   int lo_color_index_;
   int hi_color_index_;
 
-  TimeDisplay time_display_;
   FluxClock* clock_;
+
+  float mod_cycle_amt_;
+  float min_cycle_time_;
+  float max_cycle_time_;
 
   std::vector<RgbColor>    init_color_selection_;
   std::vector<RgbColor>    crnt_color_selection_;
@@ -50,7 +59,7 @@ public:
 
   ColorClock(FluxClock* the_clock
   , double cycle_time_in_hrs
-  , std::vector<RgbColor> colors = ColorConstants::roygbiv_
+  , std::vector<RgbColor> colors = ColorConst::roygbiv_
   );
 
   void reset_color_selection()
@@ -61,8 +70,11 @@ public:
   RgbColor time_to_color();
 
   void set_cycle_time(double);
+  void set_min_max_cycle_time(float, float);
+  void set_mod_cycle_amt(float);
   void determine_color_indices(float);
   void mod_color_selection(Rgb, RgbColor::IncDec);
+  void mod_cycle_time(RgbColor::IncDec);
 
   void print();
   void print_color_selections();

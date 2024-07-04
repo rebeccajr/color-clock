@@ -28,6 +28,9 @@ int TimeCalcs::prev_sec      = 0;
 float TimeCalcs::get_time_as_fractional_offset(
         float time0, float time1, float crnt_time){
 
+  if (time0 == time1)
+    return 0;
+
   // ensure time1 is greater than time0
   // if not, swap
   if (time0 > time1) {

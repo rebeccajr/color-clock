@@ -9,7 +9,9 @@
 #include "hsv-color.hpp"
 #include "rgb-color.hpp"
 
-class ColorConstants
+
+//______________________________________________________________________________
+class ColorConst
 {
  public:
 
@@ -25,8 +27,7 @@ class ColorConstants
   static std::vector<RgbColor> vibgyor_;
   static std::vector<RgbColor> rmbcgy_;
 
-  ColorConstants(){};
-
+  ColorConst(){};
 };
 
 #endif
