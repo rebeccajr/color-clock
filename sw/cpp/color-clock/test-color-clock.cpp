@@ -1,13 +1,18 @@
 #include <unistd.h>
+#include <vector>
 
 #include "flux-macros.hpp"
 #include "color-clock.hpp"
 #include "debug.hpp"
+#include "color-const.hpp"
 
 int main()
 {
   FluxClock clocky = FluxClock();
+  std::vector<RgbColor> color_selection = {ColorConst::RED, ColorConst::GRN, ColorConst::BLU};
+
   ColorClock cc = ColorClock(&clocky, 12.0/3600.0);
+
   cc.print();
 
   uint8_t sec = 0;

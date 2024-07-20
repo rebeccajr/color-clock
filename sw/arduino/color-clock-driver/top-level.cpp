@@ -22,7 +22,8 @@ void TopLevel::run()
 
     // These LEDs are common anode - boolean here sends the inverted values to
     // analog pins, e.g. full on = 0 instead of 255
-    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
+    //out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
+    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, 0);
     //__________________________________________________________________________
     // Debug
     //__________________________________________________________________________
