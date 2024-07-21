@@ -20,10 +20,11 @@ void TopLevel::run()
     short g_pin = it->second[RgbColor::PriColor::GRN];
     short b_pin = it->second[RgbColor::PriColor::BLU];
 
-    // These LEDs are common anode - boolean here sends the inverted values to
+    // These LEDs are common anode - boolean is to inverted values to
     // analog pins, e.g. full on = 0 instead of 255
-    //out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
-    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, 0);
+    // Use true for RGB LED strips
+    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
+
     //__________________________________________________________________________
     // Debug
     //__________________________________________________________________________
@@ -31,8 +32,8 @@ void TopLevel::run()
     short crnt_sec = it->first->clock_->get_sec();
     if (prev_sec != crnt_sec)
     {
-      //Debug::print_time(it->first->clock_->rtc_);
-      //Debug::print_color(out_color);
+      Debug::print_time(it->first->clock_->rtc_);
+      Debug::print_color(out_color);
       prev_sec = crnt_sec;
     }
     //__________________________________________________________________________
@@ -50,7 +51,7 @@ void TopLevel::run()
 
       time_ctrl_.get_display()->write_disp_str("FLUX");
 
-      if (enter_btn_.get_input_type() == MomentarySwitch::InputType::LONG)
+      if (enter_btn_.get_input_type() == MomentarySwitch::InputType::SHORT)
         state_ = State::SET_TIME;
 
       break;

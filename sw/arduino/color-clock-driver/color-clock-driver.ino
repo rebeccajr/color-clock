@@ -33,17 +33,17 @@ ColorClock* cc3;
 
 FluxClock   the_clock;
 
-int red_pin_0 = 8;
-int grn_pin_0 = 7;
 int blu_pin_0 = 6;
+int red_pin_0 = 7;
+int grn_pin_0 = 8;
 
-int red_pin_1 = 5;
-int grn_pin_1 = 4;
-int blu_pin_1 = 3;
+int grn_pin_1 = 3;
+int red_pin_1 = 4;
+int blu_pin_1 = 5;
 
-int red_pin_2 = 2;
-int grn_pin_2 = 1;
 int blu_pin_2 = 0;
+int red_pin_2 = 1;
+int grn_pin_2 = 2;
 
 int red_pin_3 = A4;
 int grn_pin_3 = A3;
@@ -180,4 +180,5 @@ void setup()
 void loop()
 {
   top_level.run();
+  Debug::print_string_with_new_line("proof of life");
 }
