@@ -7,7 +7,7 @@
 #include <Wire.h>
 
 // the number of the LED pin
-const int ledPin = A0;  // 16 corresponds to GPIO16
+const int ledPin = D2;  // 16 corresponds to GPIO16
 
 // setting PWM properties
 const int freq = 5000;
@@ -24,7 +24,10 @@ void setup(){
  
 void loop(){
   // increase the LED brightness
+    ledcWrite(ledChannel, 255);
+    delay(100);
     ledcWrite(ledChannel, 0);
+    delay(100);
   /*
   for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle++){   
     // changing the LED brightness with PWM

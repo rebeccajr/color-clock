@@ -59,6 +59,7 @@ void TimeDisplay::write_disp_mo(uint8_t mo)   { write_disp_str_num("MO", mo);  }
 void TimeDisplay::write_disp_day(uint8_t day) { write_disp_str_num("DA", day); }
 void TimeDisplay::write_disp_hr(uint8_t hr)   { write_disp_str_num("HR", hr);  }
 void TimeDisplay::write_disp_min(uint8_t min) { write_disp_str_num("MI", min); }
+void TimeDisplay::write_disp_sec(uint8_t sec) { write_disp_str_num("SC", sec); }
 
 
 //______________________________________________________________________________

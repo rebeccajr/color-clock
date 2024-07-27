@@ -22,8 +22,8 @@ void TopLevel::run()
 
     // These LEDs are common anode - boolean here sends the inverted values to
     // analog pins, e.g. full on = 0 instead of 255
-    //out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
-    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, 0);
+    out_color.write_rgb_to_out(r_pin, g_pin, b_pin, true);
+    //out_color.write_rgb_to_out(r_pin, g_pin, b_pin, false);
     //__________________________________________________________________________
     // Debug
     //__________________________________________________________________________
@@ -48,9 +48,11 @@ void TopLevel::run()
       //Debug::print_string_with_new_line("TopLevel::run IDLE");
       //________________________________________________________________________
 
-      time_ctrl_.get_display()->write_disp_str("FLUX");
+      //time_ctrl_.get_display()->write_disp_str("FLUX");
+      time_ctrl_.get_display()->write_disp_sec(clock_->get_sec());
 
-      if (enter_btn_.get_input_type() == MomentarySwitch::InputType::LONG)
+
+      if (enter_btn_.is_short_press())
         state_ = State::SET_TIME;
 
       break;

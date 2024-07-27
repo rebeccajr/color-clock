@@ -31,6 +31,7 @@ public:
   void write_disp_day(uint8_t day);
   void write_disp_hr(uint8_t hr);
   void write_disp_min(uint8_t min);
+  void write_disp_sec(uint8_t sec);
 
 };
 

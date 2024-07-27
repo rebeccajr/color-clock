@@ -42,7 +42,7 @@ void TimeController::set_time()
   }
   //____________________________________________________________________________
 
-  if (enter_input_type == MomentarySwitch::InputType::SHORT)
+  if (enter_btn_.is_short_press())
   {
     set_next_state();
     state_changed = true;
@@ -58,10 +58,10 @@ void TimeController::set_time()
   short min;
 
   bool inc_val =
-    inc_btn_.get_input_type() == MomentarySwitch::InputType::SHORT;
+    inc_btn_.is_short_press();
 
   bool dec_val =
-    dec_btn_.get_input_type() == MomentarySwitch::InputType::SHORT;
+    dec_btn_.is_short_press();
 
   switch (state_)
   {
