@@ -49,9 +49,9 @@ int red_pin_3 = A4;
 int grn_pin_3 = A3;
 int blu_pin_3 = A0;
 
-uint8_t inc_pin   = 10;
-uint8_t dec_pin   = 11;
-uint8_t enter_pin =  0;
+uint8_t inc_pin   = 13;
+uint8_t dec_pin   = 14;
+uint8_t enter_pin = 15;
 
 
 MomentarySwitch inc_sw;
