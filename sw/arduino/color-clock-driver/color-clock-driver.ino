@@ -23,6 +23,16 @@
 #include "time-display.hpp"
 #include "top-level.hpp"
 
+
+#define CC0_CYCLE_TIME_HOURS HOURS_PER_DAY
+#define CC1_CYCLE_TIME_HOURS 1
+#define CC2_CYCLE_TIME_HOURS HOURS_PER_MIN
+#define CC3_CYCLE_TIME_HOURS 12.0 / SECONDS_PER_HR
+
+#define START_YEAR
+#define START_MONTH
+
+
 TopLevel    top_level;
 TimeDisplay display;
 
@@ -82,10 +92,10 @@ uint8_t grn_dec_btn_pin = 7;
 uint8_t blu_dec_btn_pin = 12;
 //______________________________________________________________________________
 
-float cc0_period =  6.0 / 3600.0;
-float cc1_period = 12.0 / 3600.0;
-float cc2_period = 30.0 / 3600.0;
-float cc3_period = 60.0 / 3600.0;
+float cc0_period = CC0_CYCLE_TIME_HOURS;
+float cc1_period = CC1_CYCLE_TIME_HOURS;
+float cc2_period = CC2_CYCLE_TIME_HOURS;
+float cc3_period = CC3_CYCLE_TIME_HOURS;
 
 //______________________________________________________________________________
 void setup()
@@ -170,9 +180,11 @@ void setup()
   top_level.register_color_clock(cc0, red_pin_0, grn_pin_0, blu_pin_0);
   top_level.register_color_clock(cc1, red_pin_1, grn_pin_1, blu_pin_1);
   top_level.register_color_clock(cc2, red_pin_2, grn_pin_2, blu_pin_2);
-  //top_level.register_color_clock(cc3, red_pin_3, grn_pin_3, blu_pin_3);
+  top_level.register_color_clock(cc3, red_pin_3, grn_pin_3, blu_pin_3);
   top_level.set_participant_ctrl(cc0);
 
+  the_clock.set_yr(START_YEAR);
+  the_clock.set_month(START_MONTH);
 }
 
 
