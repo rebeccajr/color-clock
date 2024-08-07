@@ -27,14 +27,17 @@ void TopLevel::run()
     //__________________________________________________________________________
     // Debug
     //__________________________________________________________________________
+    /*
     static short prev_sec = 0;
     short crnt_sec = it->first->clock_->get_sec();
     if (prev_sec != crnt_sec)
     {
-      //Debug::print_time(it->first->clock_->rtc_);
-      //Debug::print_color(out_color);
+      Serial.println(it->first->cycle_time_in_hrs_);
+      Debug::print_time(it->first->clock_->rtc_);
+      Debug::print_color(out_color);
       prev_sec = crnt_sec;
     }
+    */
     //__________________________________________________________________________
  
   }

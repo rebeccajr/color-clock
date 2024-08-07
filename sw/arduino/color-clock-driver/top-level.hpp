@@ -9,13 +9,14 @@
 #include <Adafruit_AW9523.h>
 #include <Wire.h>
 
-#include "hsv-color.hpp"
-#include "rgb-color.hpp"
 #include "color-clock.hpp"
-#include "time-controller.hpp"
-#include "time-display.hpp"
+#include "flux-macros.hpp"
+#include "hsv-color.hpp"
 #include "momentary-switch.hpp"
 #include "participant-ctrl.hpp"
+#include "rgb-color.hpp"
+#include "time-controller.hpp"
+#include "time-display.hpp"
 
 
 

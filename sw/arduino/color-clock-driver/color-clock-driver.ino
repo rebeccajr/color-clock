@@ -24,10 +24,10 @@
 #include "top-level.hpp"
 
 
-#define CC0_CYCLE_TIME_HOURS HOURS_PER_DAY
-#define CC1_CYCLE_TIME_HOURS 1
-#define CC2_CYCLE_TIME_HOURS HOURS_PER_MIN
-#define CC3_CYCLE_TIME_HOURS 12.0 / SECONDS_PER_HR
+#define CC0_CYCLE_TIME_HOURS 24.0
+#define CC1_CYCLE_TIME_HOURS  1.0
+#define CC2_CYCLE_TIME_HOURS  1.0 / 60.0
+#define CC3_CYCLE_TIME_HOURS 12.0 / 3600.00 
 
 #define START_YEAR  24
 #define START_MONTH  8
@@ -94,7 +94,7 @@ uint8_t blu_dec_btn_pin = 12;
 
 float cc0_period = CC0_CYCLE_TIME_HOURS;
 float cc1_period = CC1_CYCLE_TIME_HOURS;
-float cc2_period = CC2_CYCLE_TIME_HOURS;
+float cc2_period = CC3_CYCLE_TIME_HOURS;
 float cc3_period = CC3_CYCLE_TIME_HOURS;
 
 //______________________________________________________________________________
