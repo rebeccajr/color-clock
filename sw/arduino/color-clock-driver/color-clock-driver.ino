@@ -29,8 +29,8 @@
 #define CC2_CYCLE_TIME_HOURS HOURS_PER_MIN
 #define CC3_CYCLE_TIME_HOURS 12.0 / SECONDS_PER_HR
 
-#define START_YEAR
-#define START_MONTH
+#define START_YEAR  24
+#define START_MONTH  8
 
 
 TopLevel    top_level;
@@ -103,7 +103,7 @@ void setup()
   Serial.begin(115200);
   Serial.println("Adafruit AW9523 Constant Current LED test!");
 
-  if (! aw.begin(0x58)) {
+  if (! aw.begin(IO_EXPANDER_ADDR)) {
     Serial.println("AW9523 not found? Check wiring!");
     while (1) delay(10);  // halt forever
   }
@@ -150,7 +150,7 @@ void setup()
   //____________________________________________________________________________
 
   Serial.begin(9600);
-  display.led_segments.begin(0x70);
+  display.led_segments.begin(LED_BACKPACK_ADDR);
   Wire.begin();
 
   //____________________________________________________________________________
@@ -158,7 +158,7 @@ void setup()
   cc0 = new ColorClock(&the_clock, cc0_period, ColorConst::roygbiv_);
   cc1 = new ColorClock(&the_clock, cc1_period, ColorConst::roygbiv_);
   cc2 = new ColorClock(&the_clock, cc2_period, ColorConst::roygbiv_);
-  cc3 = new ColorClock(&the_clock, cc3_period, ColorConst::roygbiv_);
+  cc3 = new ColorClock(&the_clock, cc3_period, ColorConst::rgb_);
 
   // TODO make buttons a vector
   top_level = TopLevel(&the_clock
@@ -181,7 +181,7 @@ void setup()
   top_level.register_color_clock(cc1, red_pin_1, grn_pin_1, blu_pin_1);
   top_level.register_color_clock(cc2, red_pin_2, grn_pin_2, blu_pin_2);
   top_level.register_color_clock(cc3, red_pin_3, grn_pin_3, blu_pin_3);
-  top_level.set_participant_ctrl(cc0);
+  top_level.set_participant_ctrl(cc3);
 
   the_clock.set_yr(START_YEAR);
   the_clock.set_month(START_MONTH);
