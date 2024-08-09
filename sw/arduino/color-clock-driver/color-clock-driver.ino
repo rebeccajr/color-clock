@@ -24,10 +24,10 @@
 #include "top-level.hpp"
 
 
-#define CC0_CYCLE_TIME_HOURS 24.0
-#define CC1_CYCLE_TIME_HOURS  1.0
-#define CC2_CYCLE_TIME_HOURS  1.0 / 60.0
-#define CC3_CYCLE_TIME_HOURS 12.0 / 3600.00 
+#define CC3_CYCLE_TIME_HOURS 24.0
+#define CC2_CYCLE_TIME_HOURS  1.0
+#define CC1_CYCLE_TIME_HOURS  1.0 / 60.0
+#define CC0_CYCLE_TIME_HOURS 12.0 / 3600.00 
 
 #define START_YEAR  24
 #define START_MONTH  8
@@ -59,8 +59,8 @@ int red_pin_3 = A4;
 int grn_pin_3 = A3;
 int blu_pin_3 = A0;
 
-uint8_t inc_pin   = 13;
-uint8_t dec_pin   = 14;
+uint8_t inc_pin   = 14;
+uint8_t dec_pin   = 13;
 uint8_t enter_pin = 15;
 
 
@@ -181,7 +181,7 @@ void setup()
   top_level.register_color_clock(cc1, red_pin_1, grn_pin_1, blu_pin_1);
   top_level.register_color_clock(cc2, red_pin_2, grn_pin_2, blu_pin_2);
   top_level.register_color_clock(cc3, red_pin_3, grn_pin_3, blu_pin_3);
-  top_level.set_participant_ctrl(cc3);
+  top_level.set_participant_ctrl(cc0);
 
   the_clock.set_yr(START_YEAR);
   the_clock.set_month(START_MONTH);
