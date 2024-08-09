@@ -26,6 +26,7 @@ class ColorConst
   static std::vector<RgbColor> roygbiv_;
   static std::vector<RgbColor> vibgyor_;
   static std::vector<RgbColor> rmbcgy_;
+  static std::vector<RgbColor> rgb_;
 
   ColorConst(){};
 };

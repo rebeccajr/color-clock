@@ -14,6 +14,11 @@ RgbColor ColorConst::BLU = RgbColor(0x0000FF);
 RgbColor ColorConst::MAG = RgbColor(0xFF00FF);
 
 
+std::vector<RgbColor> ColorConst::rgb_ = {RED
+  , GRN
+  , BLU
+  };
+
 std::vector<RgbColor> ColorConst::roygbiv_ = {RED
   , YEL
   , GRN

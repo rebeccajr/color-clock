@@ -23,6 +23,16 @@
 #include "time-display.hpp"
 #include "top-level.hpp"
 
+
+#define CC3_CYCLE_TIME_HOURS 24.0
+#define CC2_CYCLE_TIME_HOURS  1.0
+#define CC1_CYCLE_TIME_HOURS  1.0 / 60.0
+#define CC0_CYCLE_TIME_HOURS 12.0 / 3600.00 
+
+#define START_YEAR  24
+#define START_MONTH  8
+
+
 TopLevel    top_level;
 TimeDisplay display;
 
@@ -49,8 +59,8 @@ int red_pin_3 = A4;
 int grn_pin_3 = A3;
 int blu_pin_3 = A0;
 
-uint8_t inc_pin   = 13;
-uint8_t dec_pin   = 14;
+uint8_t inc_pin   = 14;
+uint8_t dec_pin   = 13;
 uint8_t enter_pin = 15;
 
 
@@ -82,10 +92,10 @@ uint8_t grn_dec_btn_pin = 7;
 uint8_t blu_dec_btn_pin = 12;
 //______________________________________________________________________________
 
-float cc0_period =  6.0 / 3600.0;
-float cc1_period = 12.0 / 3600.0;
-float cc2_period = 30.0 / 3600.0;
-float cc3_period = 60.0 / 3600.0;
+float cc0_period = CC0_CYCLE_TIME_HOURS;
+float cc1_period = CC1_CYCLE_TIME_HOURS;
+float cc2_period = CC3_CYCLE_TIME_HOURS;
+float cc3_period = CC3_CYCLE_TIME_HOURS;
 
 //______________________________________________________________________________
 void setup()
@@ -93,7 +103,7 @@ void setup()
   Serial.begin(115200);
   Serial.println("Adafruit AW9523 Constant Current LED test!");
 
-  if (! aw.begin(0x58)) {
+  if (! aw.begin(IO_EXPANDER_ADDR)) {
     Serial.println("AW9523 not found? Check wiring!");
     while (1) delay(10);  // halt forever
   }
@@ -140,7 +150,7 @@ void setup()
   //____________________________________________________________________________
 
   Serial.begin(9600);
-  display.led_segments.begin(0x70);
+  display.led_segments.begin(LED_BACKPACK_ADDR);
   Wire.begin();
 
   //____________________________________________________________________________
@@ -148,7 +158,7 @@ void setup()
   cc0 = new ColorClock(&the_clock, cc0_period, ColorConst::roygbiv_);
   cc1 = new ColorClock(&the_clock, cc1_period, ColorConst::roygbiv_);
   cc2 = new ColorClock(&the_clock, cc2_period, ColorConst::roygbiv_);
-  cc3 = new ColorClock(&the_clock, cc3_period, ColorConst::roygbiv_);
+  cc3 = new ColorClock(&the_clock, cc3_period, ColorConst::rgb_);
 
   // TODO make buttons a vector
   top_level = TopLevel(&the_clock
@@ -170,9 +180,11 @@ void setup()
   top_level.register_color_clock(cc0, red_pin_0, grn_pin_0, blu_pin_0);
   top_level.register_color_clock(cc1, red_pin_1, grn_pin_1, blu_pin_1);
   top_level.register_color_clock(cc2, red_pin_2, grn_pin_2, blu_pin_2);
-  //top_level.register_color_clock(cc3, red_pin_3, grn_pin_3, blu_pin_3);
+  top_level.register_color_clock(cc3, red_pin_3, grn_pin_3, blu_pin_3);
   top_level.set_participant_ctrl(cc0);
 
+  the_clock.set_yr(START_YEAR);
+  the_clock.set_month(START_MONTH);
 }
 
 
