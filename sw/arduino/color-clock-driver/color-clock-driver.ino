@@ -27,11 +27,10 @@
 #define CC3_CYCLE_TIME_HOURS 24.0
 #define CC2_CYCLE_TIME_HOURS  1.0
 #define CC1_CYCLE_TIME_HOURS  1.0 / 60.0
-#define CC0_CYCLE_TIME_HOURS 12.0 / 3600.00 
+#define CC0_CYCLE_TIME_HOURS (12.0 / SECONDS_PER_HOUR)
 
 #define START_YEAR  24
 #define START_MONTH  8
-
 
 TopLevel    top_level;
 TimeDisplay display;
@@ -94,7 +93,7 @@ uint8_t blu_dec_btn_pin = 12;
 
 float cc0_period = CC0_CYCLE_TIME_HOURS;
 float cc1_period = CC1_CYCLE_TIME_HOURS;
-float cc2_period = CC3_CYCLE_TIME_HOURS;
+float cc2_period = CC2_CYCLE_TIME_HOURS;
 float cc3_period = CC3_CYCLE_TIME_HOURS;
 
 //______________________________________________________________________________
@@ -105,7 +104,7 @@ void setup()
 
   if (! aw.begin(IO_EXPANDER_ADDR)) {
     Serial.println("AW9523 not found? Check wiring!");
-    while (1) delay(10);  // halt forever
+    //while (1) delay(10);  // halt forever
   }
 
   aw.pinMode(inc_pin, INPUT_PULLUP);
@@ -155,10 +154,10 @@ void setup()
 
   //____________________________________________________________________________
 
-  cc0 = new ColorClock(&the_clock, cc0_period, ColorConst::roygbiv_);
+  cc0 = new ColorClock(&the_clock, cc0_period, ColorConst::rgb_);
   cc1 = new ColorClock(&the_clock, cc1_period, ColorConst::roygbiv_);
   cc2 = new ColorClock(&the_clock, cc2_period, ColorConst::roygbiv_);
-  cc3 = new ColorClock(&the_clock, cc3_period, ColorConst::rgb_);
+  cc3 = new ColorClock(&the_clock, cc3_period, ColorConst::roygbiv_);
 
   // TODO make buttons a vector
   top_level = TopLevel(&the_clock
