@@ -1,4 +1,3 @@
-#include "debug.hpp"
 #include "rgb-color.hpp"
 
 #ifdef ARDUINO_BUILD
@@ -156,12 +155,12 @@ void RgbColor::bounds_check()
 //______________________________________________________________________________
 // Modifies the color by increasing or decreasing the intensity of one of the
 // primary colors.
-// 
+//
 // To increase the intensity of one of the primary colors, the two other
 // primary colors are decreased. To decrease the intensity of a primary
 // color, the other two are increased, which decreases the saturation of that
 // color.
-// 
+//
 // Input parameters:
 // color:     red, green, or blue selection
 // direction: increase or decrease.

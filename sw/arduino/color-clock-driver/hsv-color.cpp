@@ -12,8 +12,6 @@
 
 #include "hsv-color.hpp"
 #include "rgb-color.hpp"
-#include "debug.hpp"
-
 
 //______________________________________________________________________________
 // Convert an Rgb color object to an Hsv color object
@@ -128,7 +126,7 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
   }
 
   delta = delta * fraction;
-  
+
   float new_hue = 0;
 
   if (clockwise)

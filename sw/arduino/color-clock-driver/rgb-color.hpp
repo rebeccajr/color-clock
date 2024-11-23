@@ -29,14 +29,14 @@ public:
     , BLU
   };
 
-  enum class IncDec 
+  enum class IncDec
   { DECREMENT
     , INC
   };
 
   static std::map <PriColor, short> create_rgb_pin_map(short, short, short);
 
-  std::map <PriColor, int> rgb_; 
+  std::map <PriColor, int> rgb_;
 
   uint8_t max_red_;
   uint8_t max_grn_;
@@ -46,16 +46,16 @@ public:
   uint8_t min_blu_;
 
   uint8_t mod_amt_;
-  
+
   RgbColor(){}
 
   // values normalized to 255
   RgbColor(int red, int green, int blue){
-  
+
     set_min_max(MIN_RGB_VAL, MAX_RGB_VAL);
 
     mod_amt_ = DEFAULT_MOD_AMT;
-    
+
     rgb_.insert({PriColor::RED, red});
     rgb_.insert({PriColor::GRN, green});
     rgb_.insert({PriColor::BLU, blue});
@@ -94,7 +94,7 @@ public:
   HsvColor to_hsv();
 #endif
 
-  void mod_color(PriColor, IncDec); 
+  void mod_color(PriColor, IncDec);
 
   void write_rgb_to_out(int, int, int, bool = false);
 };
