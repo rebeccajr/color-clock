@@ -1,10 +1,34 @@
-//______________________________________________________________________________
+//______________________________________________________________________
+//______________________________________________________________________
+//      _   __   _   _ _   _   _   _         _
+// |   |_| | _  | | | V | | | | / |_/ |_| | /
+// |__ | | |__| |_| |   | |_| | \ |   | | | \_
+//  _  _         _ ___  _       _ ___   _                        / /
+// /  | | |\ |  \   |  | / | | /   |   \                        (^^)
+// \_ |_| | \| _/   |  | \ |_| \_  |  _/                        (____)o
+//______________________________________________________________________
+//______________________________________________________________________
+//
+//----------------------------------------------------------------------
+// Copyright 2024, Rebecca Rashkin
+// -------------------------------
+// This code may be copied, redistributed, transformed, or built upon in
+// any format for educational, non-commercial purposes.
+//
+// Please give me appropriate credit should you choose to use this
+// resource. Thank you :)
+//----------------------------------------------------------------------
+//
+//______________________________________________________________________
+// //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\
+//______________________________________________________________________
+//______________________________________________________________________
 // Implementation of Debug functions.
-//______________________________________________________________________________
+//______________________________________________________________________
 //#define ARDUINO_BUILD // just here so IDE doesn't complain
 #include "debug.hpp"
 
-#ifdef ARDUINO_BUILD 
+#ifdef ARDUINO_BUILD
 # include <Arduino.h>
 # include <Wire.h>
 #endif
@@ -18,7 +42,7 @@
 
 
 #ifdef USING_RGB_COLOR
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_color(RgbColor color)
 {
 #ifdef ARDUINO_BUILD
@@ -40,7 +64,7 @@ void Debug::print_color(RgbColor color)
 
 
 #ifdef USING_HSV_COLOR
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_color(HsvColor color)
 {
 #ifdef ARDUINO_BUILD
@@ -51,18 +75,18 @@ void Debug::print_color(HsvColor color)
   Serial.print("  val:   ");
   Serial.println(color.v, DEC);
 #else
-
-  printf("hue: 0x%3.4f  sat: 0x%3.4f  val: 0x%3.4f", color.h, color.s, color.v);
+  printf("hue: 0x%3.4f  sat: 0x%3.4f  val: 0x%3.4f"
+    , color.h, color.s, color.v);
 #endif
 }
 #endif
 
 
 #ifdef USING_RGB_COLOR
-//______________________________________________________________________________
+//______________________________________________________________________
 // Prints each aspect of color in array.
 // TODO make template
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_color_array(std::vector<RgbColor> colors)
 {
   for (int i = 0; i < colors.size(); ++i)
@@ -75,7 +99,7 @@ void Debug::print_color_array(std::vector<RgbColor> colors)
 
 
 #ifdef USING_HSV_COLOR
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_color_array(std::vector<HsvColor> colors)
 {
   for (int i = 0; i < colors.size(); ++i)
@@ -87,11 +111,11 @@ void Debug::print_color_array(std::vector<HsvColor> colors)
 #endif
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_interval_times_in_sec(std::vector<float> times)
 {
 
-  print_new_line(); 
+  print_new_line();
 
   for (int i = 0; i < times.size(); i++)
 #if defined(ARDUINO_BUILD) && defined(USING_TIME_CALCS)
@@ -102,7 +126,7 @@ void Debug::print_interval_times_in_sec(std::vector<float> times)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_interval_times(std::vector<float> times)
 {
   for (int i = 0; i < times.size(); i++)
@@ -114,9 +138,9 @@ void Debug::print_interval_times(std::vector<float> times)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // TODO rewrite for non-Arduino build
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_time(
 #ifdef USING_DS3231
   DS3231 clk
@@ -150,7 +174,7 @@ void Debug::print_time(
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_new_line()
 {
 #ifdef ARDUINO_BUILD
@@ -161,9 +185,9 @@ void Debug::print_new_line()
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Prints value with label in decimal. Does not include new line at end.
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_labeled_float(char* label, float num)
 {
   Debug::print_new_line();
@@ -176,9 +200,9 @@ void Debug::print_labeled_float(char* label, float num)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Prints value with label in decimal. Does not include new line at end.
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_labeled_int(char* label, int num)
 {
   Debug::print_new_line();
@@ -191,10 +215,10 @@ void Debug::print_labeled_int(char* label, int num)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Prints a string to the console
-//______________________________________________________________________________
-void Debug::print_string_with_new_line(char* str, bool print_new_line)
+//______________________________________________________________________
+void Debug::print_str_with_new_line(char* str, bool print_new_line)
 {
 #ifdef ARDUINO_BUILD
   Serial.print(str);
@@ -206,10 +230,10 @@ void Debug::print_string_with_new_line(char* str, bool print_new_line)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Prints a string to the console every second.
 // Currently only valid for Arduino builds.
-//______________________________________________________________________________
+//______________________________________________________________________
 void Debug::print_proof_of_life(char* str)
 {
 #ifdef ARDUINO_BUILD
@@ -219,7 +243,7 @@ unsigned long crnt_milli = millis();
 if(crnt_milli - prev_milli > 1000)
 {
   print_new_line();
-  print_string_with_new_line("Proof of life");
+  print_str_with_new_line("Proof of life");
   prev_milli = crnt_milli;
 }
 

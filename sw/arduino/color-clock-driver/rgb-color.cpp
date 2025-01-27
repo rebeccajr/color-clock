@@ -1,3 +1,27 @@
+//______________________________________________________________________
+//______________________________________________________________________
+//      _   __   _   _ _   _   _   _         _
+// |   |_| | _  | | | V | | | | / |_/ |_| | /
+// |__ | | |__| |_| |   | |_| | \ |   | | | \_
+//  _  _         _ ___  _       _ ___   _                        / /
+// /  | | |\ |  \   |  | / | | /   |   \                        (^^)
+// \_ |_| | \| _/   |  | \ |_| \_  |  _/                        (____)o
+//______________________________________________________________________
+//______________________________________________________________________
+//
+//----------------------------------------------------------------------
+// Copyright 2024, Rebecca Rashkin
+// -------------------------------
+// This code may be copied, redistributed, transformed, or built upon in
+// any format for educational, non-commercial purposes.
+//
+// Please give me appropriate credit should you choose to use this
+// resource. Thank you :)
+//----------------------------------------------------------------------
+//
+//______________________________________________________________________
+// //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\
+//______________________________________________________________________
 #include "rgb-color.hpp"
 
 #ifdef ARDUINO_BUILD
@@ -12,7 +36,7 @@
 
 using Rgb = RgbColor::PriColor;
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Convert an Rgb color object to an Hsv color object
 //
 // This code was heavily inspired by a program posted by Geeks For Geeks
@@ -22,7 +46,7 @@ using Rgb = RgbColor::PriColor;
 //
 // and the algorithm posted here
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
-//______________________________________________________________________________
+//______________________________________________________________________
 #ifdef USING_HSV_COLOR
 HsvColor RgbColor::to_hsv(){
 
@@ -75,9 +99,9 @@ HsvColor RgbColor::to_hsv(){
 #endif
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Sets the minimum and maximum values for red, green, and blue values.
-//______________________________________________________________________________
+//______________________________________________________________________
 void RgbColor::set_min_max(int max_red
     , uint8_t max_grn
     , uint8_t max_blu
@@ -95,10 +119,10 @@ void RgbColor::set_min_max(int max_red
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Set the minimum and maximum values for red, green, and blue where all
 // primary colors have the same minimum and maximum values.
-//______________________________________________________________________________
+//______________________________________________________________________
 void RgbColor::set_min_max(int min_val, int max_val)
 {
   set_min_max(min_val
@@ -110,10 +134,10 @@ void RgbColor::set_min_max(int min_val, int max_val)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Writes RGB values to output
 // If this is a build to the Arduino, writes the ouput pins
-//______________________________________________________________________________
+//______________________________________________________________________
 void RgbColor::write_rgb_to_out(int red_out
   , int grn_out
   , int blu_out
@@ -135,9 +159,9 @@ if (flip)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Corrects over flow and underflow of red green and blue.
-//______________________________________________________________________________
+//______________________________________________________________________
 void RgbColor::bounds_check()
 {
   for(auto it = rgb_.begin(); it != rgb_.end(); it++)
@@ -152,19 +176,19 @@ void RgbColor::bounds_check()
 }
 
 
-//______________________________________________________________________________
-// Modifies the color by increasing or decreasing the intensity of one of the
-// primary colors.
+//______________________________________________________________________
+// Modifies the color by increasing or decreasing the intensity of one
+// of the primary colors.
 //
 // To increase the intensity of one of the primary colors, the two other
 // primary colors are decreased. To decrease the intensity of a primary
-// color, the other two are increased, which decreases the saturation of that
-// color.
+// color, the other two are increased, which decreases the saturation of
+// that color.
 //
 // Input parameters:
 // color:     red, green, or blue selection
 // direction: increase or decrease.
-//______________________________________________________________________________
+//______________________________________________________________________
 void RgbColor::mod_color(Rgb color, IncDec direction)
 {
   for(auto it = rgb_.begin(); it != rgb_.end(); it++)
@@ -185,9 +209,9 @@ void RgbColor::mod_color(Rgb color, IncDec direction)
 }
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Create map of pin assignments as related to red, green, and blue.
-//______________________________________________________________________________
+//______________________________________________________________________
 std::map <Rgb, short> RgbColor::create_rgb_pin_map(short r_pin
   , short g_pin
   , short b_pin

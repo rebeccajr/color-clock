@@ -1,6 +1,30 @@
-//______________________________________________________________________________
+//______________________________________________________________________
+//______________________________________________________________________
+//      _   __   _   _ _   _   _   _         _
+// |   |_| | _  | | | V | | | | / |_/ |_| | /
+// |__ | | |__| |_| |   | |_| | \ |   | | | \_
+//  _  _         _ ___  _       _ ___   _                        / /
+// /  | | |\ |  \   |  | / | | /   |   \                        (^^)
+// \_ |_| | \| _/   |  | \ |_| \_  |  _/                        (____)o
+//______________________________________________________________________
+//______________________________________________________________________
+//
+//----------------------------------------------------------------------
+// Copyright 2024, Rebecca Rashkin
+// -------------------------------
+// This code may be copied, redistributed, transformed, or built upon in
+// any format for educational, non-commercial purposes.
+//
+// Please give me appropriate credit should you choose to use this
+// resource. Thank you :)
+//----------------------------------------------------------------------
+//
+//______________________________________________________________________
+// //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\
+//______________________________________________________________________
+//______________________________________________________________________
 // This file contains class implementations for color types.
-//______________________________________________________________________________
+//______________________________________________________________________
 
 //#define ARDUINO_BUILD //just here so VS code doesn't complain
 #include <map>
@@ -13,7 +37,7 @@
 #include "hsv-color.hpp"
 #include "rgb-color.hpp"
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // Convert an Rgb color object to an Hsv color object
 //
 // This code was heavily inspired by a program posted by Geeks For Geeks
@@ -23,7 +47,7 @@
 //
 // and the algorithm posted here
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
-//______________________________________________________________________________
+//______________________________________________________________________
 
 RgbColor HsvColor::to_rgb(){
 
@@ -83,15 +107,13 @@ RgbColor HsvColor::to_rgb(){
 
 
 
-//______________________________________________________________________________
+//______________________________________________________________________
 // COLOR TYPE CONVERSIONS
-//______________________________________________________________________________
-// This section includes functions that convert color objects to different
-// types of color objects, e.g. RgbColor to HsvColor and vice versa
-//______________________________________________________________________________
-
-
-
+//______________________________________________________________________
+// This section includes functions that convert color objects to
+// different types of color objects, e.g. RgbColor to HsvColor and vice
+// versa
+//______________________________________________________________________
 
 //--------------------------------------------------------------
 // Convert an Hsv color object to an Rgb color object.
@@ -99,20 +121,20 @@ RgbColor HsvColor::to_rgb(){
 // This code is implementing the algorithm posted here:
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 //--------------------------------------------------------------
-///______________________________________________________________________________
+//______________________________________________________________________
 // This function returns a new HsvColor object that falls
 // between two HsvColors based on a fraction that represents
 // the percentage distance from one color to another.
 //
 // Assumption:
 // color is in correct range and fraction is between 0 and 1
-//______________________________________________________________________________
+//______________________________________________________________________
 HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
    HsvColor color2,
    float    fraction
 )
 {
-  // This variable determines which direction in the circle to interpolate over
+  // Determine which direction in the circle to interpolate over
   bool clockwise = false;
 
   float delta = fabs(color2.h - color1.h);
@@ -136,9 +158,9 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
 
   new_hue = fmod(360.0 + new_hue, 360.0);
 
-  //____________________________________________________________________________
+  //____________________________________________________________________
   // Reusing delta variable
-  //____________________________________________________________________________
+  //____________________________________________________________________
   delta = fabs(color2.s - color1.s);
   delta = fraction * delta;
 
@@ -156,9 +178,9 @@ HsvColor HsvColor::interpolate_bet_hsvcolors(HsvColor color1,
 
   float new_val = delta + color1.v;
 
-  //____________________________________________________________________________
+  //____________________________________________________________________
   // TODO incorporate max sat and val
-  //____________________________________________________________________________
+  //____________________________________________________________________
   // Max out saturation and value for now
   return HsvColor(new_hue, new_sat, new_val);
 }
