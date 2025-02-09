@@ -136,6 +136,13 @@ the time was still accurate thanks to the real-time clock module 🎉
 
 I’ll make sure to share more pictures once it’s wall-mounted.
 
+*Initially, there was a cable harness that went between the electronics
+box and the light display. This separate harness would allow for easier
+assembly and hardware debugging if necessary.*
+
+*Unrelated, but this diagram was generated using DOT, a scripting
+language used to generate vector images.*
+
 ## TODO
 
 So, here are some TODOs that I will continue to pick away at...

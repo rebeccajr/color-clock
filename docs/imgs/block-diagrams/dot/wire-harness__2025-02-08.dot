@@ -1,13 +1,16 @@
+#define flux "#af5fd7"
+
 digraph ColorClockCableHarness
 {
-
   label="ColorClock Wire Harness Configuration"
+  fontsize=20
   fontname="Courier New"
   rankdir=LR
 
+
   node
   [ fontname="Courier New"
-  , color="#af5fd7"
+  , color=flux
   ];
 
   edge
@@ -18,6 +21,7 @@ digraph ColorClockCableHarness
   {
     label="ColorClock Version 1"
     fontname="Courier New"
+    fontsize=16
 
     electronics_box
     [ shape=polygon
@@ -30,14 +34,20 @@ digraph ColorClockCableHarness
     [ shape=polygon
     , sides=4
     , label="Molex\nConnector"
-    , fontsize=8
+    , fontsize=10
     ];
 
     molex_connector1
     [ shape=polygon
     , sides=4
     , label="Molex\nConnector"
-    , fontsize=8
+    , fontsize=10
+    ];
+
+    terminal_block
+    [ shape=rectangle
+    , label="Terminal\nBlock\n(on structure)"
+    , fontsize=10
     ];
 
     light_display
@@ -58,6 +68,7 @@ digraph ColorClockCableHarness
   {
     label="Home Display"
     rank=LR
+    fontsize=16
 
     electronics_box_
     [ shape=polygon
@@ -71,6 +82,12 @@ digraph ColorClockCableHarness
     , label="ColorClock\nLight Display"
     ];
 
+    terminal_block_
+    [ shape=rectangle
+    , label="Terminal\nBlock\n(on light display)"
+    , fontsize=10
+    ];
+
     position_node_bottom
     [ shape=point
     , width=0
@@ -79,11 +96,13 @@ digraph ColorClockCableHarness
 
   }
 
-    molex_connector0 -> electronics_box  [arrowhead=none];
-    molex_connector1 -> molex_connector0 [arrowhead=none];
-    light_display    -> molex_connector1 [arrowhead=none];
+    light_display     -> terminal_block   [arrowhead=none];
+    terminal_block    -> molex_connector1 [arrowhead=none];
+    molex_connector1  -> molex_connector0 [arrowhead=none];
+    molex_connector0  -> electronics_box  [arrowhead=none];
 
-    light_display_   -> electronics_box_ [arrowhead=none];
+    light_display_    -> terminal_block_  [arrowhead=none];
+    terminal_block_   -> electronics_box_ [arrowhead=none];
 
     position_node_top -> position_node_bottom
     [ style=invis
