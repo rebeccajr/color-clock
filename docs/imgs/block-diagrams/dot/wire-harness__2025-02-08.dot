@@ -1,0 +1,94 @@
+digraph ColorClockCableHarness
+{
+
+  label="ColorClock Wire Harness Configuration"
+  fontname="Courier New"
+  rankdir=LR
+
+  node
+  [ fontname="Courier New"
+  , color="#af5fd7"
+  ];
+
+  edge
+  [ color="#5fafd7"
+  ]
+
+  subgraph cluster_v1
+  {
+    label="ColorClock Version 1"
+    fontname="Courier New"
+
+    electronics_box
+    [ shape=polygon
+    , sides=4
+    , distortion=0
+    , label="Electronics\nBox"
+    ];
+
+    molex_connector0
+    [ shape=polygon
+    , sides=4
+    , label="Molex\nConnector"
+    , fontsize=8
+    ];
+
+    molex_connector1
+    [ shape=polygon
+    , sides=4
+    , label="Molex\nConnector"
+    , fontsize=8
+    ];
+
+    light_display
+    [ shape=circle
+    , label="ColorClock\nLight Display"
+    ];
+
+    position_node_top
+    [ shape=point
+    , width=0
+    , style=invis
+    ]
+
+  }
+
+  // TODO make these not copies
+  subgraph cluster_home_display
+  {
+    label="Home Display"
+    rank=LR
+
+    electronics_box_
+    [ shape=polygon
+    , sides=4
+    , distortion=0
+    , label="Electronics\nBox"
+    ];
+
+    light_display_
+    [ shape=circle
+    , label="ColorClock\nLight Display"
+    ];
+
+    position_node_bottom
+    [ shape=point
+    , width=0
+    , style=invis
+    ]
+
+  }
+
+    molex_connector0 -> electronics_box  [arrowhead=none];
+    molex_connector1 -> molex_connector0 [arrowhead=none];
+    light_display    -> molex_connector1 [arrowhead=none];
+
+    light_display_   -> electronics_box_ [arrowhead=none];
+
+    position_node_top -> position_node_bottom
+    [ style=invis
+    , weight=100
+    , lhead="cluster_home_display"
+    , ltail="cluster_v1"
+    ]
+}
