@@ -23,14 +23,14 @@
 <!-- electronics_box -->
 <g id="node1" class="node">
 <title>electronics_box</title>
-<polygon fill="none" stroke="#af5fd7" points="849.72,-415 742.72,-415 742.72,-377 849.72,-377 849.72,-415"/>
+<polygon fill="none" stroke="#5f5fd7" points="849.72,-415 742.72,-415 742.72,-377 849.72,-377 849.72,-415"/>
 <text text-anchor="middle" x="796.22" y="-399.8" font-family="Courier New" font-size="14.00">Electronics</text>
 <text text-anchor="middle" x="796.22" y="-384.8" font-family="Courier New" font-size="14.00">Box</text>
 </g>
 <!-- molex_connector0 -->
 <g id="node2" class="node">
 <title>molex_connector0</title>
-<polygon fill="none" stroke="#af5fd7" points="688.72,-414 617.72,-414 617.72,-378 688.72,-378 688.72,-414"/>
+<polygon fill="none" stroke="#5f5fd7" points="688.72,-414 617.72,-414 617.72,-378 688.72,-378 688.72,-414"/>
 <text text-anchor="middle" x="653.22" y="-399" font-family="Courier New" font-size="10.00">Molex</text>
 <text text-anchor="middle" x="653.22" y="-388" font-family="Courier New" font-size="10.00">Connector</text>
 </g>
@@ -42,7 +42,7 @@
 <!-- molex_connector1 -->
 <g id="node3" class="node">
 <title>molex_connector1</title>
-<polygon fill="none" stroke="#af5fd7" points="536.72,-414 465.72,-414 465.72,-378 536.72,-378 536.72,-414"/>
+<polygon fill="none" stroke="#5f5fd7" points="536.72,-414 465.72,-414 465.72,-378 536.72,-378 536.72,-414"/>
 <text text-anchor="middle" x="501.22" y="-399" font-family="Courier New" font-size="10.00">Molex</text>
 <text text-anchor="middle" x="501.22" y="-388" font-family="Courier New" font-size="10.00">Connector</text>
 </g>
@@ -54,7 +54,7 @@
 <!-- terminal_block -->
 <g id="node4" class="node">
 <title>terminal_block</title>
-<polygon fill="none" stroke="#af5fd7" points="365.54,-416.5 264.54,-416.5 264.54,-375.5 365.54,-375.5 365.54,-416.5"/>
+<polygon fill="none" stroke="#5f5fd7" points="365.54,-416.5 264.54,-416.5 264.54,-375.5 365.54,-375.5 365.54,-416.5"/>
 <text text-anchor="middle" x="315.04" y="-404.5" font-family="Courier New" font-size="10.00">Terminal</text>
 <text text-anchor="middle" x="315.04" y="-393.5" font-family="Courier New" font-size="10.00">Block</text>
 <text text-anchor="middle" x="315.04" y="-382.5" font-family="Courier New" font-size="10.00">(on structure)</text>
@@ -67,7 +67,7 @@
 <!-- light_display -->
 <g id="node5" class="node">
 <title>light_display</title>
-<ellipse fill="none" stroke="#af5fd7" cx="103.68" cy="-396" rx="87.86" ry="87.86"/>
+<ellipse fill="none" stroke="#5f5fd7" cx="103.68" cy="-396" rx="87.86" ry="87.86"/>
 <text text-anchor="middle" x="103.68" y="-399.8" font-family="Courier New" font-size="14.00">ColorClock</text>
 <text text-anchor="middle" x="103.68" y="-384.8" font-family="Courier New" font-size="14.00">Light Display</text>
 </g>
@@ -82,21 +82,21 @@
 <!-- electronics_box_ -->
 <g id="node7" class="node">
 <title>electronics_box_</title>
-<polygon fill="none" stroke="#af5fd7" points="706.72,-171 599.72,-171 599.72,-133 706.72,-133 706.72,-171"/>
+<polygon fill="none" stroke="#5f5fd7" points="706.72,-171 599.72,-171 599.72,-133 706.72,-133 706.72,-171"/>
 <text text-anchor="middle" x="653.22" y="-155.8" font-family="Courier New" font-size="14.00">Electronics</text>
 <text text-anchor="middle" x="653.22" y="-140.8" font-family="Courier New" font-size="14.00">Box</text>
 </g>
 <!-- light_display_ -->
 <g id="node8" class="node">
 <title>light_display_</title>
-<ellipse fill="none" stroke="#af5fd7" cx="315.04" cy="-152" rx="87.86" ry="87.86"/>
+<ellipse fill="none" stroke="#5f5fd7" cx="315.04" cy="-152" rx="87.86" ry="87.86"/>
 <text text-anchor="middle" x="315.04" y="-155.8" font-family="Courier New" font-size="14.00">ColorClock</text>
 <text text-anchor="middle" x="315.04" y="-140.8" font-family="Courier New" font-size="14.00">Light Display</text>
 </g>
 <!-- terminal_block_ -->
 <g id="node9" class="node">
 <title>terminal_block_</title>
-<polygon fill="none" stroke="#af5fd7" points="563.72,-172.5 438.72,-172.5 438.72,-131.5 563.72,-131.5 563.72,-172.5"/>
+<polygon fill="none" stroke="#5f5fd7" points="563.72,-172.5 438.72,-172.5 438.72,-131.5 563.72,-131.5 563.72,-172.5"/>
 <text text-anchor="middle" x="501.22" y="-160.5" font-family="Courier New" font-size="10.00">Terminal</text>
 <text text-anchor="middle" x="501.22" y="-149.5" font-family="Courier New" font-size="10.00">Block</text>
 <text text-anchor="middle" x="501.22" y="-138.5" font-family="Courier New" font-size="10.00">(on light display)</text>

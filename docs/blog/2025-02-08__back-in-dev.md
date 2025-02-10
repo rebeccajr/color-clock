@@ -7,9 +7,9 @@ applying it to ColorClock.
 ## Google Test
 
 During development of ColorClock Version 1, I did some rudimentary
-unit tests and took the form of print statements in simple C++ programs.
-I played around with writing makefiles but my unit tests were few and
-far between.
+unit tests that took the form of print statements in simple C++
+programs. I played around with writing makefiles but my unit tests were
+few and far between.
 
 In my latest work, I'm implementing a "real" unit testing framework in
 using Google Test. Each module has its own test file and I'm using
@@ -21,7 +21,8 @@ Since ColorClock is designed to work with specific hardware, some of my
 code isn’t easily testable using Google Test. However, much (or at least
 some) of the hardware-dependent functionality is protected by
 preprocessor directives, providing alternate behavior for non-hardware
-builds. My goal is to test as much as possible.
+builds. My goal is to write unit tests for as many functions as
+possible.
 
 ## This Is Why We Test
 
@@ -76,7 +77,7 @@ module. These macros include directives for enabling hardware-specific
 functionality. One of the macros, DEBUG_CPP, is intended for
 non-hardware builds. Until now, I’ve had to manually set this flag in
 the macros file. To streamline things a bit, I created a simple Python
-script that automatically uncommented the line:
+script that automatically uncomments the line:
 
 ```cpp
 // #define DEBUG_CPP
@@ -89,7 +90,7 @@ and converts it to:
 ```
 
 In the Makefile for the unit tests, I create a phony target that runs
-the Python script first before building out the unit test executable.
+the Python script first before building out the unit test executable 😎
 
 ## File Headers
 
@@ -128,7 +129,7 @@ header in each file.
 ## Home Display
 
 On a different note, we are also working on installing the light display
-for ColorClock Version 1 in our house 😀
+for ColorClock Version 1 in the house 🏠
 
 I powered it up for the first time since its display at Burning Man
 2024, and I was beyond thrilled to see that not only did it work, but
@@ -141,11 +142,18 @@ box and the light display. This separate harness would allow for easier
 assembly and hardware debugging if necessary.*
 
 *Unrelated, but this diagram was generated using DOT, a scripting
-language used to generate vector images.*
+language used to generate vector images - another technology I'm using
+at work and starting to utilize in ColorClock.*
+
+*We removed the wire harness from Version 1 and directly connected the
+LED strips to the terminal block, which we relocated to the back of the
+light display.*
 
 ## TODO
 
 So, here are some TODOs that I will continue to pick away at...
+
+### Unit Tests
 
 - Write unit tests for modules:
   - TimeCalcs
@@ -155,9 +163,26 @@ So, here are some TODOs that I will continue to pick away at...
   - TimeController
   - TimeDisplay
   - TopLevel
-
 - Fix code for failures found during unit testing
 - Create a pipeline that runs all unit tests
-- Organize files
+
+## Documentation
+
+- Make block diagrams of the software architecture of ColorClock using
+  dot
+- Add Doxygen comments and generate documentation
+
+## Cleanup
+
+- Organize ColorClock classes into folders
 - Clean up non-Arduino code
-- Prototype a sma
+
+## Hardware
+
+- Prototype a small harware version of the light display for testing
+  purposes
+- Research free PCB board layout programs
+
+---
+
+## My Beautiful Makefile

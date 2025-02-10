@@ -1,0 +1,8 @@
+#ifndef COLOR_CONSTANTS
+#define COLOR_CONSTANTS
+
+#define FLUX_MAGENTA "#af5fd7"
+#define FLUX_CYAN    "#5fafd7"
+#define FLUX_BLUE    "#5f5fd7"
+
+#endif
