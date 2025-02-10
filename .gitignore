@@ -6,3 +6,4 @@ plot.log
 **/.vscode
 out
 a.out
+*.gch

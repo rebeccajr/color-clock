@@ -28,15 +28,12 @@
 //______________________________________________________________________
 
 //______________________________________________________________________
-// TODO need a better way
-//______________________________________________________________________
 // Used for cpp debug
 //______________________________________________________________________
-//#define DEBUG_CPP
-//#define USING_RGB_COLOR
-//#define USING_HSV_COLOR
+// #define DEBUG_CPP
+// #define USING_RGB_COLOR
+// #define USING_HSV_COLOR
 //______________________________________________________________________
-
 
 #ifndef DEBUG_CPP
 #define ARDUINO_BUILD
@@ -57,6 +54,5 @@
 #define IO_EXPANDER_ADDR  0x58
 #define LED_BACKPACK_ADDR 0x70
 #endif
-
 
 #include <stdint.h>
