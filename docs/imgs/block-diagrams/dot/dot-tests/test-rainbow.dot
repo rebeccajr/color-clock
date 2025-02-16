@@ -1,0 +1,15 @@
+#include "dot-style-constants.dot"
+
+graph{
+
+red [color=FLUX_DARK_RED]
+
+
+red [ color=FLUX_DARK_RED]
+grn [ color=FLUX_DARK_GRN]
+yel [ color=FLUX_DARK_YEL]
+blu [ color=FLUX_DARK_BLU]
+mag [ color=FLUX_DARK_MAG]
+cya [ color=FLUX_DARK_CYA]
+
+}

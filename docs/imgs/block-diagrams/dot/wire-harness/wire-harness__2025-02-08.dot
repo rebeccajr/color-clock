@@ -1,0 +1,115 @@
+//______________________________________________________________________
+//______________________________________________________________________
+//      _   __   _   _ _   _   _   _         _
+// |   |_| | _  | | | V | | | | / |_/ |_| | /
+// |__ | | |__| |_| |   | |_| | \ |   | | | \_
+//  _  _         _ ___  _       _ ___   _                        / /
+// /  | | |\ |  \   |  | / | | /   |   \                        (^^)
+// \_ |_| | \| _/   |  | \ |_| \_  |  _/                        (____)o
+//______________________________________________________________________
+//______________________________________________________________________
+//
+//----------------------------------------------------------------------
+// Copyright 2024, Rebecca Rashkin
+// -------------------------------
+// This code may be copied, redistributed, transformed, or built upon in
+// any format for educational, non-commercial purposes.
+//
+// Please give me appropriate credit should you choose to use this
+// resource. Thank you :)
+//----------------------------------------------------------------------
+//
+//______________________________________________________________________
+// //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\
+//______________________________________________________________________
+
+//______________________________________________________________________
+// DESCRIPTION
+// This contains a block diagram of the wire harness used in ColorClock.
+//
+// USAGE
+// This file uses preprocessor directives to define constants since the
+// DOT language does not have variables or constants.
+//
+// For this reason, in order to render the image correctly, you must
+// first pass this file through cpp. So, to generate the image
+// associated with this script, run the following command:
+//
+// cpp wire-harness__2025-02-08.dot | dot -Tsvg -o wire_harness.svg
+//______________________________________________________________________
+
+#include "../dot-style-constants.dot"
+#include "wire-harness-constants.dot"
+
+
+//______________________________________________________________________
+graph top
+{
+    rankdir=LR
+
+  //____________________________________________________________________
+  subgraph cluster_ColorClockCableHarness
+  {
+    TITLE_STYLE
+    label     = "ColorClock Wire Harness Configuration\n "
+    compound  = true
+
+    newrank=true // Needed to align nodes vertically
+
+    node  [NODE_STYLE]
+    edge  [ color=FLUX_DARK_CYA]
+
+    //__________________________________________________________________
+    subgraph cluster_v1
+    {
+      SUBGRAPH_TITLE_STYLE
+      label="ColorClock Version 1"
+
+      electronics_box1 [ELECTRONICS_BOX]
+      molex_connector1 [MOLEX_CONNECTOR]
+      light_display1   [LIGHT_DISPLAY]
+
+      terminal_block1
+      [
+        BOX_NODE_STYLE
+        label="Terminal Block\n(on structure)"
+      ]
+
+      top  [PLACEHOLDER_NODE_STYLE]
+    }
+
+    //__________________________________________________________________
+    subgraph cluster_v2
+    {
+      SUBGRAPH_TITLE_STYLE
+      label="Home Display"
+
+      electronics_box2  [ELECTRONICS_BOX]
+      light_display2    [LIGHT_DISPLAY]
+
+      terminal_block2
+      [
+        BOX_NODE_STYLE
+        label="Terminal Block\n(on light display)"
+      ]
+
+      bot [PLACEHOLDER_NODE_STYLE]
+    }
+
+    // Align nodes vertically
+    { rank=same  electronics_box1 electronics_box2 }
+    { rank=same  light_display1   light_display2   }
+    { rank=same  molex_connector1 terminal_block2  }
+
+    // V1
+    light_display1    -- molex_connector1
+    molex_connector1  -- terminal_block1
+    terminal_block1   -- electronics_box1
+
+    // Home-display
+    light_display2   -- terminal_block2
+    terminal_block2  -- electronics_box2
+
+    top -- bot [PLACEHOLDER_EDGE_STYLE]
+  }
+}

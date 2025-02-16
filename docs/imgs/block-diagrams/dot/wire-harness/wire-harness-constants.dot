@@ -1,0 +1,68 @@
+//______________________________________________________________________
+//______________________________________________________________________
+//      _   __   _   _ _   _   _   _         _
+// |   |_| | _  | | | V | | | | / |_/ |_| | /
+// |__ | | |__| |_| |   | |_| | \ |   | | | \_
+//  _  _         _ ___  _       _ ___   _                        / /
+// /  | | |\ |  \   |  | / | | /   |   \                        (^^)
+// \_ |_| | \| _/   |  | \ |_| \_  |  _/                        (____)o
+//______________________________________________________________________
+//______________________________________________________________________
+//
+//----------------------------------------------------------------------
+// Copyright 2024, Rebecca Rashkin
+// -------------------------------
+// This code may be copied, redistributed, transformed, or built upon in
+// any format for educational, non-commercial purposes.
+//
+// Please give me appropriate credit should you choose to use this
+// resource. Thank you :)
+//----------------------------------------------------------------------
+//
+//______________________________________________________________________
+// //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\   //\^.^/\\
+//______________________________________________________________________
+
+//______________________________________________________________________
+// DESCRIPTION
+// Preprocessor directives used in place of creating constants in DOT.
+//______________________________________________________________________
+
+#include "../dot-style-constants.dot"
+
+#ifndef WIRE_HARNESS_CONSTANTS
+#define WIRE_HARNESS_CONSTANTS
+
+#define PLACEHOLDER_NODE_STYLE \
+  shape = point \
+  width = 0
+
+#define PLACEHOLDER_EDGE_STYLE \
+  style=invis
+
+#define BOX_NODE_STYLE \
+      NODE_STYLE \
+      shape   = box \
+      width   = 2 \
+      height  = .5 \
+
+#define ELECTRONICS_BOX \
+      BOX_NODE_STYLE \
+      label = "Electronics Box" \
+
+#define MOLEX_CONNECTOR \
+      BOX_NODE_STYLE \
+      label = "Molex Connector"
+
+#define TERMINAL_BLOCK \
+      BOX_NODE_STYLE \
+      label="Terminal Block\n(on structure)" \
+
+#define LIGHT_DISPLAY \
+      NODE_STYLE \
+      shape = circle \
+      width = 2 \
+      label = "ColorClock\nLight\nDisplay"
+
+
+#endif
